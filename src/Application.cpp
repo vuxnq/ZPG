@@ -68,7 +68,7 @@ void Application::SetUpCallbacks() {
 	glfwSetWindowSizeCallback(window, window_size_callback);
 }
 
-void Application::TyVeci() {
+void Application::CreateModels() {
 	float points_triangle[] = {
 		// pos              // color
 		0.0f, 0.5f, 0.0f,   1.f, 0.f, 0.f, 1.f,

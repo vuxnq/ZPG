@@ -6,7 +6,7 @@ int main()
 
 	app->Init();
     app->SetUpCallbacks();
-    app->TyVeci();
+    app->CreateModels();
     app->Run();
     app->Shutdown();
 

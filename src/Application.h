@@ -9,6 +9,7 @@ class Application {
 private:
     GLFWwindow* window;
     ShaderProgram* shaderProgram;
+    ShaderProgram* shaderProgram2;
 
     // temporary solution
     VertexBuffer* vb1;
@@ -23,7 +24,7 @@ public:
 
     void Init();
     void SetUpCallbacks();
-    void TyVeci();
+    void CreateModels();
     void Run();
     void Shutdown();
 };
