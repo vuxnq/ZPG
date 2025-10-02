@@ -1,7 +1,7 @@
 #include "VertexBuffer.h"
 #include <iostream>
 
-VertexBuffer::VertexBuffer(float vertices[], size_t size, std::vector<std::tuple<ElementType::Type, int>> layout) {
+VertexBuffer::VertexBuffer(const float vertices[], size_t size, std::vector<std::tuple<ElementType::Type, int>> layout) {
     glGenBuffers(1, &id);
     glBindBuffer(GL_ARRAY_BUFFER, id);
 	glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);

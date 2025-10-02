@@ -32,7 +32,7 @@ private:
     GLuint id;
     std::vector<std::tuple<ElementType::Type, int>> layout;
 public:
-    VertexBuffer(float vertices[], size_t size, std::vector<std::tuple<ElementType::Type, int>> layout = {});
+    VertexBuffer(const float vertices[], size_t size, std::vector<std::tuple<ElementType::Type, int>> layout = {});
     ~VertexBuffer();
 
 	void Bind();

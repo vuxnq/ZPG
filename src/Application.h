@@ -9,14 +9,15 @@ class Application {
 private:
     GLFWwindow* window;
     ShaderProgram* shaderProgram;
-    ShaderProgram* shaderProgram2;
 
     // temporary solution
     VertexBuffer* vb1;
     VertexBuffer* vb2;
+    VertexBuffer* vb3;
 
     VertexArray* va1;
     VertexArray* va2;
+    VertexArray* va3;
 
 public:
     Application();

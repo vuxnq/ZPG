@@ -31,6 +31,7 @@ ShaderProgram::ShaderProgram(const std::string& vertexShaderCode, const std::str
 		glGetProgramInfoLog(id, infoLogLength, NULL, strInfoLog);
 		fprintf(stderr, "Linker failure: %s\n", strInfoLog);
 		delete[] strInfoLog;
+		exit(EXIT_FAILURE);
 	}
 }
 
@@ -40,6 +41,15 @@ void ShaderProgram::Use() {
 
 void ShaderProgram::UnUse() {
     glUseProgram(0);
+}
+
+void ShaderProgram::SetUniform(const std::string& name, const glm::mat4& value) {
+	GLint location;
+	if (location = glGetUniformLocation(id, name.c_str()) == -1) {
+		fprintf(stderr, "Uniform '%s' not found\n", name.c_str());
+		exit(EXIT_FAILURE);
+	}
+	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(value));
 }
 
 std::string ReadShaderSource(const std::string& filePath) {

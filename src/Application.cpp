@@ -20,6 +20,12 @@
 #include "VertexBuffer.h"
 #include "VertexArray.h"
 #include "Callbacks.h"
+#include "Transformation.h"
+
+
+#include "assets/models/sphere.h"
+
+
 
 Application::Application() {}
 
@@ -47,6 +53,9 @@ void Application::Init() {
 
 	glewExperimental = GL_TRUE;
 	glewInit();
+
+	// depth comparisons and update the depth buffer
+	glEnable(GL_DEPTH_TEST);
 
 	// get version info
 	printf("OpenGL Version: %s\n",glGetString(GL_VERSION));
@@ -106,6 +115,15 @@ void Application::CreateModels() {
 	va2 = new VertexArray();
 	va2->AddVertexBuffer(*vb2);
 
+	// sphere ////////////////////////////
+	vb3 = new VertexBuffer(sphere, sizeof(sphere), {
+		{ElementType::Float, 3},
+		{ElementType::Float, 3}
+	});
+	va3 = new VertexArray();
+	va3->AddVertexBuffer(*vb3);
+	// end: sphere ////////////////////////////
+
 	shaderProgram = new ShaderProgram(
 		ReadShaderSource("../assets/vertex_shader.glsl"),
 		ReadShaderSource("../assets/fragment_shader.glsl")
@@ -117,10 +135,44 @@ void Application::Run() {
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+		static float angle = 0;
+		angle += 1.f;
+
+		Transformation t = Transformation();
+		ScaleTransform st = ScaleTransform(0.5f);
+		RotateTransform rt = RotateTransform(angle, glm::vec3(0.0f, 1.0f, 0.0f));
+		TranslateTransform tt = TranslateTransform({0.0f, 0.5f, 0.0f});
+		t.Add(&st);
+		t.Add(&rt);
+		// t.Add(&tt);
+
+		glm::mat4 M = t.ComputeMatrix();
+
+		shaderProgram->SetUniform("modelMatrix", M);
+
 		shaderProgram->Use();
+
+		// camera ////////////////////
+		// int width, height;
+		// glfwGetFramebufferSize(this->window, &width, &height);
+
+		// float ratio = width / (float)height;
+		// glm::mat4 camPushback = glm::inverse(glm::translate(glm::mat4(1.f), glm::vec3(0.f, 0.f, 3.f)));
+		// glm::mat4 viewMatrix = glm::perspective(45.f, ratio, 0.1f, 100.f) * camPushback;
+
+		// GLint idViewMatrix = glGetUniformLocation(shaderProgram->GetId(), "viewMatrix");
+		// glUniformMatrix4fv(idViewMatrix, 1, GL_FALSE, glm::value_ptr(viewMatrix));
+		// end camera ////////////////////
+
+
+		va3->Bind();
+		glDrawArrays(GL_TRIANGLES, 0, 2880);
+
 
 		va1->Bind();
 		glDrawArrays(GL_TRIANGLES, 0, 3);
+
+		shaderProgram->SetUniform("modelMatrix", glm::mat4(1.0f));
 
 		va2->Bind();
 		glDrawArrays(GL_TRIANGLES, 0, 6);
