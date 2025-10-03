@@ -10,55 +10,72 @@ public:
     virtual void Update(float delta) {}
 };
 
+
 class StaticTransformationComponent : public TransformationComponent {
 protected:
     glm::mat4 cachedMatrix;
     bool cached = false;
 };
 
+
 class ScaleTransform : public StaticTransformationComponent {
-private:
-    float scale;
 public:
     ScaleTransform(const float scale);
+    ~ScaleTransform() {}
+
     glm::mat4 ComputeMatrix() override;
+
+private:
+    float scale;
 };
 
 class TranslateTransform : public StaticTransformationComponent {
-private:
-    glm::vec3 offset;
 public:
     TranslateTransform(const glm::vec3& offset);
+    ~TranslateTransform() {}
+
     glm::mat4 ComputeMatrix() override;
+
+private:
+    glm::vec3 offset;
 };
 
 class RotateTransform : public StaticTransformationComponent {
+public:
+    RotateTransform(float angle, const glm::vec3& axis);
+    ~RotateTransform() {}
+
+    glm::mat4 ComputeMatrix() override;
+
 private:
     float angle;
     glm::vec3 axis;
-public:
-    RotateTransform(float angle, const glm::vec3& axis);
-    glm::mat4 ComputeMatrix() override;
 };
 
 class DynamicRotateTransform : public TransformationComponent {
+public:
+    DynamicRotateTransform(float startAngle, float speed, const glm::vec3& axis);
+    ~DynamicRotateTransform() {}
+
+    void Update(float delta) override;
+    glm::mat4 ComputeMatrix() override;
+
 private:
     float angle;
     float speed;
     glm::vec3 axis;
-public:
-    DynamicRotateTransform(float startAngle, float speed, const glm::vec3& axis);
-    void Update(float delta) override;
-    glm::mat4 ComputeMatrix() override;
 };
 
 
 class Transformation : public TransformationComponent {
-private:
-    std::vector<TransformationComponent*> children;
 public:
     Transformation() {}
+    ~Transformation() {}
+
     void Add(TransformationComponent* transformation);
     glm::mat4 ComputeMatrix() override;
     void Update(float delta) override;
+
+private:
+    std::vector<TransformationComponent*> children;
 };

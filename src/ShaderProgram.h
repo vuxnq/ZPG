@@ -7,20 +7,18 @@
 #include "Shader.h"
 
 class ShaderProgram {
-private:
-    GLuint id;
-
 public:
     ShaderProgram(const std::vector<Shader*>& shaders);
-    ~ShaderProgram();
+    ~ShaderProgram() {}
 
     void Use();
     void UnUse();
 
     void SetUniform(const std::string& name, const glm::mat4& value);
     // TODO: overloading
+
 private:
+    GLuint id;
+
     int GetUniformLocation(const std::string& name);
 };
-
-std::string ReadShaderSource(const std::string& filePath);

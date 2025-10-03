@@ -110,23 +110,21 @@ void Application::CreateModels() {
 	});
 
 	// vertex array object (VAO)
-	va1 = new VertexArray(vb1);
+	va1 = new VertexArray(*vb1);
 
-	va2 = new VertexArray();
-	va2->AddVertexBuffer(*vb2);
+	va2 = new VertexArray(*vb2);
 
 	// sphere ////////////////////////////
 	vb3 = new VertexBuffer(sphere, sizeof(sphere), {
 		{ElementType::Float, 3},
 		{ElementType::Float, 3}
 	});
-	va3 = new VertexArray();
-	va3->AddVertexBuffer(*vb3);
+	va3 = new VertexArray(*vb3);
 	// end: sphere ////////////////////////////
 
-	Shader* vertexShader = new Shader("../assets/vertex_shader.glsl", GL_VERTEX_SHADER);
-	Shader* fragmentShader = new Shader("../assets/fragment_shader.glsl", GL_FRAGMENT_SHADER);
-	shaderProgram = new ShaderProgram({vertexShader, fragmentShader});
+	Shader vertexShader = Shader("../assets/vertex_shader.glsl", GL_VERTEX_SHADER);
+	Shader fragmentShader = Shader("../assets/fragment_shader.glsl", GL_FRAGMENT_SHADER);
+	shaderProgram = new ShaderProgram({&vertexShader, &fragmentShader});
 }
 
 void Application::Run() {
@@ -158,18 +156,6 @@ void Application::Run() {
 		shaderProgram->SetUniform("modelMatrix", M);
 
 		shaderProgram->Use();
-
-		// camera ////////////////////
-		// int width, height;
-		// glfwGetFramebufferSize(this->window, &width, &height);
-
-		// float ratio = width / (float)height;
-		// glm::mat4 camPushback = glm::inverse(glm::translate(glm::mat4(1.f), glm::vec3(0.f, 0.f, 3.f)));
-		// glm::mat4 viewMatrix = glm::perspective(45.f, ratio, 0.1f, 100.f) * camPushback;
-
-		// GLint idViewMatrix = glGetUniformLocation(shaderProgram->GetId(), "viewMatrix");
-		// glUniformMatrix4fv(idViewMatrix, 1, GL_FALSE, glm::value_ptr(viewMatrix));
-		// end camera ////////////////////
 
 		va3->Bind();
 		glDrawArrays(GL_TRIANGLES, 0, 2880);

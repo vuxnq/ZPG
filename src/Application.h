@@ -6,6 +6,16 @@
 #include "VertexArray.h"
 
 class Application {
+public:
+    Application();
+    ~Application() {}
+
+    void Init();
+    void SetUpCallbacks();
+    void CreateModels();
+    void Run();
+    void Shutdown();
+
 private:
     GLFWwindow* window;
     ShaderProgram* shaderProgram;
@@ -18,14 +28,4 @@ private:
     VertexArray* va1;
     VertexArray* va2;
     VertexArray* va3;
-
-public:
-    Application();
-    ~Application() {}
-
-    void Init();
-    void SetUpCallbacks();
-    void CreateModels();
-    void Run();
-    void Shutdown();
 };

@@ -47,19 +47,3 @@ int ShaderProgram::GetUniformLocation(const std::string& name) {
 void ShaderProgram::SetUniform(const std::string& name, const glm::mat4& value) {
 	glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, glm::value_ptr(value));
 }
-
-std::string ReadShaderSource(const std::string& filePath) {
-    std::ifstream file(filePath);
-    if (!file.is_open()) {
-        std::cerr << "Failed to read shader file: " << filePath << std::endl;
-        exit(EXIT_FAILURE);
-    }
-
-    std::stringstream ss;
-    ss << file.rdbuf();
-    file.close();
-
-    std::string content = ss.str();
-
-    return std::move(content);
-}

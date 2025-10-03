@@ -3,15 +3,15 @@
 #include "VertexBuffer.h"
 
 class VertexArray {
-private:
-    GLuint id;
-    VertexBuffer* vertexBuffer;
 public:
-    VertexArray();
-    VertexArray(VertexBuffer* vertexBuffer);
+    VertexArray(VertexBuffer& vertexBuffer);
     ~VertexArray();
 
 	void Bind();
     void Unbind();
-    void AddVertexBuffer(VertexBuffer& vertexBuffer);
+    void SetVertexBuffer(VertexBuffer& vertexBuffer);
+
+private:
+    GLuint id;
+    VertexBuffer& vertexBuffer;
 };

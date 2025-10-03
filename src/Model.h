@@ -1,13 +1,14 @@
 #pragma once
 #include <GL/glew.h>
-#include <VertexBuffer.h>
-#include <VertexArray.h>
+#include "VertexBuffer.h"
+#include "VertexArray.h"
+#include "Transformation.h"
 
 class Model {
-private:
-    VertexBuffer vertexBuffer;
-    VertexArray vertexArray;
 public:
-    // TODO: pos vec3, color vec4
-    Model(const float vertices[]);
+    Model(VertexArray& vertexArray);
+    ~Model() {}
+
+private:
+    VertexArray& vertexArray;
 };
