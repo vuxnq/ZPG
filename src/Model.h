@@ -7,12 +7,10 @@
 
 class Model {
 public:
-    Model(const ref<VertexArray>& vertexArray) : vertexArray(vertexArray) {}
+    Model(const ref<VertexArray>& vertexArray);
     ~Model() {}
 
-    void Bind() {
-        vertexArray->Bind();
-    }
+    void Bind();
     const VertexArray& GetVertexArray() const { return *vertexArray; }
 
 private:

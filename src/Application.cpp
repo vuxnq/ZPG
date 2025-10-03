@@ -28,7 +28,6 @@
 #include "assets/models/sphere.h"
 
 
-
 Application::Application() {}
 
 void Application::Init() {
@@ -79,7 +78,11 @@ void Application::SetUpCallbacks() {
 	glfwSetWindowSizeCallback(window, window_size_callback);
 }
 
-void Application::CreateModels() {
+void Application::OnCreate() {
+	ref<Shader> vertexShader = make_ref(new Shader("../assets/vertex_shader.glsl", GL_VERTEX_SHADER));
+	ref<Shader> fragmentShader = make_ref(new Shader("../assets/fragment_shader.glsl", GL_FRAGMENT_SHADER));
+	shaderProgram = make_ref(new ShaderProgram({vertexShader, fragmentShader}));
+
 	float points_triangle[] = {
 		// pos              // color
 		0.0f, 0.5f, 0.0f,   1.f, 0.f, 0.f, 1.f,
@@ -120,13 +123,8 @@ void Application::CreateModels() {
 	ref<Model> rectangleModel = make_ref(new Model(va2));
 
 	// DrawableObjects
-	triangleObject = new DrawableObject(triangleModel, make_ref(new Transformation()));
-	rectangleObject = new DrawableObject(rectangleModel, make_ref(new Transformation()));
-
-
-	ref<Shader> vertexShader = make_ref(new Shader("../assets/vertex_shader.glsl", GL_VERTEX_SHADER));
-	ref<Shader> fragmentShader = make_ref(new Shader("../assets/fragment_shader.glsl", GL_FRAGMENT_SHADER));
-	shaderProgram = make_ref(new ShaderProgram({vertexShader, fragmentShader}));
+	ref<DrawableObject> triangleObject = make_ref(new DrawableObject(triangleModel, make_ref(new Transformation()), shaderProgram));
+	ref<DrawableObject> rectangleObject = make_ref(new DrawableObject(rectangleModel, make_ref(new Transformation()), shaderProgram));
 
 
 	// sphere ////////////////////////////
@@ -143,13 +141,24 @@ void Application::CreateModels() {
 	t->Add(make_ref(new RotateTransform(45, glm::vec3(0.0f, 0.0f, 1.0f))));
 	t->Add(make_ref(new TranslateTransform(glm::vec3(0.0f, 0.5f, 0.0f))));
 
-	sphereObject = new DrawableObject(sphereModel, t);
+	ref<DrawableObject> sphereObject = make_ref(new DrawableObject(sphereModel, t, shaderProgram));
 	sphereObject->SetShaderProgram(shaderProgram);
 	// end: sphere ////////////////////////////
+
+	triangleObject->SetShaderProgram(shaderProgram);
+	rectangleObject->SetShaderProgram(shaderProgram);
+
+	// Scenes
+	ref<Scene> scene = make_ref(new Scene());
+	scene->AddDrawableObject(triangleObject);
+	scene->AddDrawableObject(rectangleObject);
+	scene->AddDrawableObject(sphereObject);
+
+	sceneManager.AddScene("scene1", scene);
 }
 
 void Application::Run() {
-	float lastTime = 0.f;
+	float lastTime = 0.0f;
 	while (!glfwWindowShouldClose(window))
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -158,15 +167,7 @@ void Application::Run() {
 		float delta = currentTime - lastTime;
 		lastTime = currentTime;
 
-		shaderProgram->Use();
-
-		sphereObject->Update(delta);
-		sphereObject->Draw();
-
-		shaderProgram->SetUniform("modelMatrix", glm::mat4(1.0f));
-
-		triangleObject->Draw();
-		rectangleObject->Draw();
+		sceneManager.GetActiveScene()->OnUpdate(delta);
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();

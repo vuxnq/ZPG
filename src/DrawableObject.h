@@ -7,28 +7,15 @@
 
 class DrawableObject {
 public:
-    DrawableObject(const ref<Model>& model, const ref<TransformationComponent>& transformation) : model(model), transformation(transformation) {}
+    DrawableObject(const ref<Model>& model, const ref<TransformationComponent>& transformation, const ref<ShaderProgram>& shaderProgram);
     ~DrawableObject() {}
 
-    void SetShaderProgram(const ref<ShaderProgram>& shaderProgram) {
-        this->shaderProgram = shaderProgram;
-    }
-    void Update(float delta) {
-        transformation->Update(delta);
-    }
-    void Draw() {
-        model->Bind();
-        if (shaderProgram) {
-            shaderProgram->SetUniform("modelMatrix", transformation->GetMatrix());
-        }
-        const auto& vertexBuffer = model->GetVertexArray().GetVertexBuffer();
-        GLsizei count = vertexBuffer.GetSize() / vertexBuffer.GetStride();
-
-		glDrawArrays(GL_TRIANGLES, 0, count);
-    }
+    void SetShaderProgram(const ref<ShaderProgram>& shaderProgram);
+    void Update(float delta);
+    void Draw();
 
 private:
     ref<Model> model;
     ref<TransformationComponent> transformation;
-    ref<ShaderProgram> shaderProgram = nullptr;
+    ref<ShaderProgram> shaderProgram;
 };

@@ -7,6 +7,7 @@
 #include "VertexArray.h"
 #include "Model.h"
 #include "DrawableObject.h"
+#include "SceneManager.h"
 
 class Application {
 public:
@@ -15,16 +16,12 @@ public:
 
     void Init();
     void SetUpCallbacks();
-    void CreateModels();
+    void OnCreate();
     void Run();
     void Shutdown();
 
 private:
     GLFWwindow* window;
     ref<ShaderProgram> shaderProgram;
-
-    // temporary solution
-    DrawableObject* triangleObject;
-    DrawableObject* rectangleObject;
-    DrawableObject* sphereObject;
+    SceneManager sceneManager;
 };

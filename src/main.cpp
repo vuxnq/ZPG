@@ -5,7 +5,7 @@ int main() {
 
 	app->Init();
     app->SetUpCallbacks();
-    app->CreateModels();
+    app->OnCreate();
     app->Run();
     app->Shutdown();
 
