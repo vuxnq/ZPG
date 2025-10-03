@@ -3,22 +3,13 @@
 #include <fstream>
 #include <sstream>
 
-ShaderProgram::ShaderProgram(const std::string& vertexShaderCode, const std::string& fragmentShaderCode) {
-	const char* vertPtr = vertexShaderCode.c_str();
-	const char* fragPtr = fragmentShaderCode.c_str();
-
-    vertexShader = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(vertexShader, 1, &vertPtr, NULL);
-    glCompileShader(vertexShader);
-
-    fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fragmentShader, 1, &fragPtr, NULL);
-    glCompileShader(fragmentShader);
-
+ShaderProgram::ShaderProgram(const std::vector<Shader*>& shaders) {
 	id = glCreateProgram();
 
-	glAttachShader(id, fragmentShader);
-	glAttachShader(id, vertexShader);
+	for (auto& shader : shaders) {
+		shader->Attach(id);
+	}
+
 	glLinkProgram(id);
 
 	GLint status;
@@ -43,13 +34,18 @@ void ShaderProgram::UnUse() {
     glUseProgram(0);
 }
 
-void ShaderProgram::SetUniform(const std::string& name, const glm::mat4& value) {
+int ShaderProgram::GetUniformLocation(const std::string& name) {
 	GLint location;
 	if (location = glGetUniformLocation(id, name.c_str()) == -1) {
 		fprintf(stderr, "Uniform '%s' not found\n", name.c_str());
 		exit(EXIT_FAILURE);
 	}
-	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(value));
+	return location;
+	// TODO: add cache
+}
+
+void ShaderProgram::SetUniform(const std::string& name, const glm::mat4& value) {
+	glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, glm::value_ptr(value));
 }
 
 std::string ReadShaderSource(const std::string& filePath) {

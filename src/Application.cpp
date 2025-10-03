@@ -124,27 +124,34 @@ void Application::CreateModels() {
 	va3->AddVertexBuffer(*vb3);
 	// end: sphere ////////////////////////////
 
-	shaderProgram = new ShaderProgram(
-		ReadShaderSource("../assets/vertex_shader.glsl"),
-		ReadShaderSource("../assets/fragment_shader.glsl")
-	);
+	Shader* vertexShader = new Shader("../assets/vertex_shader.glsl", GL_VERTEX_SHADER);
+	Shader* fragmentShader = new Shader("../assets/fragment_shader.glsl", GL_FRAGMENT_SHADER);
+	shaderProgram = new ShaderProgram({vertexShader, fragmentShader});
 }
 
 void Application::Run() {
+	float lastTime = 0.f;
+	DynamicRotateTransform drt = DynamicRotateTransform(0, 50, glm::vec3(0.0f, 1.0f, 0.0f));
+	DynamicRotateTransform drt2 = DynamicRotateTransform(0, 25, glm::vec3(0.0f, 0.0f, 1.0f));
 	while (!glfwWindowShouldClose(window))
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		static float angle = 0;
-		angle += 1.f;
+		float currentTime = glfwGetTime();
+		float delta = currentTime - lastTime;
+		lastTime = currentTime;
 
 		Transformation t = Transformation();
 		ScaleTransform st = ScaleTransform(0.5f);
-		RotateTransform rt = RotateTransform(angle, glm::vec3(0.0f, 1.0f, 0.0f));
+		RotateTransform rt = RotateTransform(45, glm::vec3(0.0f, 0.0f, 1.0f));
 		TranslateTransform tt = TranslateTransform({0.0f, 0.5f, 0.0f});
+
 		t.Add(&st);
+		t.Add(&drt);
+		t.Add(&drt2);
 		t.Add(&rt);
-		// t.Add(&tt);
+		t.Add(&tt);
+		t.Update(delta);
 
 		glm::mat4 M = t.ComputeMatrix();
 
@@ -164,10 +171,8 @@ void Application::Run() {
 		// glUniformMatrix4fv(idViewMatrix, 1, GL_FALSE, glm::value_ptr(viewMatrix));
 		// end camera ////////////////////
 
-
 		va3->Bind();
 		glDrawArrays(GL_TRIANGLES, 0, 2880);
-
 
 		va1->Bind();
 		glDrawArrays(GL_TRIANGLES, 0, 3);
