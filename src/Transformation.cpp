@@ -30,11 +30,5 @@ glm::mat4 Transformation::ComputeMatrix() {
         matrix = child->ComputeMatrix() * matrix;
     }
 
-    // glm::mat4 mRotate = glm::rotate(glm::mat4(1.0f), glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-    // glm::mat4 mTranslate = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.2f, 0.0f));
-    // glm::mat4 mScale = glm::scale(glm::mat4(1.0f), glm::vec3(0.5f));
-    // printf("%d\n", (glm::mat4(1.0f) * mScale));
-
-    // matrix = mRotate * mTranslate * mScale;
     return matrix;
 }
