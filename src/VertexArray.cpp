@@ -1,6 +1,6 @@
 #include "VertexArray.h"
 
-VertexArray::VertexArray(VertexBuffer& vertexBuffer) : vertexBuffer(vertexBuffer) {
+VertexArray::VertexArray(const ref<VertexBuffer>& vertexBuffer) : vertexBuffer(vertexBuffer) {
     glGenVertexArrays(1, &id);
 
     SetVertexBuffer(vertexBuffer);
@@ -14,16 +14,13 @@ void VertexArray::Unbind() {
     glBindVertexArray(0);
 }
 
-void VertexArray::SetVertexBuffer(VertexBuffer& vertexBuffer) {
+void VertexArray::SetVertexBuffer(const ref<VertexBuffer>& vertexBuffer) {
 	Bind();
-    vertexBuffer.Bind();
+    vertexBuffer->Bind();
 
-    auto layout = vertexBuffer.GetLayout();
+    auto layout = vertexBuffer->GetLayout();
 
-	size_t stride = 0;
-    for (int i = 0; i < layout.size(); i++) {
-		stride += get<1>(layout[i]) * ElementType::SizeOf(get<0>(layout[i]));
-	}
+	size_t stride = vertexBuffer->GetStride();
 
 	int offset = 0;
     for (int i = 0; i < layout.size(); i++) {
@@ -42,5 +39,5 @@ void VertexArray::SetVertexBuffer(VertexBuffer& vertexBuffer) {
     }
 
 	Unbind();
-    vertexBuffer.Unbind();
+    vertexBuffer->Unbind();
 }

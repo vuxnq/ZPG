@@ -1,6 +1,7 @@
 #pragma once
 #include <GL/glew.h>
 #include <vector>
+#include "Core.h"
 #include "Model.h"
 
 class Scene {
@@ -9,5 +10,5 @@ public:
     ~Scene() {}
 
 private:
-    std::vector<Model*> models;
+    std::vector<ref<Model>> models;
 };

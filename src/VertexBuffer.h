@@ -30,15 +30,18 @@ public:
 class VertexBuffer {
 public:
     VertexBuffer(const float vertices[], size_t size, std::vector<std::tuple<ElementType::Type, int>> layout = {});
-    ~VertexBuffer();
+    ~VertexBuffer() {}
 
 	void Bind();
     void Unbind();
 
-    const std::vector<std::tuple<ElementType::Type, int>>& GetLayout();
+    const std::vector<std::tuple<ElementType::Type, int>>& GetLayout() const;
     void SetLayout(std::vector<std::tuple<ElementType::Type, int>> layout);
+    int GetStride() const;
+    int GetSize() const { return size; }
 
 private:
     GLuint id;
+    int size;
     std::vector<std::tuple<ElementType::Type, int>> layout;
 };

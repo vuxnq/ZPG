@@ -1,9 +1,12 @@
 #pragma once
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include "Core.h"
 #include "ShaderProgram.h"
 #include "VertexBuffer.h"
 #include "VertexArray.h"
+#include "Model.h"
+#include "DrawableObject.h"
 
 class Application {
 public:
@@ -18,14 +21,10 @@ public:
 
 private:
     GLFWwindow* window;
-    ShaderProgram* shaderProgram;
+    ref<ShaderProgram> shaderProgram;
 
     // temporary solution
-    VertexBuffer* vb1;
-    VertexBuffer* vb2;
-    VertexBuffer* vb3;
-
-    VertexArray* va1;
-    VertexArray* va2;
-    VertexArray* va3;
+    DrawableObject* triangleObject;
+    DrawableObject* rectangleObject;
+    DrawableObject* sphereObject;
 };

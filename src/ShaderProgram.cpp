@@ -3,7 +3,7 @@
 #include <fstream>
 #include <sstream>
 
-ShaderProgram::ShaderProgram(const std::vector<Shader*>& shaders) {
+ShaderProgram::ShaderProgram(const std::vector<ref<Shader>>& shaders) {
 	id = glCreateProgram();
 
 	for (auto& shader : shaders) {

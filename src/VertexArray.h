@@ -1,17 +1,20 @@
 #pragma once
 #include <GL/glew.h>
 #include "VertexBuffer.h"
+#include "Core.h"
 
 class VertexArray {
 public:
-    VertexArray(VertexBuffer& vertexBuffer);
-    ~VertexArray();
+    VertexArray(const ref<VertexBuffer>& vertexBuffer);
+    ~VertexArray() {}
 
 	void Bind();
     void Unbind();
-    void SetVertexBuffer(VertexBuffer& vertexBuffer);
+    void SetVertexBuffer(const ref<VertexBuffer>& vertexBuffer);
+
+    const VertexBuffer& GetVertexBuffer() const { return *vertexBuffer; }
 
 private:
     GLuint id;
-    VertexBuffer& vertexBuffer;
+    ref<VertexBuffer> vertexBuffer;
 };

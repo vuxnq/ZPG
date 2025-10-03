@@ -21,6 +21,8 @@
 #include "VertexArray.h"
 #include "Callbacks.h"
 #include "Transformation.h"
+#include "Model.h"
+#include "DrawableObject.h"
 
 
 #include "assets/models/sphere.h"
@@ -97,40 +99,57 @@ void Application::CreateModels() {
 
 
 	// vertex buffer object (VBO)
-	vb1 = new VertexBuffer(points_triangle, sizeof(points_triangle));
+	ref<VertexBuffer> vb1 = make_ref(new VertexBuffer(points_triangle, sizeof(points_triangle)));
 	vb1->SetLayout({
 		{ElementType::Float, 3},
 		{ElementType::Float, 4}
 	});
 
-	vb2 = new VertexBuffer(points_rectangle, sizeof(points_rectangle));
+	ref<VertexBuffer> vb2 = make_ref(new VertexBuffer(points_rectangle, sizeof(points_rectangle)));
 	vb2->SetLayout({
 		{ElementType::Float, 3},
 		{ElementType::Float, 4}
 	});
 
 	// vertex array object (VAO)
-	va1 = new VertexArray(*vb1);
+	ref<VertexArray> va1 = make_ref(new VertexArray(vb1));
+	ref<VertexArray> va2 = make_ref(new VertexArray(vb2));
 
-	va2 = new VertexArray(*vb2);
+	// Models
+	ref<Model> triangleModel = make_ref(new Model(va1));
+	ref<Model> rectangleModel = make_ref(new Model(va2));
+
+	// DrawableObjects
+	triangleObject = new DrawableObject(triangleModel, make_ref(new Transformation()));
+	rectangleObject = new DrawableObject(rectangleModel, make_ref(new Transformation()));
+
+
+	ref<Shader> vertexShader = make_ref(new Shader("../assets/vertex_shader.glsl", GL_VERTEX_SHADER));
+	ref<Shader> fragmentShader = make_ref(new Shader("../assets/fragment_shader.glsl", GL_FRAGMENT_SHADER));
+	shaderProgram = make_ref(new ShaderProgram({vertexShader, fragmentShader}));
+
 
 	// sphere ////////////////////////////
-	vb3 = new VertexBuffer(sphere, sizeof(sphere), {
+	ref<VertexBuffer> sphereVBO = make_ref(new VertexBuffer(sphere, sizeof(sphere), {
 		{ElementType::Float, 3},
 		{ElementType::Float, 3}
-	});
-	va3 = new VertexArray(*vb3);
-	// end: sphere ////////////////////////////
+	}));
+	ref<VertexArray> sphereVAO = make_ref(new VertexArray(sphereVBO));
+	ref<Model> sphereModel = make_ref(new Model(sphereVAO));
 
-	Shader vertexShader = Shader("../assets/vertex_shader.glsl", GL_VERTEX_SHADER);
-	Shader fragmentShader = Shader("../assets/fragment_shader.glsl", GL_FRAGMENT_SHADER);
-	shaderProgram = new ShaderProgram({&vertexShader, &fragmentShader});
+	ref<Transformation> t = make_ref<Transformation>();
+	t->Add(make_ref(new DynamicRotateTransform(0, 50, glm::vec3(0.0f, 1.0f, 0.0f))));
+	t->Add(make_ref(new ScaleTransform(0.5)));
+	t->Add(make_ref(new RotateTransform(45, glm::vec3(0.0f, 0.0f, 1.0f))));
+	t->Add(make_ref(new TranslateTransform(glm::vec3(0.0f, 0.5f, 0.0f))));
+
+	sphereObject = new DrawableObject(sphereModel, t);
+	sphereObject->SetShaderProgram(shaderProgram);
+	// end: sphere ////////////////////////////
 }
 
 void Application::Run() {
 	float lastTime = 0.f;
-	DynamicRotateTransform drt = DynamicRotateTransform(0, 50, glm::vec3(0.0f, 1.0f, 0.0f));
-	DynamicRotateTransform drt2 = DynamicRotateTransform(0, 25, glm::vec3(0.0f, 0.0f, 1.0f));
 	while (!glfwWindowShouldClose(window))
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -139,34 +158,15 @@ void Application::Run() {
 		float delta = currentTime - lastTime;
 		lastTime = currentTime;
 
-		Transformation t = Transformation();
-		ScaleTransform st = ScaleTransform(0.5f);
-		RotateTransform rt = RotateTransform(45, glm::vec3(0.0f, 0.0f, 1.0f));
-		TranslateTransform tt = TranslateTransform({0.0f, 0.5f, 0.0f});
-
-		t.Add(&st);
-		t.Add(&drt);
-		t.Add(&drt2);
-		t.Add(&rt);
-		t.Add(&tt);
-		t.Update(delta);
-
-		glm::mat4 M = t.ComputeMatrix();
-
-		shaderProgram->SetUniform("modelMatrix", M);
-
 		shaderProgram->Use();
 
-		va3->Bind();
-		glDrawArrays(GL_TRIANGLES, 0, 2880);
-
-		va1->Bind();
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		sphereObject->Update(delta);
+		sphereObject->Draw();
 
 		shaderProgram->SetUniform("modelMatrix", glm::mat4(1.0f));
 
-		va2->Bind();
-		glDrawArrays(GL_TRIANGLES, 0, 6);
+		triangleObject->Draw();
+		rectangleObject->Draw();
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();

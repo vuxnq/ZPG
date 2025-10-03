@@ -3,10 +3,11 @@
 #include <GL/glew.h>
 #include <glm/mat4x4.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include "Core.h"
 
 class TransformationComponent {
 public:
-    virtual glm::mat4 ComputeMatrix() = 0;
+    virtual glm::mat4 GetMatrix() = 0;
     virtual void Update(float delta) {}
 };
 
@@ -23,7 +24,7 @@ public:
     ScaleTransform(const float scale);
     ~ScaleTransform() {}
 
-    glm::mat4 ComputeMatrix() override;
+    glm::mat4 GetMatrix() override;
 
 private:
     float scale;
@@ -34,7 +35,7 @@ public:
     TranslateTransform(const glm::vec3& offset);
     ~TranslateTransform() {}
 
-    glm::mat4 ComputeMatrix() override;
+    glm::mat4 GetMatrix() override;
 
 private:
     glm::vec3 offset;
@@ -45,7 +46,7 @@ public:
     RotateTransform(float angle, const glm::vec3& axis);
     ~RotateTransform() {}
 
-    glm::mat4 ComputeMatrix() override;
+    glm::mat4 GetMatrix() override;
 
 private:
     float angle;
@@ -58,7 +59,7 @@ public:
     ~DynamicRotateTransform() {}
 
     void Update(float delta) override;
-    glm::mat4 ComputeMatrix() override;
+    glm::mat4 GetMatrix() override;
 
 private:
     float angle;
@@ -72,10 +73,10 @@ public:
     Transformation() {}
     ~Transformation() {}
 
-    void Add(TransformationComponent* transformation);
-    glm::mat4 ComputeMatrix() override;
+    void Add(const ref<TransformationComponent>& transformation);
+    glm::mat4 GetMatrix() override;
     void Update(float delta) override;
 
 private:
-    std::vector<TransformationComponent*> children;
+    std::vector<ref<TransformationComponent>> children;
 };

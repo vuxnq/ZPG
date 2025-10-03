@@ -1,6 +1,7 @@
 #pragma once
 #include <GL/glew.h>
 #include <vector>
+#include "Core.h"
 #include "Scene.h"
 
 class SceneManager {
@@ -12,5 +13,5 @@ public:
     void SetActiveScene();
 
 private:
-    std::vector<Scene*> scenes;
+    std::vector<ref<Scene>> scenes;
 };
