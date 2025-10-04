@@ -1,4 +1,4 @@
-#include "VertexArray.h"
+#include "object/VertexArray.h"
 
 VertexArray::VertexArray(const ref<VertexBuffer>& vertexBuffer) : vertexBuffer(vertexBuffer) {
     glGenVertexArrays(1, &id);

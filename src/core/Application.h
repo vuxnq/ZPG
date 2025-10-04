@@ -1,13 +1,9 @@
 #pragma once
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include "Core.h"
-#include "ShaderProgram.h"
-#include "VertexBuffer.h"
-#include "VertexArray.h"
-#include "Model.h"
-#include "DrawableObject.h"
-#include "SceneManager.h"
+#include "core/Core.h"
+#include "core/ShaderProgram.h"
+#include "core/SceneManager.h"
 
 class Application {
 public:

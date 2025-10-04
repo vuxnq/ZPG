@@ -1,4 +1,4 @@
-#include "VertexBuffer.h"
+#include "object/VertexBuffer.h"
 #include <iostream>
 
 VertexBuffer::VertexBuffer(const float vertices[], size_t size, std::vector<std::tuple<ElementType::Type, int>> layout) : size(size), layout(layout) {

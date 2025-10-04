@@ -4,8 +4,8 @@
 #include <vector>
 #include <glm/mat4x4.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include "Core.h"
-#include "Shader.h"
+#include "core/Core.h"
+#include "core/Shader.h"
 
 class ShaderProgram {
 public:
@@ -20,7 +20,6 @@ public:
 
 private:
     GLuint id;
-    // std::vector<ref<Shader>> shaders;
 
     int GetUniformLocation(const std::string& name);
 };

@@ -1,4 +1,4 @@
-#include "Model.h"
+#include "object/Model.h"
 
 Model::Model(const ref<VertexArray>& vertexArray) : vertexArray(vertexArray) {}
 

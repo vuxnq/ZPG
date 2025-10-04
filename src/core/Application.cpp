@@ -1,4 +1,4 @@
-#include "Application.h"
+#include "core/Application.h"
 
 // glew, glfw
 #include <GL/glew.h>
@@ -16,14 +16,13 @@
 #include <fstream>
 #include <sstream>
 
-#include "ShaderProgram.h"
-#include "VertexBuffer.h"
-#include "VertexArray.h"
-#include "Callbacks.h"
-#include "Transformation.h"
-#include "Model.h"
-#include "DrawableObject.h"
-
+#include "core/Callbacks.h"
+#include "core/ShaderProgram.h"
+#include "object/VertexBuffer.h"
+#include "object/VertexArray.h"
+#include "object/Model.h"
+#include "object/DrawableObject.h"
+#include "transform/Transformation.h"
 
 #include "assets/models/sphere.h"
 
@@ -83,6 +82,8 @@ void Application::OnCreate() {
 	ref<Shader> fragmentShader = make_ref(new Shader("../assets/fragment_shader.glsl", GL_FRAGMENT_SHADER));
 	shaderProgram = make_ref(new ShaderProgram({vertexShader, fragmentShader}));
 
+	// Scenes /////////////////////////////
+	// scene1 - triangle
 	float points_triangle[] = {
 		// pos              // color
 		0.0f, 0.5f, 0.0f,   1.f, 0.f, 0.f, 1.f,
@@ -90,44 +91,25 @@ void Application::OnCreate() {
 		-0.5f, -0.5f, 0.0f, 0.f, 0.f, 1.f, 1.f,
 	};
 
-	float points_rectangle[] = {
-		// pos            // color
-		0.5f, 0.5f, 0.0f, 1.f, 0.f, 0.f, 1.f,
-		1.0f, 0.5f, 0.0f, 0.f, 0.f, 1.f, 1.f,
-		1.0f, 1.0f, 0.0f, 0.f, 1.f, 0.f, 1.f,
-		0.5f, 0.5f, 0.0f, 1.f, 0.f, 0.f, 1.f,
-		0.5f, 1.0f, 0.0f, 1.f, 1.f, 0.f, 1.f,
-		1.0f, 1.0f, 0.0f, 0.f, 1.f, 0.f, 1.f,
-	};
-
-
-	// vertex buffer object (VBO)
-	ref<VertexBuffer> vb1 = make_ref(new VertexBuffer(points_triangle, sizeof(points_triangle)));
-	vb1->SetLayout({
+	ref<VertexBuffer> triangleVBO = make_ref(new VertexBuffer(points_triangle, sizeof(points_triangle)));
+	triangleVBO->SetLayout({
 		{ElementType::Float, 3},
 		{ElementType::Float, 4}
 	});
+	ref<VertexArray> triangleVAO = make_ref(new VertexArray(triangleVBO));
+	ref<Model> triangleModel = make_ref(new Model(triangleVAO));
+	ref<DrawableObject> triangleObject = make_ref(new DrawableObject(
+		triangleModel,
+		make_ref(new DynamicRotateTransform(90, glm::vec3(0.0f, 0.0f, 1.0f), 1)),
+		shaderProgram
+	));
 
-	ref<VertexBuffer> vb2 = make_ref(new VertexBuffer(points_rectangle, sizeof(points_rectangle)));
-	vb2->SetLayout({
-		{ElementType::Float, 3},
-		{ElementType::Float, 4}
-	});
+	ref<Scene> scene1 = make_ref(new Scene());
+	scene1->AddDrawableObject(triangleObject);
 
-	// vertex array object (VAO)
-	ref<VertexArray> va1 = make_ref(new VertexArray(vb1));
-	ref<VertexArray> va2 = make_ref(new VertexArray(vb2));
+	sceneManager.AddScene("scene1", scene1);
 
-	// Models
-	ref<Model> triangleModel = make_ref(new Model(va1));
-	ref<Model> rectangleModel = make_ref(new Model(va2));
-
-	// DrawableObjects
-	ref<DrawableObject> triangleObject = make_ref(new DrawableObject(triangleModel, make_ref(new Transformation()), shaderProgram));
-	ref<DrawableObject> rectangleObject = make_ref(new DrawableObject(rectangleModel, make_ref(new Transformation()), shaderProgram));
-
-
-	// sphere ////////////////////////////
+	// scene2 - balls :p
 	ref<VertexBuffer> sphereVBO = make_ref(new VertexBuffer(sphere, sizeof(sphere), {
 		{ElementType::Float, 3},
 		{ElementType::Float, 3}
@@ -135,26 +117,24 @@ void Application::OnCreate() {
 	ref<VertexArray> sphereVAO = make_ref(new VertexArray(sphereVBO));
 	ref<Model> sphereModel = make_ref(new Model(sphereVAO));
 
-	ref<Transformation> t = make_ref<Transformation>();
-	t->Add(make_ref(new DynamicRotateTransform(0, 50, glm::vec3(0.0f, 1.0f, 0.0f))));
-	t->Add(make_ref(new ScaleTransform(0.5)));
-	t->Add(make_ref(new RotateTransform(45, glm::vec3(0.0f, 0.0f, 1.0f))));
-	t->Add(make_ref(new TranslateTransform(glm::vec3(0.0f, 0.5f, 0.0f))));
+	ref<Transformation> transformation = make_ref<Transformation>();
 
-	ref<DrawableObject> sphereObject = make_ref(new DrawableObject(sphereModel, t, shaderProgram));
-	sphereObject->SetShaderProgram(shaderProgram);
-	// end: sphere ////////////////////////////
+	transformation->Add(make_ref(new TranslateTransform(glm::vec3(1.0f, 1.0f, 0.0f))));
+	transformation->Add(make_ref(new DynamicRotateTransform(45, glm::vec3(0.0f, 1.0f, 0.0f), 3)));
+	transformation->Add(make_ref(new ScaleTransform(0.5)));
+	transformation->Add(make_ref(new RotateTransform(45, glm::vec3(0.0f, 0.0f, 1.0f))));
+	transformation->Add(make_ref(new TranslateTransform(glm::vec3(0.0f, 0.5f, 0.0f))));
+	transformation->Add(make_ref(new DynamicTranslateTransform(glm::vec3(0.0f, -0.5f, 0.0f), 0.5)));
+	transformation->Add(make_ref(new DynamicScaleTransform(-1, 0.1)));
 
-	triangleObject->SetShaderProgram(shaderProgram);
-	rectangleObject->SetShaderProgram(shaderProgram);
+	ref<DrawableObject> sphereObject = make_ref(new DrawableObject(sphereModel, transformation, shaderProgram));
 
-	// Scenes
-	ref<Scene> scene = make_ref(new Scene());
-	scene->AddDrawableObject(triangleObject);
-	scene->AddDrawableObject(rectangleObject);
-	scene->AddDrawableObject(sphereObject);
+	ref<Scene> scene2 = make_ref(new Scene());
+	scene2->AddDrawableObject(sphereObject);
 
-	sceneManager.AddScene("scene1", scene);
+	sceneManager.AddScene("scene2", scene2);
+
+	sceneManager.SetActiveScene("scene2");
 }
 
 void Application::Run() {

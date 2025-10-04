@@ -1,9 +1,7 @@
 #pragma once
 #include <GL/glew.h>
-#include "Core.h"
-#include "VertexBuffer.h"
-#include "VertexArray.h"
-#include "Transformation.h"
+#include "core/Core.h"
+#include "object/VertexArray.h"
 
 class Model {
 public:
