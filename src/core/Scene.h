@@ -9,7 +9,7 @@ public:
     Scene() {}
     ~Scene() {}
 
-    void OnUpdate(float delta);
+    virtual void OnUpdate(float delta);
     void AddDrawableObject(const ref<DrawableObject>& drawableObject);
 
 private:

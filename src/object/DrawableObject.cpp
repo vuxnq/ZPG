@@ -1,6 +1,10 @@
 #include "object/DrawableObject.h"
 
-DrawableObject::DrawableObject(const ref<Model>& model, const ref<TransformComponent>& transformation, const ref<ShaderProgram>& shaderProgram) : model(model), transformation(transformation), shaderProgram(shaderProgram) {}
+DrawableObject::DrawableObject(const ref<Model>& model, const ref<TransformComponent>& transformation, const ref<ShaderProgram>& shaderProgram)
+: model(model),
+transformation(transformation),
+shaderProgram(shaderProgram) {
+}
 
 void DrawableObject::SetShaderProgram(const ref<ShaderProgram>& shaderProgram) {
     this->shaderProgram = shaderProgram;
@@ -12,10 +16,14 @@ void DrawableObject::Update(float delta) {
 
 void DrawableObject::Draw() {
     model->Bind();
-    if (shaderProgram) {
-        shaderProgram->Use();
-        shaderProgram->SetUniform("modelMatrix", transformation->GetMatrix());
+
+    if (shaderProgram == nullptr) {
+        fprintf(stderr, "Shader program must be set.");
+        exit(EXIT_FAILURE);
     }
+
+    shaderProgram->Use();
+    shaderProgram->SetUniform("modelMatrix", transformation->GetMatrix());
     const auto& vertexBuffer = model->GetVertexArray().GetVertexBuffer();
     GLsizei count = vertexBuffer.GetSize() / vertexBuffer.GetStride();
 

@@ -24,8 +24,7 @@
 #include "object/DrawableObject.h"
 #include "transform/Transformation.h"
 
-#include "assets/models/sphere.h"
-
+#include "scenes/Cv3Scenes.h"
 
 Application::Application() {}
 
@@ -69,7 +68,12 @@ void Application::Init() {
 }
 
 void Application::SetUpCallbacks() {
-	glfwSetKeyCallback(window, key_callback);
+	glfwSetWindowUserPointer(window, this);
+
+	// glfwSetKeyCallback(window, key_callback);
+	glfwSetKeyCallback(window, [](GLFWwindow* window, int key, int scancode, int action, int mods){
+		((Application*)glfwGetWindowUserPointer(window))->OnKey(key, action);
+	});
 	glfwSetCursorPosCallback(window, cursor_callback);
 	glfwSetMouseButtonCallback(window, button_callback);
 	glfwSetWindowFocusCallback(window, window_focus_callback);
@@ -77,64 +81,36 @@ void Application::SetUpCallbacks() {
 	glfwSetWindowSizeCallback(window, window_size_callback);
 }
 
+void Application::OnKey(int key, int action) {
+	if (action == GLFW_PRESS) {
+		switch (key) {
+			case GLFW_KEY_Q:
+			case GLFW_KEY_ESCAPE:
+				glfwSetWindowShouldClose(window, GL_TRUE);
+				break;
+			case GLFW_KEY_1:
+				sceneManager.SetActiveScene("scene1");
+				break;
+			case GLFW_KEY_2:
+				sceneManager.SetActiveScene("scene2");
+				break;
+			case GLFW_KEY_3:
+				sceneManager.SetActiveScene("scene3");
+				break;
+			case GLFW_KEY_4:
+				sceneManager.SetActiveScene("scene4");
+				break;
+			default:
+				break;
+		}
+	}
+}
+
 void Application::OnCreate() {
-	ref<Shader> vertexShader = make_ref(new Shader("../assets/vertex_shader.glsl", GL_VERTEX_SHADER));
-	ref<Shader> fragmentShader = make_ref(new Shader("../assets/fragment_shader.glsl", GL_FRAGMENT_SHADER));
-	shaderProgram = make_ref(new ShaderProgram({vertexShader, fragmentShader}));
-
-	// Scenes /////////////////////////////
-	// scene1 - triangle
-	float points_triangle[] = {
-		// pos              // color
-		0.0f, 0.5f, 0.0f,   1.f, 0.f, 0.f, 1.f,
-		0.5f, -0.5f, 0.0f,  0.f, 1.f, 0.f, 1.f,
-		-0.5f, -0.5f, 0.0f, 0.f, 0.f, 1.f, 1.f,
-	};
-
-	ref<VertexBuffer> triangleVBO = make_ref(new VertexBuffer(points_triangle, sizeof(points_triangle)));
-	triangleVBO->SetLayout({
-		{ElementType::Float, 3},
-		{ElementType::Float, 4}
-	});
-	ref<VertexArray> triangleVAO = make_ref(new VertexArray(triangleVBO));
-	ref<Model> triangleModel = make_ref(new Model(triangleVAO));
-	ref<DrawableObject> triangleObject = make_ref(new DrawableObject(
-		triangleModel,
-		make_ref(new DynamicRotateTransform(90, glm::vec3(0.0f, 0.0f, 1.0f), 1)),
-		shaderProgram
-	));
-
-	ref<Scene> scene1 = make_ref(new Scene());
-	scene1->AddDrawableObject(triangleObject);
-
-	sceneManager.AddScene("scene1", scene1);
-
-	// scene2 - balls :p
-	ref<VertexBuffer> sphereVBO = make_ref(new VertexBuffer(sphere, sizeof(sphere), {
-		{ElementType::Float, 3},
-		{ElementType::Float, 3}
-	}));
-	ref<VertexArray> sphereVAO = make_ref(new VertexArray(sphereVBO));
-	ref<Model> sphereModel = make_ref(new Model(sphereVAO));
-
-	ref<Transformation> transformation = make_ref<Transformation>();
-
-	transformation->Add(make_ref(new TranslateTransform(glm::vec3(1.0f, 1.0f, 0.0f))));
-	transformation->Add(make_ref(new DynamicRotateTransform(45, glm::vec3(0.0f, 1.0f, 0.0f), 3)));
-	transformation->Add(make_ref(new ScaleTransform(0.5)));
-	transformation->Add(make_ref(new RotateTransform(45, glm::vec3(0.0f, 0.0f, 1.0f))));
-	transformation->Add(make_ref(new TranslateTransform(glm::vec3(0.0f, 0.5f, 0.0f))));
-	transformation->Add(make_ref(new DynamicTranslateTransform(glm::vec3(0.0f, -0.5f, 0.0f), 0.5)));
-	transformation->Add(make_ref(new DynamicScaleTransform(-1, 0.1)));
-
-	ref<DrawableObject> sphereObject = make_ref(new DrawableObject(sphereModel, transformation, shaderProgram));
-
-	ref<Scene> scene2 = make_ref(new Scene());
-	scene2->AddDrawableObject(sphereObject);
-
-	sceneManager.AddScene("scene2", scene2);
-
-	sceneManager.SetActiveScene("scene2");
+	sceneManager.AddScene("scene1", make_ref(new Cv3Scene1()));
+	sceneManager.AddScene("scene2", make_ref(new Cv3Scene2()));
+	sceneManager.AddScene("scene3", make_ref(new Cv3Scene3()));
+	sceneManager.AddScene("scene4", make_ref(new Cv3Scene4()));
 }
 
 void Application::Run() {

@@ -18,6 +18,7 @@ public:
 
 private:
     GLFWwindow* window;
-    ref<ShaderProgram> shaderProgram;
     SceneManager sceneManager;
+
+    void OnKey(int key, int action);
 };

@@ -9,7 +9,7 @@ void SceneManager::AddScene(const std::string& name, const ref<Scene>& scene) {
 
 void SceneManager::SetActiveScene(const std::string& name) {
     if (!scenes.contains(name)) {
-        fprintf(stderr, "Scene '%s' does not exist in Scene Manager.\n", name);
+        fprintf(stderr, "Scene '%s' does not exist in Scene Manager.\n", name.c_str());
         exit(EXIT_FAILURE);
     }
     activeScene = name;

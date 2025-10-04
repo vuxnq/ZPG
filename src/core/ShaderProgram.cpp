@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include "ShaderProgram.h"
 
 ShaderProgram::ShaderProgram(const std::vector<ref<Shader>>& shaders) {
 	id = glCreateProgram();
@@ -34,6 +35,38 @@ void ShaderProgram::UnUse() {
     glUseProgram(0);
 }
 
+void ShaderProgram::SetUniform(const std::string& name, float value) {
+	glUniform1f(GetUniformLocation(name), value);
+}
+
+void ShaderProgram::SetUniform(const std::string& name, int value) {
+	glUniform1i(GetUniformLocation(name), value);
+}
+
+void ShaderProgram::SetUniform(const std::string& name, const glm::vec2& value) {
+	glUniform2fv(GetUniformLocation(name), 1, glm::value_ptr(value));
+}
+
+void ShaderProgram::SetUniform(const std::string& name, const glm::vec3& value) {
+	glUniform3fv(GetUniformLocation(name), 1, glm::value_ptr(value));
+}
+
+void ShaderProgram::SetUniform(const std::string& name, const glm::vec4& value) {
+	glUniform4fv(GetUniformLocation(name), 1, glm::value_ptr(value));
+}
+
+void ShaderProgram::SetUniform(const std::string& name, const glm::mat2& value) {
+	glUniformMatrix2fv(GetUniformLocation(name), 1, GL_FALSE, glm::value_ptr(value));
+}
+
+void ShaderProgram::SetUniform(const std::string& name, const glm::mat3& value) {
+	glUniformMatrix3fv(GetUniformLocation(name), 1, GL_FALSE, glm::value_ptr(value));
+}
+
+void ShaderProgram::SetUniform(const std::string& name, const glm::mat4& value) {
+	glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, glm::value_ptr(value));
+}
+
 int ShaderProgram::GetUniformLocation(const std::string& name) {
 	GLint location;
 	if (location = glGetUniformLocation(id, name.c_str()) == -1) {
@@ -42,8 +75,4 @@ int ShaderProgram::GetUniformLocation(const std::string& name) {
 	}
 	return location;
 	// TODO: add cache
-}
-
-void ShaderProgram::SetUniform(const std::string& name, const glm::mat4& value) {
-	glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, glm::value_ptr(value));
 }
