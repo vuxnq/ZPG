@@ -2,15 +2,12 @@
 #include <iostream>
 
 void Scene::OnUpdate(float delta) {
-    camera.Update(delta);
+    camera.Update(delta); // TODO: added without thinking mb refactor
 
     for (auto& drawableObject : drawableObjects) {
         drawableObject->Update(delta);
         drawableObject->Draw();
     }
-
-    auto p = camera.GetPosition();
-    std::cout << p.x << " " << p.y << " " << p.z << std::endl;
 }
 
 void Scene::AddDrawableObject(const ref<DrawableObject>& drawableObject) {

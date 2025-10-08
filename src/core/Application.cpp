@@ -48,8 +48,7 @@ void Application::Init() {
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	window = glfwCreateWindow(640, 480, "ZPG", NULL, NULL);
-	if (!window)
-	{
+	if (!window) {
 		glfwTerminate();
 		exit(EXIT_FAILURE);
 	}

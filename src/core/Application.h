@@ -18,6 +18,7 @@ public:
 
     static Application* Get() { return s_application; }
     GLFWwindow* GetWindow() { return window; }
+
 private:
     GLFWwindow* window;
     SceneManager sceneManager;
