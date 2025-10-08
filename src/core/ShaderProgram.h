@@ -5,9 +5,10 @@
 #include <glm/mat4x4.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "core/Core.h"
+#include "core/Observer.h"
 #include "core/Shader.h"
 
-class ShaderProgram {
+class ShaderProgram : public Subscriber {
 public:
     ShaderProgram(const std::vector<ref<Shader>>& shaders);
     ~ShaderProgram() {}
@@ -25,6 +26,8 @@ public:
     void SetUniform(const std::string& name, const glm::mat2& value);
     void SetUniform(const std::string& name, const glm::mat3& value);
     void SetUniform(const std::string& name, const glm::mat4& value);
+
+    void OnNotify(const Event& event) override;
 
 private:
     GLuint id;

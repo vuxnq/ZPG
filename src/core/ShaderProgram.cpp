@@ -2,7 +2,6 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include "ShaderProgram.h"
 
 ShaderProgram::ShaderProgram(const std::vector<ref<Shader>>& shaders) {
 	id = glCreateProgram();
@@ -71,8 +70,19 @@ int ShaderProgram::GetUniformLocation(const std::string& name) {
 	GLint location;
 	if (location = glGetUniformLocation(id, name.c_str()) == -1) {
 		fprintf(stderr, "Uniform '%s' not found\n", name.c_str());
-		exit(EXIT_FAILURE);
+		// exit(EXIT_FAILURE);
 	}
 	return location;
 	// TODO: add cache
+}
+
+void ShaderProgram::OnNotify(const Event& event) {
+	if (event.type == EventType::CameraPositionChanged) {
+		auto payload = (CameraPositionChangedPayload*)event.payload;
+		Use();
+		SetUniform("viewMatrix", payload->viewMatrix);
+		SetUniform("projMatrix", payload->projectionMatrix);
+		std::cout << "Set uniforms (" << id << ")" << std::endl;
+
+	}
 }

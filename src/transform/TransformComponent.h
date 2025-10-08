@@ -4,6 +4,7 @@
 
 class TransformComponent {
 public:
+    virtual ~TransformComponent() {}
     virtual glm::mat4 GetMatrix() = 0;
     virtual void Update(float delta) {}
 };

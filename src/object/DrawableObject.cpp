@@ -24,6 +24,7 @@ void DrawableObject::Draw() {
 
     shaderProgram->Use();
     shaderProgram->SetUniform("modelMatrix", transformation->GetMatrix());
+
     const auto& vertexBuffer = model->GetVertexArray().GetVertexBuffer();
     GLsizei count = vertexBuffer.GetSize() / vertexBuffer.GetStride();
 

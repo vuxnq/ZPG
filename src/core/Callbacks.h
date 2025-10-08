@@ -15,20 +15,20 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 }
 
 static void window_focus_callback(GLFWwindow* window, int focused) {
-	printf("window_focus_callback \n");
+	// printf("window_focus_callback \n");
 }
 
 static void window_iconify_callback(GLFWwindow* window, int iconified) {
-	printf("window_iconify_callback \n");
+	// printf("window_iconify_callback \n");
 }
 
 static void window_size_callback(GLFWwindow* window, int width, int height){
-	printf("resize %d, %d \n", width, height);
+	// printf("resize %d, %d \n", width, height);
 	glViewport(0, 0, width, height);
 }
 
 static void cursor_callback(GLFWwindow *window, double x, double y) {
-	printf("cursor_callback \n");
+	// printf("cursor_callback \n");
 }
 
 static void button_callback(GLFWwindow* window, int button, int action, int mode){

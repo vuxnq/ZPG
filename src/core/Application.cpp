@@ -26,7 +26,13 @@
 
 #include "scenes/Cv3Scenes.h"
 
-Application::Application() {}
+Application::Application() {
+	if (s_application != nullptr) {
+		std::cerr << "Application already instantiated" << std::endl;
+		exit(EXIT_FAILURE);
+	}
+	s_application = this;
+}
 
 void Application::Init() {
 	glfwSetErrorCallback(error_callback);

@@ -2,6 +2,7 @@
 #include <GL/glew.h>
 #include <vector>
 #include "core/Core.h"
+#include "core/Camera.h"
 #include "object/DrawableObject.h"
 
 class Scene {
@@ -14,4 +15,7 @@ public:
 
 private:
     std::vector<ref<DrawableObject>> drawableObjects;
+
+protected:
+    Camera camera;
 };

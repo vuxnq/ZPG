@@ -18,11 +18,14 @@ public:
         ref<Shader> fragmentShader = make_ref(new Shader("../assets/fragment_shader.glsl", GL_FRAGMENT_SHADER));
         shaderProgram = make_ref(new ShaderProgram({vertexShader, fragmentShader}));
 
+        camera.AddSubscriber(shaderProgram);
+        camera.Notify();
+
         float points_triangle[] = {
             // pos              // color
-            0.0f, 0.5f, 0.0f,   1.f, 0.f, 0.f, 1.f,
-            0.5f, -0.5f, 0.0f,  0.f, 1.f, 0.f, 1.f,
-            -0.5f, -0.5f, 0.0f, 0.f, 0.f, 1.f, 1.f,
+            0.0f, 0.5f, -1.0f,   1.f, 0.f, 0.f, 1.f,
+            0.5f, -0.5f, -1.0f,  0.f, 1.f, 0.f, 1.f,
+            -0.5f, -0.5f, -1.0f, 0.f, 0.f, 1.f, 1.f,
         };
 
         ref<VertexBuffer> triangleVBO = make_ref(new VertexBuffer(points_triangle, sizeof(points_triangle)));
@@ -55,6 +58,9 @@ public:
         ref<Shader> fragmentShader = make_ref(new Shader("../assets/fragment_shader.glsl", GL_FRAGMENT_SHADER));
         shaderProgram = make_ref(new ShaderProgram({vertexShader, fragmentShader}));
 
+        camera.AddSubscriber(shaderProgram);
+        camera.Notify();
+
         ref<VertexBuffer> sphereVBO = make_ref(new VertexBuffer(sphere, sizeof(sphere), {{ElementType::Float, 3}, {ElementType::Float, 3}}));
         ref<VertexArray> sphereVAO = make_ref(new VertexArray(sphereVBO));
         ref<Model> sphereModel = make_ref(new Model(sphereVAO));
@@ -69,7 +75,7 @@ public:
         so3T->Add(make_ref(new TranslateTransform(glm::vec3(-0.5f, -0.5f, 0.0f))));
         auto so4T = make_ref(new Transformation());
         so4T->Add(make_ref(new ScaleTransform(0.2)));
-        so4T->Add(make_ref(new TranslateTransform(glm::vec3(0.5f, -0.5f, 0.0f))));
+        so4T->Add(make_ref(new TranslateTransform(glm::vec3(0.0f, 0.0f, 0.0f))));
         ref<DrawableObject> sphereObject1 = make_ref(new DrawableObject(sphereModel, so1T, shaderProgram));
         ref<DrawableObject> sphereObject2 = make_ref(new DrawableObject(sphereModel, so2T, shaderProgram));
         ref<DrawableObject> sphereObject3 = make_ref(new DrawableObject(sphereModel, so3T, shaderProgram));
@@ -100,6 +106,11 @@ public:
             make_ref(new ShaderProgram({vertexShader, fragmentShaderGrayscale})),
             make_ref(new ShaderProgram({vertexShader, fragmentShaderYellow}))
         };
+
+        for (auto& shader : shaders) {
+            camera.AddSubscriber(shader);
+        }
+        camera.Notify();
 
         std::vector<std::tuple<ElementType::Type, int>> layout = {{ElementType::Float, 3}, {ElementType::Float, 3}};
         std::vector<ref<Model>> models = {
@@ -142,6 +153,11 @@ public:
         ref<Shader> vertexShader = make_ref(new Shader("../assets/vertex_shader_normal.glsl", GL_VERTEX_SHADER));
         ref<Shader> fragmentShader = make_ref(new Shader("../assets/fragment_shader.glsl", GL_FRAGMENT_SHADER));
         shaderProgram = make_ref(new ShaderProgram({vertexShader, fragmentShader}));
+
+
+        camera.AddSubscriber(shaderProgram);
+        camera.Notify();
+
 
         std::vector<std::tuple<ElementType::Type, int>> layout = {{ElementType::Float, 3}, {ElementType::Float, 3}};
         auto sphereVBO = make_ref(new VertexBuffer(sphere, sizeof(sphere), layout));
