@@ -9,53 +9,17 @@
 
 class Camera : public Publisher {
 public:
-    Camera() {
-        ComputeViewMatrix();
-        ComputerProjectionMatrix();
-        Notify();
-    }
+    Camera();
     ~Camera() {}
 
-    const glm::mat4& GetViewMatrix() {
-        return viewMatrix;
-    }
+    const glm::mat4& GetViewMatrix();
+    const glm::mat4& GetProjMatrix();
 
-    const glm::mat4& GetProjMatrix() {
-        return projectionMatrix;
-    }
+    void SetPosition(const glm::vec3& position);
+    void SetDirection(const glm::vec3& direction);
+    void SetAspectRatio(float aspectRatio);
 
-    void SetPosition(const glm::vec3& position) {
-        this->position = position;
-        ComputeViewMatrix();
-        Notify();
-    }
-
-    const glm::vec3& GetPosition() const {
-        return position;
-    }
-
-    void SetDirection(const glm::vec3& direction) {
-        this->direction = direction;
-        ComputeViewMatrix();
-        Notify();
-    }
-
-    void SetAspectRatio(float aspectRatio) {
-        this->aspectRatio = aspectRatio;
-        ComputerProjectionMatrix();
-        Notify();
-    }
-
-    void Notify() override {
-        CameraPositionChangedPayload payload;
-        payload.viewMatrix = viewMatrix;
-        payload.projectionMatrix = projectionMatrix;
-        Event event(EventType::CameraPositionChanged, &payload);
-
-        for (auto& subscriber : subscribers) {
-            subscriber->OnNotify(event);
-        }
-    }
+    void Notify() override;
 
     void Update(float delta);
 

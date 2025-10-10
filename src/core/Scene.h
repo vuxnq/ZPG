@@ -10,7 +10,7 @@ public:
     Scene() {}
     ~Scene() {}
 
-    virtual void OnUpdate(float delta);
+    virtual void OnUpdate(float delta); // TODO: add renderer class mb drawableobj by se nemel sam kreslit
     void AddDrawableObject(const ref<DrawableObject>& drawableObject);
 
 private:

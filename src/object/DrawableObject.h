@@ -12,7 +12,7 @@ public:
 
     void SetShaderProgram(const ref<ShaderProgram>& shaderProgram);
     void Update(float delta);
-    void Draw();
+    void Draw(); // TODO: renderer
 
 private:
     ref<Model> model;
