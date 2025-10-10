@@ -2,7 +2,7 @@
 #include <iostream>
 
 void Scene::OnUpdate(float delta) {
-    camera.Update(delta); // TODO: added without thinking mb refactor
+    controller.Update(delta);
 
     for (auto& drawableObject : drawableObjects) {
         drawableObject->Update(delta);

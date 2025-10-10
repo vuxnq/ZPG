@@ -19,25 +19,23 @@ public:
     void SetDirection(const glm::vec3& direction);
     void SetAspectRatio(float aspectRatio);
 
-    void Notify() override;
+    glm::vec3 GetPosition() { return position; }
+    glm::vec3 GetDirection() { return direction; }
+    glm::vec3 GetUp() { return up; }
 
-    void Update(float delta);
+    void Notify() override;
 
 private:
     glm::mat4 viewMatrix;
     glm::mat4 projectionMatrix;
 
-    float aspectRatio = 1.5f;
+    float aspectRatio = 1.5f; // TODO:
     float fov = 75.0f;
 
     glm::vec3 position = glm::vec3(0.f, 0.f, 0.f);
     glm::vec3 direction = glm::vec3(0.f, 0.f, -1.f);
     glm::vec3 up = glm::vec3(0.f, 1.f, 0.f);
 
-    void ComputeViewMatrix() {
-        viewMatrix = glm::lookAt(position, position + direction, up);
-    }
-    void ComputerProjectionMatrix() {
-        projectionMatrix = glm::perspective(glm::radians(fov), aspectRatio, 0.1f, 100.0f);
-    }
+    void ComputeViewMatrix();
+    void ComputerProjectionMatrix();
 };

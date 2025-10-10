@@ -73,17 +73,16 @@ void Application::Init() {
 }
 
 void Application::SetUpCallbacks() {
-	glfwSetWindowUserPointer(window, this);
-
 	// glfwSetKeyCallback(window, key_callback);
 	glfwSetKeyCallback(window, [](GLFWwindow* window, int key, int scancode, int action, int mods){
-		((Application*)glfwGetWindowUserPointer(window))->OnKey(key, action);
+		Application::Get()->OnKey(key, action);
 	});
 	glfwSetCursorPosCallback(window, cursor_callback);
 	glfwSetMouseButtonCallback(window, button_callback);
 	glfwSetWindowFocusCallback(window, window_focus_callback);
 	glfwSetWindowIconifyCallback(window, window_iconify_callback);
 	glfwSetWindowSizeCallback(window, window_size_callback);
+
 }
 
 void Application::OnKey(int key, int action) {

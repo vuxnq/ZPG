@@ -5,12 +5,22 @@
 
 class Controller {
 public:
-    Controller(ref<Camera> camera) {
-        this->camera = camera;
-    }
-
+    Controller(Camera& camera) : camera(camera) {}
     ~Controller() {}
 
+    void Update(float delta);
+
 private:
-    ref<Camera> camera;
+    Camera& camera;
+    float speed = 2;
+    float sensitivity = 100;
+    float mouseSensitivity = 0.25f;
+
+    float yaw = -90.0f;
+    float pitch = 0.0f;
+
+    double mouseLastPosition[2] = {0};
+
+    void ProcessKeyboardInput(float delta);
+    void ProcessMouseInput(float delta);
 };

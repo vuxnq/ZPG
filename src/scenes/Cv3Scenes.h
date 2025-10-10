@@ -19,7 +19,6 @@ public:
         shaderProgram = make_ref(new ShaderProgram({vertexShader, fragmentShader}));
 
         camera.AddSubscriber(shaderProgram);
-        camera.Notify();
 
         float points_triangle[] = {
             // pos              // color
@@ -59,7 +58,6 @@ public:
         shaderProgram = make_ref(new ShaderProgram({vertexShader, fragmentShader}));
 
         camera.AddSubscriber(shaderProgram);
-        camera.Notify();
 
         ref<VertexBuffer> sphereVBO = make_ref(new VertexBuffer(sphere, sizeof(sphere), {{ElementType::Float, 3}, {ElementType::Float, 3}}));
         ref<VertexArray> sphereVAO = make_ref(new VertexArray(sphereVBO));
@@ -110,7 +108,6 @@ public:
         for (auto& shader : shaders) {
             camera.AddSubscriber(shader);
         }
-        camera.Notify();
 
         std::vector<std::tuple<ElementType::Type, int>> layout = {{ElementType::Float, 3}, {ElementType::Float, 3}};
         std::vector<ref<Model>> models = {
@@ -156,7 +153,6 @@ public:
 
 
         camera.AddSubscriber(shaderProgram);
-        camera.Notify();
 
 
         std::vector<std::tuple<ElementType::Type, int>> layout = {{ElementType::Float, 3}, {ElementType::Float, 3}};

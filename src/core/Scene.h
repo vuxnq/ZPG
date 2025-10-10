@@ -3,11 +3,12 @@
 #include <vector>
 #include "core/Core.h"
 #include "core/Camera.h"
+#include "core/Controller.h"
 #include "object/DrawableObject.h"
 
 class Scene {
 public:
-    Scene() {}
+    Scene() : controller(camera) {}
     ~Scene() {}
 
     virtual void OnUpdate(float delta); // TODO: add renderer class mb drawableobj by se nemel sam kreslit
@@ -18,4 +19,5 @@ private:
 
 protected:
     Camera camera;
+    Controller controller;
 };
