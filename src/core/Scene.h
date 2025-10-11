@@ -14,6 +14,8 @@ public:
     virtual void OnUpdate(float delta); // TODO: add renderer class mb drawableobj by se nemel sam kreslit
     void AddDrawableObject(const ref<DrawableObject>& drawableObject);
 
+    void SetAspectRatio(float aspect);
+
 private:
     std::vector<ref<DrawableObject>> drawableObjects;
 

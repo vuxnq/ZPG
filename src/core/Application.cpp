@@ -25,6 +25,7 @@
 #include "transform/Transformation.h"
 
 #include "scenes/Cv3Scenes.h"
+#include "scenes/Cv4Scenes.h"
 
 Application::Application() {
 	if (s_application != nullptr) {
@@ -47,7 +48,7 @@ void Application::Init() {
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	window = glfwCreateWindow(640, 480, "ZPG", NULL, NULL);
+	window = glfwCreateWindow(windowWidth, windowHeight, "ZPG", NULL, NULL);
 	if (!window) {
 		glfwTerminate();
 		exit(EXIT_FAILURE);
@@ -77,11 +78,15 @@ void Application::SetUpCallbacks() {
 	glfwSetKeyCallback(window, [](GLFWwindow* window, int key, int scancode, int action, int mods){
 		Application::Get()->OnKey(key, action);
 	});
-	glfwSetCursorPosCallback(window, cursor_callback);
-	glfwSetMouseButtonCallback(window, button_callback);
-	glfwSetWindowFocusCallback(window, window_focus_callback);
-	glfwSetWindowIconifyCallback(window, window_iconify_callback);
-	glfwSetWindowSizeCallback(window, window_size_callback);
+	// glfwSetCursorPosCallback(window, cursor_callback);
+	// glfwSetMouseButtonCallback(window, button_callback);
+	// glfwSetWindowFocusCallback(window, window_focus_callback);
+	// glfwSetWindowIconifyCallback(window, window_iconify_callback);
+	// glfwSetWindowSizeCallback(window, window_size_callback);
+	glfwSetWindowSizeCallback(window, [](GLFWwindow* window, int width, int height){
+		glViewport(0, 0, width, height);
+		Application::Get()->OnWindowResize(width, height);
+	});
 
 }
 
@@ -94,15 +99,23 @@ void Application::OnKey(int key, int action) {
 				break;
 			case GLFW_KEY_1:
 				sceneManager.SetActiveScene("scene1");
+				sceneManager.GetActiveScene()->SetAspectRatio(windowWidth / (float)windowHeight);
 				break;
 			case GLFW_KEY_2:
 				sceneManager.SetActiveScene("scene2");
+				sceneManager.GetActiveScene()->SetAspectRatio(windowWidth / (float)windowHeight);
 				break;
 			case GLFW_KEY_3:
 				sceneManager.SetActiveScene("scene3");
+				sceneManager.GetActiveScene()->SetAspectRatio(windowWidth / (float)windowHeight);
 				break;
 			case GLFW_KEY_4:
 				sceneManager.SetActiveScene("scene4");
+				sceneManager.GetActiveScene()->SetAspectRatio(windowWidth / (float)windowHeight);
+				break;
+			case GLFW_KEY_5:
+				sceneManager.SetActiveScene("scene5");
+				sceneManager.GetActiveScene()->SetAspectRatio(windowWidth / (float)windowHeight);
 				break;
 			default:
 				break;
@@ -110,11 +123,19 @@ void Application::OnKey(int key, int action) {
 	}
 }
 
+void Application::OnWindowResize(int width, int height) {
+	windowWidth = width;
+	windowHeight = height;
+
+	sceneManager.GetActiveScene()->SetAspectRatio(windowWidth / (float)windowHeight);
+}
+
 void Application::OnCreate() {
 	sceneManager.AddScene("scene1", make_ref(new Cv3Scene1()));
 	sceneManager.AddScene("scene2", make_ref(new Cv3Scene2()));
 	sceneManager.AddScene("scene3", make_ref(new Cv3Scene3()));
 	sceneManager.AddScene("scene4", make_ref(new Cv3Scene4()));
+	sceneManager.AddScene("scene5", make_ref(new Cv4Scene()));
 }
 
 void Application::Run() {

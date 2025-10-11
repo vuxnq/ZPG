@@ -29,7 +29,7 @@ private:
     glm::mat4 viewMatrix;
     glm::mat4 projectionMatrix;
 
-    float aspectRatio = 1.5f; // TODO:
+    float aspectRatio = 1.5f;
     float fov = 75.0f;
 
     glm::vec3 position = glm::vec3(0.f, 0.f, 0.f);

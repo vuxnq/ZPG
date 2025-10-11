@@ -13,7 +13,7 @@ public:
 private:
     Camera& camera;
     float speed = 2;
-    float sensitivity = 100;
+    float rotationSpeed = 100;
     float mouseSensitivity = 0.25f;
 
     float yaw = -90.0f;
@@ -22,5 +22,7 @@ private:
     double mouseLastPosition[2] = {0};
 
     void ProcessKeyboardInput(float delta);
-    void ProcessMouseInput(float delta);
+    void ProcessMouseInput();
+
+    glm::vec3 ComputeDirection(float yaw, float pitch) const;
 };

@@ -1,5 +1,6 @@
 #include "core/Scene.h"
 #include <iostream>
+#include "Scene.h"
 
 void Scene::OnUpdate(float delta) {
     controller.Update(delta);
@@ -12,4 +13,8 @@ void Scene::OnUpdate(float delta) {
 
 void Scene::AddDrawableObject(const ref<DrawableObject>& drawableObject) {
     drawableObjects.push_back(drawableObject);
+}
+
+void Scene::SetAspectRatio(float aspect) {
+    camera.SetAspectRatio(aspect);
 }

@@ -20,10 +20,14 @@ public:
     GLFWwindow* GetWindow() { return window; }
 
 private:
+    inline static Application* s_application = nullptr;
+
     GLFWwindow* window;
     SceneManager sceneManager;
 
-    void OnKey(int key, int action);
+    int windowWidth = 640;
+    int windowHeight = 480;
 
-    inline static Application* s_application = nullptr;
+    void OnKey(int key, int action);
+    void OnWindowResize(int width, int height);
 };
