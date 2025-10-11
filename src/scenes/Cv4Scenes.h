@@ -1,5 +1,6 @@
 #pragma once
 #include "core/Scene.h"
+#include <random>
 
 #include "assets/models/bushes.h"
 #include "assets/models/plain.h"
@@ -26,11 +27,53 @@ public:
         ref<VertexArray> plainVAO = make_ref(new VertexArray(plainVBO));
         ref<Model> plainModel = make_ref(new Model(plainVAO));
 
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_real_distribution<float> rTreeOffset(-plainSize, plainSize);
+        std::uniform_real_distribution<float> rBushesOffsetRelativeToTreeOffset(-0.5f, 0.5f);
+        std::uniform_real_distribution<float> rAngle(0.0f, 360.0f);
+        std::uniform_real_distribution<float> rScale(0.6f, 1.0f);
 
-        ref<DrawableObject> bushes1 = make_ref(new DrawableObject(bushesModel, make_ref<Transformation>(), shaderProgram));
-        AddDrawableObject(bushes1);
+        // trees
+        for (int i = 0; i < treeCount; i++) {
+            auto treeTransform = make_ref(new Transformation());
+            treeTransform->Add(make_ref(new ScaleTransform(rScale(gen))));
+            treeTransform->Add(make_ref(new RotateTransform(rAngle(gen), glm::vec3(0.0f, 1.0f, 0.0f))));
+            treeTransform->Add(make_ref(new TranslateTransform(glm::vec3(rTreeOffset(gen), 0.0f, rTreeOffset(gen)))));
+            ref<DrawableObject> treeObject = make_ref(new DrawableObject(treeModel, treeTransform, shaderProgram));
+
+            // bushes around the tree
+            for (int j = 0; j < 10; j++) {
+                if (rand() % 2) continue;
+
+                auto bushesTransform = make_ref(new Transformation());
+                bushesTransform->Add(make_ref(new ScaleTransform(rScale(gen))));
+                bushesTransform->Add(make_ref(new RotateTransform(rAngle(gen), glm::vec3(0.0f, 1.0f, 0.0f))));
+                bushesTransform->Add(make_ref(new TranslateTransform(glm::vec3(rBushesOffsetRelativeToTreeOffset(gen), 0.0f, rBushesOffsetRelativeToTreeOffset(gen)))));
+                bushesTransform->Add(treeTransform);
+                ref<DrawableObject> bushesObject = make_ref(new DrawableObject(bushesModel, bushesTransform, shaderProgram));
+                AddDrawableObject(bushesObject);
+            }
+            AddDrawableObject(treeObject);
+        }
+
+        // bushes
+        for (int i = 0; i < (int)(pow(plainSize, 2) * bushesDensity); i++) {
+            auto bushesTransform = make_ref(new Transformation());
+            bushesTransform->Add(make_ref(new ScaleTransform(rScale(gen))));
+            bushesTransform->Add(make_ref(new RotateTransform(rAngle(gen), glm::vec3(0.0f, 1.0f, 0.0f))));
+            bushesTransform->Add(make_ref(new TranslateTransform(glm::vec3(rTreeOffset(gen), 0.0f, rTreeOffset(gen)))));
+            ref<DrawableObject> bushesObject = make_ref(new DrawableObject(bushesModel, bushesTransform, shaderProgram));
+            AddDrawableObject(bushesObject);
+        }
+
+        ref<DrawableObject> plainObject = make_ref(new DrawableObject(plainModel, make_ref(new ScaleTransform(plainSize)), shaderProgram));
+        AddDrawableObject(plainObject);
     }
 
 private:
     ref<ShaderProgram> shaderProgram;
+    float plainSize = 10.0f;
+    int bushesDensity = 4;
+    int treeCount = 50;
 };
