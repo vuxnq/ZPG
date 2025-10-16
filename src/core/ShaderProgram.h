@@ -33,4 +33,8 @@ private:
     GLuint id;
 
     int GetUniformLocation(const std::string& name);
+
+    // TODO: kurva pico
+    inline static int lightcount = 0;
+
 };

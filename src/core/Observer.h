@@ -5,6 +5,7 @@
 
 enum EventType {
     CameraPositionChanged,
+    PointLightSet,
 };
 
 struct Payload {};
@@ -12,6 +13,11 @@ struct Payload {};
 struct CameraPositionChangedPayload : public Payload {
     glm::mat4 viewMatrix;
     glm::mat4 projectionMatrix;
+};
+
+struct PointLightSetPayload : public Payload {
+    glm::vec3 color;
+    glm::vec3 position;
 };
 
 struct Event {

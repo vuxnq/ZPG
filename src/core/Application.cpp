@@ -26,6 +26,7 @@
 
 #include "scenes/Cv3Scenes.h"
 #include "scenes/Cv4Scenes.h"
+#include "scenes/Cv5Scenes.h"
 
 Application::Application() {
 	if (s_application != nullptr) {
@@ -98,23 +99,19 @@ void Application::OnKey(int key, int action) {
 				glfwSetWindowShouldClose(window, GL_TRUE);
 				break;
 			case GLFW_KEY_1:
-				sceneManager.SetActiveScene("scene1");
+				sceneManager.SetActiveScene("scene5.1");
 				sceneManager.GetActiveScene()->SetAspectRatio(windowWidth / (float)windowHeight);
 				break;
 			case GLFW_KEY_2:
-				sceneManager.SetActiveScene("scene2");
+				sceneManager.SetActiveScene("scene5.2");
 				sceneManager.GetActiveScene()->SetAspectRatio(windowWidth / (float)windowHeight);
 				break;
 			case GLFW_KEY_3:
-				sceneManager.SetActiveScene("scene3");
+				sceneManager.SetActiveScene("scene5.3");
 				sceneManager.GetActiveScene()->SetAspectRatio(windowWidth / (float)windowHeight);
 				break;
 			case GLFW_KEY_4:
-				sceneManager.SetActiveScene("scene4");
-				sceneManager.GetActiveScene()->SetAspectRatio(windowWidth / (float)windowHeight);
-				break;
-			case GLFW_KEY_5:
-				sceneManager.SetActiveScene("scene5");
+				sceneManager.SetActiveScene("scene5.4");
 				sceneManager.GetActiveScene()->SetAspectRatio(windowWidth / (float)windowHeight);
 				break;
 			default:
@@ -131,11 +128,10 @@ void Application::OnWindowResize(int width, int height) {
 }
 
 void Application::OnCreate() {
-	sceneManager.AddScene("scene1", make_ref(new Cv3Scene1()));
-	sceneManager.AddScene("scene2", make_ref(new Cv3Scene2()));
-	sceneManager.AddScene("scene3", make_ref(new Cv3Scene3()));
-	sceneManager.AddScene("scene4", make_ref(new Cv3Scene4()));
-	sceneManager.AddScene("scene5", make_ref(new Cv4Scene()));
+	sceneManager.AddScene("scene5.1", make_ref(new Cv5Scene1()));
+	sceneManager.AddScene("scene5.2", make_ref(new Cv5Scene2()));
+	sceneManager.AddScene("scene5.3", make_ref(new Cv5Scene3()));
+	sceneManager.AddScene("scene5.4", make_ref(new Cv5Scene4()));
 }
 
 void Application::Run() {
