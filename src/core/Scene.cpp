@@ -25,7 +25,6 @@ void Scene::SetAspectRatio(float aspect) {
 
 void Scene::SetPointLights() {
     for (auto& shaderProgram : shaderProgramManager.GetShaderPrograms()) { // TODO: uniformbuffer
-        printf("%s\n", shaderProgram.first.c_str());
         for (int j = 0; j < pointLights.size(); j++) {
             shaderProgram.second->Use();
             std::string base = "pointLights[" + std::to_string(j) + "]";
