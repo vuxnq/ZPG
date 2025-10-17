@@ -114,6 +114,10 @@ void Application::OnKey(int key, int action) {
 				sceneManager.SetActiveScene("scene5.4");
 				sceneManager.GetActiveScene()->SetAspectRatio(windowWidth / (float)windowHeight);
 				break;
+			case GLFW_KEY_5:
+				sceneManager.SetActiveScene("scene5.5");
+				sceneManager.GetActiveScene()->SetAspectRatio(windowWidth / (float)windowHeight);
+				break;
 			default:
 				break;
 		}
@@ -132,6 +136,7 @@ void Application::OnCreate() {
 	sceneManager.AddScene("scene5.2", make_ref(new Cv5Scene2()));
 	sceneManager.AddScene("scene5.3", make_ref(new Cv5Scene3()));
 	sceneManager.AddScene("scene5.4", make_ref(new Cv5Scene4()));
+	sceneManager.AddScene("scene5.5", make_ref(new Cv5Scene5()));
 }
 
 void Application::Run() {

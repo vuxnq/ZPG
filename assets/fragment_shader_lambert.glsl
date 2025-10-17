@@ -20,15 +20,7 @@ vec3 calculatePointLight(PointLight light, vec3 fragPos, vec3 normal, vec3 viewD
     // diffuse
     float diff = max(dot(lightDir, normal), 0.0);
 
-    // specular - phong
-    // vec3 reflectDir = reflect(-lightDir, normal);
-    // float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32.0);
-
-    // specular - blinn-phong
-    vec3 halfway = normalize(lightDir + viewDir);
-    float spec = pow(max(dot(normal, halfway), 0.0), 32.0);
-
-    return diff * light.color + spec * light.color;
+    return diff * light.color;
 }
 
 void main(void) {
