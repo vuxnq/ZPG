@@ -12,7 +12,9 @@ public:
 
 private:
     Camera& camera;
-    float speed = 2;
+    float normalSpeed = 2;
+    float highSpeed = 5;
+    float speed = normalSpeed;
     float rotationSpeed = 100;
     float mouseSensitivity = 0.25f;
 

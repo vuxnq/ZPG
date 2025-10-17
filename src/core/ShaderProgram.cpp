@@ -3,7 +3,6 @@
 #include <fstream>
 #include <sstream>
 #include "core/Camera.h"
-#include "object/Light.h"
 
 ShaderProgram::ShaderProgram(const std::vector<ref<Shader>>& shaders) {
 	id = glCreateProgram();

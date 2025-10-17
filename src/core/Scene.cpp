@@ -24,11 +24,12 @@ void Scene::SetAspectRatio(float aspect) {
 }
 
 void Scene::SetPointLights() {
-    for (int i = 0; i < shaderPrograms.size(); i++) {
+    for (auto& shaderProgram : shaderProgramManager.GetShaderPrograms()) { // TODO: uniformbuffer
         for (int j = 0; j < pointLights.size(); j++) {
-            shaderPrograms[i]->Use();
-            shaderPrograms[i]->SetUniform("pointLights[" + std::to_string(j) + "].color", pointLights[j]->GetColor());
-            shaderPrograms[i]->SetUniform("pointLights[" + std::to_string(j) + "].position", pointLights[j]->GetPosition());
+            shaderProgram.second->Use();
+            std::string base = "pointLights[" + std::to_string(j) + "]";
+            shaderProgram.second->SetUniform(base + ".color", pointLights[j]->GetColor());
+            shaderProgram.second->SetUniform(base + ".position", pointLights[j]->GetPosition());
         }
     }
 }

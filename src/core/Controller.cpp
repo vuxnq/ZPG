@@ -22,7 +22,8 @@ void Controller::ProcessKeyboardInput(float delta) {
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) position -= forward * delta * speed;
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) position += right * delta * speed;
     if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) position += up * delta * speed;
-    if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) position -= up * delta * speed;
+    if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) position -= up * delta * speed;
+    if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) speed = highSpeed; else speed = normalSpeed;
 
     if (position != oldPosition) {
         camera.SetPosition(position);

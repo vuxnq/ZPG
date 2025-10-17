@@ -4,8 +4,9 @@
 #include "core/Core.h"
 #include "core/Camera.h"
 #include "core/Controller.h"
+#include "core/ShaderProgramManager.h"
 #include "object/DrawableObject.h"
-#include "object/Light.h"
+#include "object/PointLight.h"
 
 class Scene {
 public:
@@ -27,5 +28,5 @@ private:
 protected:
     Camera camera;
     Controller controller;
-    std::vector<ref<ShaderProgram>> shaderPrograms; // TODO: Asi nejako takto asi jako map stejne jako scenemanager asi to predelat na shaderprogrammanager
+    ShaderProgramManager shaderProgramManager;
 };
