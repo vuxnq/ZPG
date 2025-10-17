@@ -2,6 +2,8 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include "core/Camera.h"
+#include "object/Light.h"
 
 ShaderProgram::ShaderProgram(const std::vector<ref<Shader>>& shaders) {
 	id = glCreateProgram();
@@ -67,29 +69,34 @@ void ShaderProgram::SetUniform(const std::string& name, const glm::mat4& value) 
 }
 
 int ShaderProgram::GetUniformLocation(const std::string& name) {
+	if (locationCache.contains(name))
+		return locationCache[name];
+
 	GLint location;
 	if ((location = glGetUniformLocation(id, name.c_str())) == -1) {
 		fprintf(stderr, "Uniform '%s' not found\n", name.c_str());
-		exit(EXIT_FAILURE);
+		// exit(EXIT_FAILURE);
 	}
+
+	locationCache[name] = location;
 	return location;
-	// TODO: add cache
 }
 
 void ShaderProgram::OnNotify(const Event& event) {
 	switch (event.type) {
 		case EventType::CameraPositionChanged: {
-			auto payload = (CameraPositionChangedPayload*)event.payload;
+			auto camera = (Camera*)event.payload;
 			Use();
-			SetUniform("viewMatrix", payload->viewMatrix);
-			SetUniform("projMatrix", payload->projectionMatrix);
+			SetUniform("viewMatrix", camera->GetViewMatrix());
+			SetUniform("projMatrix", camera->GetProjMatrix());
+			SetUniform("cameraPos", camera->GetPosition());
 			break;
 		}
 		case EventType::PointLightSet: {
-			auto payload = (PointLightSetPayload*)event.payload;
+			auto light = (PointLight*)event.payload;
 			Use();
-			SetUniform("pointLights[" + std::to_string(lightcount) + "].color", payload->color);
-			SetUniform("pointLights[" + std::to_string(lightcount) + "].position", payload->position);
+			SetUniform("pointLights[" + std::to_string(lightcount) + "].color", light->GetColor());
+			SetUniform("pointLights[" + std::to_string(lightcount) + "].position", light->GetPosition());
 			lightcount++;
 			break;
 		}

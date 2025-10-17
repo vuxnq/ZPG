@@ -35,10 +35,7 @@ void Camera::SetAspectRatio(float aspectRatio) {
 }
 
 void Camera::Notify() {
-    CameraPositionChangedPayload payload;
-    payload.viewMatrix = viewMatrix;
-    payload.projectionMatrix = projectionMatrix;
-    Event event(EventType::CameraPositionChanged, &payload);
+    Event event(EventType::CameraPositionChanged, this);
 
     for (auto& subscriber : subscribers) {
         subscriber->OnNotify(event);

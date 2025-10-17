@@ -9,11 +9,11 @@ public:
     PointLight(const glm::vec3& color, const glm::vec3& position) : color(color), position(position) {}
     ~PointLight() {}
 
+    const glm::vec3& GetColor() { return color; }
+    const glm::vec3& GetPosition() { return position; }
+
     void Notify() override {
-        PointLightSetPayload payload;
-        payload.color = color;
-        payload.position = position;
-        Event event(EventType::PointLightSet, &payload);
+        Event event(EventType::PointLightSet, this);
 
         for (auto& subscriber : subscribers) {
             subscriber->OnNotify(event);

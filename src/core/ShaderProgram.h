@@ -7,6 +7,7 @@
 #include "core/Core.h"
 #include "core/Observer.h"
 #include "core/Shader.h"
+#include <unordered_map>
 
 class ShaderProgram : public Subscriber {
 public:
@@ -31,10 +32,10 @@ public:
 
 private:
     GLuint id;
+    std::unordered_map<std::string, unsigned int> locationCache;
 
     int GetUniformLocation(const std::string& name);
 
     // TODO: kurva pico
-    inline static int lightcount = 0;
-
+    int lightcount = 0;
 };

@@ -7,11 +7,11 @@ uniform mat4 modelMatrix;
 uniform mat4 viewMatrix;
 uniform mat4 projMatrix;
 
-out vec4 worldPosition;
+out vec4 worldPos;
 out vec3 worldNormal;
 
 void main() {
-    worldPosition = modelMatrix * vec4(vp, 1.0);
-    gl_Position = projMatrix * viewMatrix * worldPosition;
+    worldPos = modelMatrix * vec4(vp, 1.0);
+    gl_Position = projMatrix * viewMatrix * worldPos;
     worldNormal = mat3(transpose(inverse(modelMatrix))) * vn;
 }

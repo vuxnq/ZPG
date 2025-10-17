@@ -8,23 +8,11 @@ enum EventType {
     PointLightSet,
 };
 
-struct Payload {};
-
-struct CameraPositionChangedPayload : public Payload {
-    glm::mat4 viewMatrix;
-    glm::mat4 projectionMatrix;
-};
-
-struct PointLightSetPayload : public Payload {
-    glm::vec3 color;
-    glm::vec3 position;
-};
-
 struct Event {
-    Event(EventType type, Payload* payload) : type(type), payload(payload) {}
+    Event(EventType type, void* payload) : type(type), payload(payload) {}
 
     EventType type;
-    Payload* payload;
+    void* payload;
 };
 
 class Subscriber {

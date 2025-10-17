@@ -39,7 +39,9 @@ public:
         AddDrawableObject(triangleObject);
 
 
-
+        auto pointLight1 = make_ref(new PointLight(glm::vec3(0.385, 0.647, 0.812), glm::vec3(10.0f, 10.0f, 10.0f)));
+        pointLight1->AddSubscriber(shaderProgram);
+        AddPointLight(pointLight1);
     }
 
 private:
@@ -81,6 +83,10 @@ public:
         AddDrawableObject(sphereObject2);
         AddDrawableObject(sphereObject3);
         AddDrawableObject(sphereObject4);
+
+        auto pointLight1 = make_ref(new PointLight(glm::vec3(0.385, 0.647, 0.812), glm::vec3(10.0f, 10.0f, 10.0f)));
+        pointLight1->AddSubscriber(shaderProgram);
+        AddPointLight(pointLight1);
     }
 
 private:
@@ -152,6 +158,10 @@ public:
 
         ref<DrawableObject> plainObject = make_ref(new DrawableObject(plainModel, make_ref(new ScaleTransform(plainSize)), shaderProgram));
         AddDrawableObject(plainObject);
+
+        auto pointLight1 = make_ref(new PointLight(glm::vec3(0.385, 0.647, 0.812), glm::vec3(10.0f, 10.0f, 10.0f)));
+        pointLight1->AddSubscriber(shaderProgram);
+        AddPointLight(pointLight1);
     }
 
 private:
