@@ -24,7 +24,7 @@ public:
 class Publisher {
 public:
     virtual ~Publisher() {}
-    virtual void AddSubscriber(const ref<Subscriber>& subscriber) { subscribers.push_back(subscriber); }
+    virtual void AddSubscriber(const ref<Subscriber>& subscriber) { subscribers.push_back(subscriber); Notify(); }
     virtual void Notify() = 0;
 
 protected:

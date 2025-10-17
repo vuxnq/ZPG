@@ -9,6 +9,15 @@ public:
     PointLight(const glm::vec3& color, const glm::vec3& position) : color(color), position(position) {}
     ~PointLight() {}
 
+    void SetPosition(const glm::vec3& position) {
+        this->position = position;
+        Notify();
+    }
+    void SetColor(const glm::vec3& color) {
+        this->color = color;
+        Notify();
+    }
+
     const glm::vec3& GetColor() { return color; }
     const glm::vec3& GetPosition() { return position; }
 

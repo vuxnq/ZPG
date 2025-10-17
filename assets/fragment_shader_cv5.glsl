@@ -41,6 +41,8 @@ void main(void) {
         result += calculatePointLight(pointLights[i], fragPos, normal, viewDir);
     }
 
+    vec4 viewDiffuse = max(dot(viewDir, normal), 0.0) * vec4(0.1, 0.1, 0.1, 1.0); // TODO: fucking around
+
     vec4 ambient = vec4(0.1, 0.1, 0.1, 1.0);
-    fragColor = ambient + vec4(result, 1.0);
+    fragColor = ambient + vec4(result, 1.0) + viewDiffuse;
 }
