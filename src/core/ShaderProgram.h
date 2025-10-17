@@ -35,7 +35,4 @@ private:
     std::unordered_map<std::string, unsigned int> locationCache;
 
     int GetUniformLocation(const std::string& name);
-
-    // TODO: kurva pico
-    int lightcount = 0;
 };

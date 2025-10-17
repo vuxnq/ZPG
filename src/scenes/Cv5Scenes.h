@@ -38,10 +38,11 @@ public:
 
         AddDrawableObject(triangleObject);
 
-
+        shaderPrograms.push_back(shaderProgram);
         auto pointLight1 = make_ref(new PointLight(glm::vec3(0.385, 0.647, 0.812), glm::vec3(10.0f, 10.0f, 10.0f)));
-        pointLight1->AddSubscriber(shaderProgram);
+        // pointLight1->AddSubscriber(shaderProgram);
         AddPointLight(pointLight1);
+        SetPointLights();
     }
 
 private:

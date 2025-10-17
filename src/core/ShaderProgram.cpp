@@ -83,24 +83,11 @@ int ShaderProgram::GetUniformLocation(const std::string& name) {
 }
 
 void ShaderProgram::OnNotify(const Event& event) {
-	switch (event.type) {
-		case EventType::CameraPositionChanged: {
-			auto camera = (Camera*)event.payload;
-			Use();
-			SetUniform("viewMatrix", camera->GetViewMatrix());
-			SetUniform("projMatrix", camera->GetProjMatrix());
-			SetUniform("cameraPos", camera->GetPosition());
-			break;
-		}
-		case EventType::PointLightSet: {
-			auto light = (PointLight*)event.payload;
-			Use();
-			SetUniform("pointLights[" + std::to_string(lightcount) + "].color", light->GetColor());
-			SetUniform("pointLights[" + std::to_string(lightcount) + "].position", light->GetPosition());
-			lightcount++;
-			break;
-		}
-		default:
-			break;
+	if (event.type == EventType::CameraPositionChanged) {
+		auto camera = (Camera*)event.payload;
+		Use();
+		SetUniform("viewMatrix", camera->GetViewMatrix());
+		SetUniform("projMatrix", camera->GetProjMatrix());
+		SetUniform("cameraPos", camera->GetPosition());
 	}
 }

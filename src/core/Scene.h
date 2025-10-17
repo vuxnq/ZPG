@@ -18,6 +18,8 @@ public:
 
     void SetAspectRatio(float aspect);
 
+    void SetPointLights(); // TODO: this should be in renderer
+
 private:
     std::vector<ref<DrawableObject>> drawableObjects;
     std::vector<ref<PointLight>> pointLights;
@@ -25,4 +27,5 @@ private:
 protected:
     Camera camera;
     Controller controller;
+    std::vector<ref<ShaderProgram>> shaderPrograms; // TODO: Asi nejako takto asi jako map stejne jako scenemanager asi to predelat na shaderprogrammanager
 };

@@ -22,3 +22,13 @@ void Scene::AddPointLight(const ref<PointLight>& light) {
 void Scene::SetAspectRatio(float aspect) {
     camera.SetAspectRatio(aspect);
 }
+
+void Scene::SetPointLights() {
+    for (int i = 0; i < shaderPrograms.size(); i++) {
+        for (int j = 0; j < pointLights.size(); j++) {
+            shaderPrograms[i]->Use();
+            shaderPrograms[i]->SetUniform("pointLights[" + std::to_string(j) + "].color", pointLights[j]->GetColor());
+            shaderPrograms[i]->SetUniform("pointLights[" + std::to_string(j) + "].position", pointLights[j]->GetPosition());
+        }
+    }
+}
