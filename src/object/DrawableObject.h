@@ -3,7 +3,7 @@
 #include "core/Core.h"
 #include "object/Model.h"
 #include "transform/Transformation.h"
-#include "core/ShaderProgram.h"
+#include "shader/ShaderProgram.h"
 
 class DrawableObject {
 public:

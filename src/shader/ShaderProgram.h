@@ -6,7 +6,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "core/Core.h"
 #include "core/Observer.h"
-#include "core/Shader.h"
+#include "shader/Shader.h"
 #include <unordered_map>
 
 class ShaderProgram : public Subscriber {

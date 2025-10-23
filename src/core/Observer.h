@@ -24,9 +24,9 @@ public:
 class Publisher {
 public:
     virtual ~Publisher() {}
-    virtual void AddSubscriber(const ref<Subscriber>& subscriber) { subscribers.push_back(subscriber); Notify(); }
+    virtual void AddSubscriber(Subscriber* subscriber) { subscribers.push_back(subscriber); Notify(); }
     virtual void Notify() = 0;
 
 protected:
-    std::vector<ref<Subscriber>> subscribers;
+    std::vector<Subscriber*> subscribers; // TODO: pointery misto ref
 };

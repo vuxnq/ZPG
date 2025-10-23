@@ -4,7 +4,7 @@
 #include <vector>
 #include <map>
 #include <string>
-#include "core/ShaderProgram.h"
+#include "shader/ShaderProgram.h"
 
 class ShaderProgramManager {
 public:

@@ -4,9 +4,10 @@
 #include "core/Core.h"
 #include "core/Camera.h"
 #include "core/Controller.h"
-#include "core/ShaderProgramManager.h"
+#include "shader/ShaderProgramManager.h"
+#include "light/LightManager.h"
 #include "object/DrawableObject.h"
-#include "object/PointLight.h"
+#include "light/PointLight.h"
 
 class Scene {
 public:
@@ -19,14 +20,12 @@ public:
 
     void SetAspectRatio(float aspect);
 
-    void SetPointLights(); // TODO: this should be in renderer
-
 private:
     std::vector<ref<DrawableObject>> drawableObjects;
-    std::vector<ref<PointLight>> pointLights;
 
 protected:
     Camera camera;
     Controller controller;
     ShaderProgramManager shaderProgramManager;
+    LightManager lightManager;
 };

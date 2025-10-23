@@ -2,7 +2,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include "core/Core.h"
-#include "core/ShaderProgram.h"
+#include "shader/ShaderProgram.h"
 #include "core/SceneManager.h"
 
 class Application {

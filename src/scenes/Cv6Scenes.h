@@ -1,7 +1,7 @@
 #pragma once
 #include <random>
 #include "core/Scene.h"
-#include "object/PointLight.h"
+#include "light/PointLight.h"
 
 #include "assets/models/sphere.h"
 #include "assets/models/plain.h"
@@ -16,7 +16,7 @@ public:
         ref<ShaderProgram> shaderProgram = make_ref(new ShaderProgram({vertexShader, fragmentShader}));
         shaderProgramManager.AddShaderProgram("sp", shaderProgram);
 
-        camera.AddSubscriber(shaderProgramManager.GetShaderProgram("sp"));
+        camera.AddSubscriber(shaderProgramManager.GetShaderProgram("sp").get());
 
         auto sphereVBO = make_ref(new VertexBuffer(sphere, sizeof(sphere), {{ElementType::Float, 3}, {ElementType::Float, 3}}));
         auto sphereVAO = make_ref(new VertexArray(sphereVBO));
@@ -31,8 +31,8 @@ public:
         }
 
         auto light = make_ref(new PointLight(glm::vec3(1.0, 1.0, 1.0), glm::vec3(0.0, 0.5, 0.0), 30));
-        AddPointLight(light);
-        SetPointLights();
+        lightManager.AddSubscriber(shaderProgramManager.GetShaderProgram("sp").get());
+        lightManager.AddPointLight(light);
     }
 };
 
@@ -45,7 +45,7 @@ public:
         ref<ShaderProgram> shaderProgram = make_ref(new ShaderProgram({vertexShader, fragmentShader}));
         shaderProgramManager.AddShaderProgram("sp", shaderProgram);
 
-        camera.AddSubscriber(shaderProgramManager.GetShaderProgram("sp"));
+        camera.AddSubscriber(shaderProgramManager.GetShaderProgram("sp").get());
 
         ref<VertexBuffer> bushesVBO = make_ref(new VertexBuffer(bushes, sizeof(bushes), {{ElementType::Float, 3}, {ElementType::Float, 3}}));
         ref<VertexArray> bushesVAO = make_ref(new VertexArray(bushesVBO));
@@ -103,9 +103,9 @@ public:
         AddDrawableObject(plainObject);
 
         auto pointLight1 = make_ref(new PointLight(glm::vec3(0.385, 0.647, 0.812), glm::vec3(10.0f, 10.0f, 10.0f), 3));
-        AddPointLight(pointLight1);
+        lightManager.AddPointLight(pointLight1);
 
-        SetPointLights();
+        // SetPointLights();
     }
 
 private:
@@ -129,10 +129,10 @@ public:
         shaderProgramManager.AddShaderProgram("sp_lambert", make_ref(new ShaderProgram({vertexShader, fragmentShaderLambert})));
         shaderProgramManager.AddShaderProgram("sp_phong", make_ref(new ShaderProgram({vertexShader, fragmentShaderPhong})));
 
-        camera.AddSubscriber(shaderProgramManager.GetShaderProgram("sp"));
-        camera.AddSubscriber(shaderProgramManager.GetShaderProgram("sp_constant"));
-        camera.AddSubscriber(shaderProgramManager.GetShaderProgram("sp_lambert"));
-        camera.AddSubscriber(shaderProgramManager.GetShaderProgram("sp_phong"));
+        camera.AddSubscriber(shaderProgramManager.GetShaderProgram("sp").get());
+        camera.AddSubscriber(shaderProgramManager.GetShaderProgram("sp_constant").get());
+        camera.AddSubscriber(shaderProgramManager.GetShaderProgram("sp_lambert").get());
+        camera.AddSubscriber(shaderProgramManager.GetShaderProgram("sp_phong").get());
 
         auto sphereVBO = make_ref(new VertexBuffer(sphere, sizeof(sphere), {{ElementType::Float, 3}, {ElementType::Float, 3}}));
         auto sphereVAO = make_ref(new VertexArray(sphereVBO));
@@ -173,8 +173,8 @@ public:
         AddDrawableObject(moonObject);
 
         auto sunPointLight = make_ref(new PointLight(glm::vec3(1.0, 1.0, 0.9), glm::vec3(0.0, 0.0, 0.0), 10));
-        AddPointLight(sunPointLight);
+        lightManager.AddPointLight(sunPointLight);
 
-        SetPointLights();
+        // SetPointLights();
     }
 };

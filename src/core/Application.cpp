@@ -17,7 +17,7 @@
 #include <sstream>
 
 #include "core/Callbacks.h"
-#include "core/ShaderProgram.h"
+#include "shader/ShaderProgram.h"
 #include "object/VertexBuffer.h"
 #include "object/VertexArray.h"
 #include "object/Model.h"
