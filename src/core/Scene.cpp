@@ -30,6 +30,7 @@ void Scene::SetPointLights() {
             std::string base = "pointLights[" + std::to_string(j) + "]";
             shaderProgram.second->SetUniform(base + ".color", pointLights[j]->GetColor());
             shaderProgram.second->SetUniform(base + ".position", pointLights[j]->GetPosition());
+            shaderProgram.second->SetUniform(base + ".intensity", pointLights[j]->GetIntensity());
         }
     }
 }

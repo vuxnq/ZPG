@@ -24,9 +24,6 @@
 #include "object/DrawableObject.h"
 #include "transform/Transformation.h"
 
-#include "scenes/Cv3Scenes.h"
-#include "scenes/Cv4Scenes.h"
-#include "scenes/Cv5Scenes.h"
 #include "scenes/Cv6Scenes.h"
 
 Application::Application() {
@@ -104,19 +101,11 @@ void Application::OnKey(int key, int action) {
 				sceneManager.GetActiveScene()->SetAspectRatio(windowWidth / (float)windowHeight);
 				break;
 			case GLFW_KEY_2:
-				sceneManager.SetActiveScene("scene5.2");
+				sceneManager.SetActiveScene("scene6.2");
 				sceneManager.GetActiveScene()->SetAspectRatio(windowWidth / (float)windowHeight);
 				break;
 			case GLFW_KEY_3:
-				sceneManager.SetActiveScene("scene5.3");
-				sceneManager.GetActiveScene()->SetAspectRatio(windowWidth / (float)windowHeight);
-				break;
-			case GLFW_KEY_4:
-				sceneManager.SetActiveScene("scene5.4");
-				sceneManager.GetActiveScene()->SetAspectRatio(windowWidth / (float)windowHeight);
-				break;
-			case GLFW_KEY_5:
-				sceneManager.SetActiveScene("scene5.5");
+				sceneManager.SetActiveScene("scene6.3");
 				sceneManager.GetActiveScene()->SetAspectRatio(windowWidth / (float)windowHeight);
 				break;
 			default:
@@ -134,10 +123,8 @@ void Application::OnWindowResize(int width, int height) {
 
 void Application::OnCreate() {
 	sceneManager.AddScene("scene6.1", make_ref(new Cv6Scene1()));
-	sceneManager.AddScene("scene5.2", make_ref(new Cv5Scene2()));
-	sceneManager.AddScene("scene5.3", make_ref(new Cv5Scene3()));
-	sceneManager.AddScene("scene5.4", make_ref(new Cv5Scene4()));
-	sceneManager.AddScene("scene5.5", make_ref(new Cv5Scene5()));
+	sceneManager.AddScene("scene6.2", make_ref(new Cv6Scene2()));
+	sceneManager.AddScene("scene6.3", make_ref(new Cv6Scene3()));
 }
 
 void Application::Run() {
