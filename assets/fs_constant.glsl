@@ -7,6 +7,7 @@ struct PointLight {
 };
 #define MAX_POINTLIGHTS 10
 uniform PointLight pointLights[MAX_POINTLIGHTS];
+uniform int pointLightCount;
 
 uniform vec3 cameraPos;
 
@@ -16,6 +17,6 @@ in vec3 worldNormal;
 out vec4 fragColor;
 
 void main(void) {
-    vec4 ambient = vec4(1.0, 1.0, 0.5, 1.0);
+    vec4 ambient = vec4(0.1, 0.1, 0.1, 1.0);
     fragColor = ambient;
 }

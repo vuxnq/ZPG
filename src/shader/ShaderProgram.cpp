@@ -97,5 +97,9 @@ void ShaderProgram::OnNotify(const Event& event) {
 		SetUniform(base + "color", light->GetColor());
 		SetUniform(base + "position", light->GetPosition());
 		SetUniform(base + "intensity", light->GetIntensity());
+	} else if (event.type == EventType::PointLightCountSet) {
+		int count = (size_t)event.payload;
+		Use();
+		SetUniform("pointLightCount", count);
 	}
 }

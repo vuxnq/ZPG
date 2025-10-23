@@ -14,9 +14,11 @@ public:
     Scene() : controller(camera) {}
     ~Scene() {}
 
-    virtual void OnUpdate(float delta); // TODO: add renderer class mb drawableobj by se nemel sam kreslit
+    virtual void OnUpdate(float delta);
+
+    void AddShaderProgram(const std::string& name, const ref<ShaderProgram> shaderProgram);
     void AddDrawableObject(const ref<DrawableObject>& drawableObject);
-    void AddPointLight(const ref<PointLight>& light);
+    void AddPointLight(const ref<PointLight>& light); // TODO: interface light
 
     void SetAspectRatio(float aspect);
 

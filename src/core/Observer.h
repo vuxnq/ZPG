@@ -6,6 +6,7 @@
 enum EventType {
     CameraPositionChanged,
     PointLightSet,
+    PointLightCountSet,
 };
 
 struct Event {

@@ -11,8 +11,19 @@ void Scene::OnUpdate(float delta) {
     }
 }
 
+void Scene::AddShaderProgram(const std::string& name, const ref<ShaderProgram> shaderProgram) {
+    camera.AddSubscriber(shaderProgram.get());
+    lightManager.AddSubscriber(shaderProgram.get());
+    shaderProgramManager.AddShaderProgram(name, shaderProgram);
+
+}
+
 void Scene::AddDrawableObject(const ref<DrawableObject>& drawableObject) {
     drawableObjects.push_back(drawableObject);
+}
+
+void Scene::AddPointLight(const ref<PointLight>& light) {
+    lightManager.AddPointLight(light);
 }
 
 void Scene::SetAspectRatio(float aspect) {

@@ -11,11 +11,13 @@ public:
     ~DrawableObject() {}
 
     void SetShaderProgram(const ref<ShaderProgram>& shaderProgram);
-    void Update(float delta);
+    virtual void Update(float delta);
     void Draw(); // TODO: renderer
+
+protected:
+    ref<TransformComponent> transformation;
 
 private:
     ref<Model> model;
-    ref<TransformComponent> transformation;
     ref<ShaderProgram> shaderProgram;
 };

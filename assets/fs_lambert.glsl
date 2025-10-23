@@ -7,6 +7,7 @@ struct PointLight {
 };
 #define MAX_POINTLIGHTS 10
 uniform PointLight pointLights[MAX_POINTLIGHTS];
+uniform int pointLightCount;
 
 uniform vec3 cameraPos;
 
@@ -30,7 +31,7 @@ void main(void) {
     vec3 viewDir = normalize(cameraPos - fragPos);
 
     vec3 result = vec3(0.0);
-    for (int i = 0; i < MAX_POINTLIGHTS; i++) {
+    for (int i = 0; i < pointLightCount; i++) {
         result += calculatePointLight(pointLights[i], fragPos, normal, viewDir);
     }
 
