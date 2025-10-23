@@ -10,17 +10,9 @@ public:
     LightManager() {}
     ~LightManager() {}
 
-    void AddPointLight(const ref<PointLight> light) {
-        light->AddSubscriber(this);
-        light->SetIndex(pointLights.size());
-        pointLights.push_back(light);
-    }
+    void AddPointLight(const ref<PointLight> light);
 
-    void OnNotify(const Event& event) override {
-        if (event.type == EventType::PointLightSet) {
-            Notify(event);
-        }
-    }
+    void OnNotify(const Event& event) override;
 
 private:
     std::vector<ref<PointLight>> pointLights;
