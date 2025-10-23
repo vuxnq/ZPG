@@ -4,7 +4,7 @@
 Camera::Camera() {
     ComputeViewMatrix();
     ComputerProjectionMatrix();
-    Notify();
+    Notify(Event(EventType::CameraPositionChanged, this));
 }
 
 
@@ -19,27 +19,19 @@ const glm::mat4& Camera::GetProjMatrix() {
 void Camera::SetPosition(const glm::vec3& position) {
     this->position = position;
     ComputeViewMatrix();
-    Notify();
+    Notify(Event(EventType::CameraPositionChanged, this));
 }
 
 void Camera::SetDirection(const glm::vec3& direction) {
     this->direction = direction;
     ComputeViewMatrix();
-    Notify();
+    Notify(Event(EventType::CameraPositionChanged, this));
 }
 
 void Camera::SetAspectRatio(float aspectRatio) {
     this->aspectRatio = aspectRatio;
     ComputerProjectionMatrix();
-    Notify();
-}
-
-void Camera::Notify() {
-    Event event(EventType::CameraPositionChanged, this);
-
-    for (auto& subscriber : subscribers) {
-        subscriber->OnNotify(event);
-    }
+    Notify(Event(EventType::CameraPositionChanged, this));
 }
 
 void Camera::ComputeViewMatrix() {

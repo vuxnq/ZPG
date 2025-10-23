@@ -1,19 +1,22 @@
 #include "light/PointLight.h"
+#include "PointLight.h"
+
+void PointLight::SetIndex(int index) {
+    this->index = index;
+    Notify(Event(EventType::PointLightSet, this));
+}
 
 void PointLight::SetPosition(const glm::vec3& position) {
     this->position = position;
-    Notify();
+    Notify(Event(EventType::PointLightSet, this));
 }
 
 void PointLight::SetColor(const glm::vec3& color) {
     this->color = color;
-    Notify();
+    Notify(Event(EventType::PointLightSet, this));
 }
 
-void PointLight::Notify() {
-    Event event(EventType::PointLightSet, this);
-
-    for (auto& subscriber : subscribers) {
-        subscriber->OnNotify(event);
-    }
+void PointLight::SetIntensity(int intensity) {
+    this->intensity = intensity;
+    Notify(Event(EventType::PointLightSet, this));
 }

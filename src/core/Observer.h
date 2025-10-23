@@ -24,9 +24,9 @@ public:
 class Publisher {
 public:
     virtual ~Publisher() {}
-    virtual void AddSubscriber(Subscriber* subscriber) { subscribers.push_back(subscriber); Notify(); }
-    virtual void Notify() = 0;
+    virtual void AddSubscriber(Subscriber* subscriber) { subscribers.push_back(subscriber); }
+    virtual void Notify(Event event) { for (auto& subscriber : subscribers) subscriber->OnNotify(event); }
 
 protected:
-    std::vector<Subscriber*> subscribers; // TODO: pointery misto ref
+    std::vector<Subscriber*> subscribers;
 };

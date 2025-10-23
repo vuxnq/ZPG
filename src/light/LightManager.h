@@ -11,17 +11,16 @@ public:
     ~LightManager() {}
 
     void AddPointLight(const ref<PointLight> light) {
-        pointLights.push_back(light);
         light->AddSubscriber(this);
+        light->SetIndex(pointLights.size());
+        pointLights.push_back(light);
     }
 
     void OnNotify(const Event& event) override {
         if (event.type == EventType::PointLightSet) {
-            auto light = (PointLight*)event.payload; // TODO: ziskat pozici ve vektoru a setuniform
+            Notify(event);
         }
     }
-
-    void Notify() override {}
 
 private:
     std::vector<ref<PointLight>> pointLights;
