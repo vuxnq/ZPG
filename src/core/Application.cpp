@@ -108,6 +108,14 @@ void Application::OnKey(int key, int action) {
 				sceneManager.SetActiveScene("scene6.3");
 				sceneManager.GetActiveScene()->SetAspectRatio(windowWidth / (float)windowHeight);
 				break;
+			case GLFW_KEY_4:
+				sceneManager.SetActiveScene("scene6.4");
+				sceneManager.GetActiveScene()->SetAspectRatio(windowWidth / (float)windowHeight);
+				break;
+			case GLFW_KEY_5:
+				sceneManager.SetActiveScene("scene6.5");
+				sceneManager.GetActiveScene()->SetAspectRatio(windowWidth / (float)windowHeight);
+				break;
 			default:
 				break;
 		}
@@ -125,12 +133,13 @@ void Application::OnCreate() {
 	sceneManager.AddScene("scene6.1", make_ref(new Cv6Scene1()));
 	sceneManager.AddScene("scene6.2", make_ref(new Cv6Scene2()));
 	sceneManager.AddScene("scene6.3", make_ref(new Cv6Scene3()));
+	sceneManager.AddScene("scene6.4", make_ref(new Cv6Scene4()));
+	sceneManager.AddScene("scene6.5", make_ref(new Cv6Scene5()));
 }
 
 void Application::Run() {
 	float lastTime = 0.0f;
-	while (!glfwWindowShouldClose(window))
-	{
+	while (!glfwWindowShouldClose(window)) {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		float currentTime = glfwGetTime();

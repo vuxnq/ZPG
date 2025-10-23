@@ -5,7 +5,7 @@ struct PointLight {
     vec3 color;
     int intensity;
 };
-#define MAX_POINTLIGHTS 10
+#define MAX_POINTLIGHTS 100
 uniform PointLight pointLights[MAX_POINTLIGHTS];
 uniform int pointLightCount;
 
@@ -22,7 +22,11 @@ vec3 calculatePointLight(PointLight light, vec3 fragPos, vec3 normal, vec3 viewD
     // diffuse
     float diff = max(dot(lightDir, normal), 0.0);
 
-    return diff * light.color;
+    // attenuation
+    float dist = length(light.position - fragPos);
+    float attenuation = light.intensity / ((dist * dist * 10) + light.intensity);
+
+    return diff * light.color * attenuation;
 }
 
 void main(void) {

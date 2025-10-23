@@ -22,9 +22,12 @@ vec3 calculatePointLight(PointLight light, vec3 fragPos, vec3 normal, vec3 viewD
     // diffuse
     float diff = max(dot(lightDir, normal), 0.0);
 
-    // specular - phong
     vec3 reflectDir = reflect(-lightDir, normal);
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32.0);
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 1.0);
+
+    if (dot(normal, lightDir) < 0.0) {
+        reflectDir = vec3(0.0, 0.0, 0.0);
+    }
 
     // attenuation
     float dist = length(light.position - fragPos);
@@ -43,6 +46,6 @@ void main(void) {
         result += calculatePointLight(pointLights[i], fragPos, normal, viewDir);
     }
 
-    vec4 ambient = vec4(0.1, 0.1, 0.1, 1.0);
+    vec4 ambient = vec4(0.05, 0.05, 0.05, 1.0);
     fragColor = ambient + vec4(result, 1.0);
 }
