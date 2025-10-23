@@ -28,7 +28,11 @@ vec3 calculatePointLight(PointLight light, vec3 fragPos, vec3 normal, vec3 viewD
     vec3 halfway = normalize(lightDir + viewDir);
     float spec = pow(max(dot(normal, halfway), 0.0), 32.0);
 
-    return diff * light.color + spec * light.color;
+    // attenuation
+    float dis = length(light.position - fragPos);
+    float attenuation = 1.0 / ((dis * dis * 10) + dis);
+
+    return (diff * light.color + spec * light.color) * attenuation;
 }
 
 void main(void) {

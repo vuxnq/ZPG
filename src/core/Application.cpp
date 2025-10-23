@@ -27,6 +27,7 @@
 #include "scenes/Cv3Scenes.h"
 #include "scenes/Cv4Scenes.h"
 #include "scenes/Cv5Scenes.h"
+#include "scenes/Cv6Scenes.h"
 
 Application::Application() {
 	if (s_application != nullptr) {
@@ -99,7 +100,7 @@ void Application::OnKey(int key, int action) {
 				glfwSetWindowShouldClose(window, GL_TRUE);
 				break;
 			case GLFW_KEY_1:
-				sceneManager.SetActiveScene("scene5.1");
+				sceneManager.SetActiveScene("scene6.1");
 				sceneManager.GetActiveScene()->SetAspectRatio(windowWidth / (float)windowHeight);
 				break;
 			case GLFW_KEY_2:
@@ -132,7 +133,7 @@ void Application::OnWindowResize(int width, int height) {
 }
 
 void Application::OnCreate() {
-	sceneManager.AddScene("scene5.1", make_ref(new Cv5Scene1()));
+	sceneManager.AddScene("scene6.1", make_ref(new Cv6Scene1()));
 	sceneManager.AddScene("scene5.2", make_ref(new Cv5Scene2()));
 	sceneManager.AddScene("scene5.3", make_ref(new Cv5Scene3()));
 	sceneManager.AddScene("scene5.4", make_ref(new Cv5Scene4()));
