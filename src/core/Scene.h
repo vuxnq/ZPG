@@ -4,29 +4,30 @@
 #include "core/Core.h"
 #include "core/Camera.h"
 #include "core/Controller.h"
-#include "core/ShaderProgramManager.h"
+#include "shader/ShaderProgramManager.h"
+#include "light/LightManager.h"
 #include "object/DrawableObject.h"
-#include "object/PointLight.h"
+#include "light/PointLight.h"
 
 class Scene {
 public:
     Scene() : controller(camera) {}
     ~Scene() {}
 
-    virtual void OnUpdate(float delta); // TODO: add renderer class mb drawableobj by se nemel sam kreslit
+    virtual void OnUpdate(float delta);
+
+    void AddShaderProgram(const std::string& name, const ref<ShaderProgram> shaderProgram);
     void AddDrawableObject(const ref<DrawableObject>& drawableObject);
-    void AddPointLight(const ref<PointLight>& light);
+    void AddPointLight(const ref<PointLight>& light); // TODO: interface light
 
     void SetAspectRatio(float aspect);
 
-    void SetPointLights(); // TODO: this should be in renderer
-
 private:
     std::vector<ref<DrawableObject>> drawableObjects;
-    std::vector<ref<PointLight>> pointLights;
 
 protected:
     Camera camera;
     Controller controller;
     ShaderProgramManager shaderProgramManager;
+    LightManager lightManager;
 };

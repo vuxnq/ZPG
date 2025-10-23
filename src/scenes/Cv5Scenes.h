@@ -39,7 +39,7 @@ public:
 
         AddDrawableObject(triangleObject);
 
-        auto pointLight1 = make_ref(new PointLight(glm::vec3(0.385, 0.647, 0.812), glm::vec3(10.0f, 10.0f, 10.0f)));
+        auto pointLight1 = make_ref(new PointLight(glm::vec3(0.385, 0.647, 0.812), glm::vec3(10.0f, 10.0f, 10.0f), 3));
         AddPointLight(pointLight1);
 
         SetPointLights();
@@ -83,7 +83,7 @@ public:
         AddDrawableObject(sphereObject3);
         AddDrawableObject(sphereObject4);
 
-        auto pointLight1 = make_ref(new PointLight(glm::vec3(0.385, 0.647, 0.812), glm::vec3(0.0f, 0.0f, 0.0f)));
+        auto pointLight1 = make_ref(new PointLight(glm::vec3(0.385, 0.647, 0.812), glm::vec3(0.0f, 0.0f, 0.0f), 3));
         AddPointLight(pointLight1);
 
         SetPointLights();
@@ -157,7 +157,7 @@ public:
         ref<DrawableObject> plainObject = make_ref(new DrawableObject(plainModel, make_ref(new ScaleTransform(plainSize)), shaderProgram));
         AddDrawableObject(plainObject);
 
-        auto pointLight1 = make_ref(new PointLight(glm::vec3(0.385, 0.647, 0.812), glm::vec3(10.0f, 10.0f, 10.0f)));
+        auto pointLight1 = make_ref(new PointLight(glm::vec3(0.385, 0.647, 0.812), glm::vec3(10.0f, 10.0f, 10.0f), 3));
         AddPointLight(pointLight1);
 
         SetPointLights();
@@ -176,10 +176,18 @@ public:
     Cv5Scene4() {
         ref<Shader> vertexShader = make_ref(new Shader("../assets/vertex_shader.glsl", GL_VERTEX_SHADER));
         ref<Shader> fragmentShader = make_ref(new Shader("../assets/fragment_shader.glsl", GL_FRAGMENT_SHADER));
-        ref<ShaderProgram> shaderProgram = make_ref(new ShaderProgram({vertexShader, fragmentShader}));
-        shaderProgramManager.AddShaderProgram("sp", shaderProgram);
+        ref<Shader> fragmentShaderConstantSun = make_ref(new Shader("../assets/fragment_shader_constant_sun.glsl", GL_FRAGMENT_SHADER));
+        ref<Shader> fragmentShaderLambert = make_ref(new Shader("../assets/fragment_shader_lambert.glsl", GL_FRAGMENT_SHADER));
+        ref<Shader> fragmentShaderPhong = make_ref(new Shader("../assets/fragment_shader_phong.glsl", GL_FRAGMENT_SHADER));
+        shaderProgramManager.AddShaderProgram("sp", make_ref(new ShaderProgram({vertexShader, fragmentShader})));
+        shaderProgramManager.AddShaderProgram("sp_constant", make_ref(new ShaderProgram({vertexShader, fragmentShaderConstantSun})));
+        shaderProgramManager.AddShaderProgram("sp_lambert", make_ref(new ShaderProgram({vertexShader, fragmentShaderLambert})));
+        shaderProgramManager.AddShaderProgram("sp_phong", make_ref(new ShaderProgram({vertexShader, fragmentShaderPhong})));
 
         camera.AddSubscriber(shaderProgramManager.GetShaderProgram("sp"));
+        camera.AddSubscriber(shaderProgramManager.GetShaderProgram("sp_constant"));
+        camera.AddSubscriber(shaderProgramManager.GetShaderProgram("sp_lambert"));
+        camera.AddSubscriber(shaderProgramManager.GetShaderProgram("sp_phong"));
 
         auto sphereVBO = make_ref(new VertexBuffer(sphere, sizeof(sphere), {{ElementType::Float, 3}, {ElementType::Float, 3}}));
         auto sphereVAO = make_ref(new VertexArray(sphereVBO));
@@ -211,22 +219,16 @@ public:
         moonTransform->Add(make_ref(new DynamicRotateTransform(20, glm::vec3(0.0f, 1.0f, 0.0f), 1)));
 
 
-        auto sunObject = make_ref(new DrawableObject(sphereModel, sunTransform, shaderProgram));
-        auto earthObject = make_ref(new DrawableObject(sphereModel, earthTransform, shaderProgram));
-        auto moonObject = make_ref(new DrawableObject(sphereModel, moonTransform, shaderProgram));
+        auto sunObject = make_ref(new DrawableObject(sphereModel, sunTransform, shaderProgramManager.GetShaderProgram("sp_constant")));
+        auto earthObject = make_ref(new DrawableObject(sphereModel, earthTransform, shaderProgramManager.GetShaderProgram("sp")));
+        auto moonObject = make_ref(new DrawableObject(sphereModel, moonTransform, shaderProgramManager.GetShaderProgram("sp")));
 
         AddDrawableObject(sunObject);
         AddDrawableObject(earthObject);
         AddDrawableObject(moonObject);
 
-        auto pointLight1 = make_ref(new PointLight(glm::vec3(0.385, 0.647, 0.812), glm::vec3(10.0f, 10.0f, 10.0f)));
-        AddPointLight(pointLight1);
-
-        auto pointLight2 = make_ref(new PointLight(glm::vec3(0.647, 0.385, 0.812), glm::vec3(-10.0f, -10.0f, -10.0f)));
-        AddPointLight(pointLight2);
-
-        auto pointLight3 = make_ref(new PointLight(glm::vec3(0.812, 0.647, 0.385), glm::vec3(0.0f, 5.0f, 0.0f)));
-        AddPointLight(pointLight3);
+        auto sunPointLight = make_ref(new PointLight(glm::vec3(1.0, 1.0, 0.9), glm::vec3(0.0, 0.0, 0.0), 10));
+        AddPointLight(sunPointLight);
 
         SetPointLights();
     }
@@ -278,7 +280,7 @@ public:
         AddDrawableObject(sphereObject3);
         AddDrawableObject(sphereObject4);
 
-        auto pointLight1 = make_ref(new PointLight(glm::vec3(0.385, 0.647, 0.812), glm::vec3(0.0f, 0.0f, 0.0f)));
+        auto pointLight1 = make_ref(new PointLight(glm::vec3(0.385, 0.647, 0.812), glm::vec3(0.0f, 0.0f, 0.0f), 3));
         AddPointLight(pointLight1);
 
         SetPointLights();

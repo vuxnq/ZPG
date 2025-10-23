@@ -6,18 +6,22 @@
 
 class PointLight : public Publisher {
 public:
-    PointLight(const glm::vec3& color, const glm::vec3& position) : color(color), position(position) {}
+    PointLight(const glm::vec3& color, const glm::vec3& position, int intensity) : color(color), position(position), intensity(intensity) {}
     ~PointLight() {}
 
+    void SetIndex(int index);
     void SetPosition(const glm::vec3& position);
     void SetColor(const glm::vec3& color);
+    void SetIntensity(int intensity);
 
+    const int GetIndex() { return index; }
     const glm::vec3& GetColor() { return color; }
     const glm::vec3& GetPosition() { return position; }
-
-    void Notify() override;
+    const int GetIntensity() { return intensity; }
 
 private:
+    int index;
     glm::vec3 color;
     glm::vec3 position;
+    int intensity;
 };

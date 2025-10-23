@@ -17,16 +17,14 @@
 #include <sstream>
 
 #include "core/Callbacks.h"
-#include "core/ShaderProgram.h"
+#include "shader/ShaderProgram.h"
 #include "object/VertexBuffer.h"
 #include "object/VertexArray.h"
 #include "object/Model.h"
 #include "object/DrawableObject.h"
 #include "transform/Transformation.h"
 
-#include "scenes/Cv3Scenes.h"
-#include "scenes/Cv4Scenes.h"
-#include "scenes/Cv5Scenes.h"
+#include "scenes/Cv6Scenes.h"
 
 Application::Application() {
 	if (s_application != nullptr) {
@@ -99,23 +97,23 @@ void Application::OnKey(int key, int action) {
 				glfwSetWindowShouldClose(window, GL_TRUE);
 				break;
 			case GLFW_KEY_1:
-				sceneManager.SetActiveScene("scene5.1");
+				sceneManager.SetActiveScene("scene6.1");
 				sceneManager.GetActiveScene()->SetAspectRatio(windowWidth / (float)windowHeight);
 				break;
 			case GLFW_KEY_2:
-				sceneManager.SetActiveScene("scene5.2");
+				sceneManager.SetActiveScene("scene6.2");
 				sceneManager.GetActiveScene()->SetAspectRatio(windowWidth / (float)windowHeight);
 				break;
 			case GLFW_KEY_3:
-				sceneManager.SetActiveScene("scene5.3");
+				sceneManager.SetActiveScene("scene6.3");
 				sceneManager.GetActiveScene()->SetAspectRatio(windowWidth / (float)windowHeight);
 				break;
 			case GLFW_KEY_4:
-				sceneManager.SetActiveScene("scene5.4");
+				sceneManager.SetActiveScene("scene6.4");
 				sceneManager.GetActiveScene()->SetAspectRatio(windowWidth / (float)windowHeight);
 				break;
 			case GLFW_KEY_5:
-				sceneManager.SetActiveScene("scene5.5");
+				sceneManager.SetActiveScene("scene6.5");
 				sceneManager.GetActiveScene()->SetAspectRatio(windowWidth / (float)windowHeight);
 				break;
 			default:
@@ -132,17 +130,16 @@ void Application::OnWindowResize(int width, int height) {
 }
 
 void Application::OnCreate() {
-	sceneManager.AddScene("scene5.1", make_ref(new Cv5Scene1()));
-	sceneManager.AddScene("scene5.2", make_ref(new Cv5Scene2()));
-	sceneManager.AddScene("scene5.3", make_ref(new Cv5Scene3()));
-	sceneManager.AddScene("scene5.4", make_ref(new Cv5Scene4()));
-	sceneManager.AddScene("scene5.5", make_ref(new Cv5Scene5()));
+	sceneManager.AddScene("scene6.1", make_ref(new Cv6Scene1()));
+	sceneManager.AddScene("scene6.2", make_ref(new Cv6Scene2()));
+	sceneManager.AddScene("scene6.3", make_ref(new Cv6Scene3()));
+	sceneManager.AddScene("scene6.4", make_ref(new Cv6Scene4()));
+	sceneManager.AddScene("scene6.5", make_ref(new Cv6Scene5()));
 }
 
 void Application::Run() {
 	float lastTime = 0.0f;
-	while (!glfwWindowShouldClose(window))
-	{
+	while (!glfwWindowShouldClose(window)) {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		float currentTime = glfwGetTime();

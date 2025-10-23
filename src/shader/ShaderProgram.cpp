@@ -1,8 +1,10 @@
-#include "core/ShaderProgram.h"
+#include "shader/ShaderProgram.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <string>
 #include "core/Camera.h"
+#include "light/PointLight.h"
 
 ShaderProgram::ShaderProgram(const std::vector<ref<Shader>>& shaders) {
 	id = glCreateProgram();
@@ -88,5 +90,16 @@ void ShaderProgram::OnNotify(const Event& event) {
 		SetUniform("viewMatrix", camera->GetViewMatrix());
 		SetUniform("projMatrix", camera->GetProjMatrix());
 		SetUniform("cameraPos", camera->GetPosition());
+	} else if (event.type == EventType::PointLightSet) {
+		auto light = (PointLight*)event.payload;
+		Use();
+		std::string base = "pointLights[" + std::to_string(light->GetIndex()) + "].";
+		SetUniform(base + "color", light->GetColor());
+		SetUniform(base + "position", light->GetPosition());
+		SetUniform(base + "intensity", light->GetIntensity());
+	} else if (event.type == EventType::PointLightCountSet) {
+		int count = (size_t)event.payload;
+		Use();
+		SetUniform("pointLightCount", count);
 	}
 }

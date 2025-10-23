@@ -3,7 +3,7 @@
 #include "core/Core.h"
 #include "object/Model.h"
 #include "transform/Transformation.h"
-#include "core/ShaderProgram.h"
+#include "shader/ShaderProgram.h"
 
 class DrawableObject {
 public:
@@ -11,11 +11,13 @@ public:
     ~DrawableObject() {}
 
     void SetShaderProgram(const ref<ShaderProgram>& shaderProgram);
-    void Update(float delta);
+    virtual void Update(float delta);
     void Draw(); // TODO: renderer
+
+protected:
+    ref<TransformComponent> transformation;
 
 private:
     ref<Model> model;
-    ref<TransformComponent> transformation;
     ref<ShaderProgram> shaderProgram;
 };

@@ -23,8 +23,6 @@ public:
     glm::vec3 GetDirection() { return direction; }
     glm::vec3 GetUp() { return up; }
 
-    void Notify() override;
-
 private:
     glm::mat4 viewMatrix;
     glm::mat4 projectionMatrix;
