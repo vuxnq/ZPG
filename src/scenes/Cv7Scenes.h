@@ -94,16 +94,16 @@ public:
         auto plainObject = make_ref(new DrawableObject(plainModel, make_ref(new ScaleTransform(plainSize)), shaderProgramManager.GetShaderProgram("sp")));
         AddDrawableObject(plainObject);
 
-        auto blueLight = make_ref(new PointLight(glm::vec3(0.0, 0.3, 0.9), glm::vec3(10.0f, 10.0f, 10.0f), 300));
-        auto purpleLight = make_ref(new PointLight(glm::vec3(0.1, 0.1, 0.8), glm::vec3(-10.0f, 10.0f, -10.0f), 300));
-        AddLight(blueLight);
-        AddLight(purpleLight);
+        // auto blueLight = make_ref(new PointLight(glm::vec3(0.0, 0.3, 0.9), glm::vec3(10.0f, 10.0f, 10.0f), 300));
+        // auto purpleLight = make_ref(new PointLight(glm::vec3(0.1, 0.1, 0.8), glm::vec3(-10.0f, 10.0f, -10.0f), 300));
+        // AddLight(blueLight);
+        // AddLight(purpleLight);
 
         SetAmbientLight(glm::vec3(0.025, 0.025, 0.025));
-
+        AddLight(make_ref(new DirectionalLight(glm::vec3(0.0, 0.3, 0.9), glm::vec3(-1.0, -1.0 , -1.0), 1)));
+        AddLight(make_ref(new DirectionalLight(glm::vec3(0.1, 0.1, 0.8), glm::vec3(1.0, -1.0 , 1.0), 1)));
         AddLight(make_ref(new SpotLight(glm::vec3(1.0, 0.0 , 0.0), glm::vec3(0.0, 1.0, 0.0), glm::vec3(1.0, -1.0 , 0.0), 2)));
         AddLight(make_ref(new SpotLight(glm::vec3(1.0, 1.0 , 1.0), glm::vec3(0.0, 1.0, 0.0), glm::vec3(0.0, 0.0 , -1.0), 300)));
-        // AddLight(make_ref(new PointLight(glm::vec3(1.0, 0.0 , 0.0), glm::vec3(0.0, 1.0, 0.0), 20)));
     }
 
 private:

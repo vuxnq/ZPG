@@ -4,6 +4,7 @@
 #include <sstream>
 #include <string>
 #include "core/Camera.h"
+#include "light/DirectionalLight.h"
 #include "light/PointLight.h"
 #include "light/SpotLight.h"
 
@@ -95,6 +96,17 @@ void ShaderProgram::OnNotify(const Event& event) {
 		auto color = *(glm::vec3*)event.payload;
 		Use();
 		SetUniform("ambient", color);
+	} else if (event.type == EventType::DirectionalLightSet) {
+		auto light = (DirectionalLight*)event.payload;
+		Use();
+		std::string base = "directionalLights[" + std::to_string(light->GetIndex()) + "].";
+		SetUniform(base + "color", light->GetColor());
+		SetUniform(base + "direction", light->GetDirection());
+		SetUniform(base + "intensity", light->GetIntensity());
+	} else if (event.type == EventType::DirectionalLightCountSet) {
+		int count = (size_t)event.payload;
+		Use();
+		SetUniform("directionalLightCount", count);
 	} else if (event.type == EventType::PointLightSet) {
 		auto light = (PointLight*)event.payload;
 		Use();

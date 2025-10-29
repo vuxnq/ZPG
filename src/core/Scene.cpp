@@ -25,6 +25,10 @@ void Scene::SetAmbientLight(const glm::vec3& color) {
     lightManager.SetAmbientLight(color);
 }
 
+void Scene::AddLight(const ref<DirectionalLight>& light) {
+    lightManager.AddLight(light);
+}
+
 void Scene::AddLight(const ref<PointLight>& light) {
     lightManager.AddLight(light);
 }

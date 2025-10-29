@@ -3,6 +3,7 @@
 struct DirectionalLight {
     vec3 color;
     vec3 direction;
+    int intensity;
 };
 
 struct PointLight {
@@ -39,6 +40,19 @@ in vec4 worldPos;
 in vec3 worldNormal;
 
 out vec4 fragColor;
+
+vec3 calculateDirectionalLight(DirectionalLight light, vec3 fragPos, vec3 normal, vec3 viewDir) {
+    vec3 lightDir = normalize(-light.direction);
+
+    // diffuse
+    float diff = max(dot(lightDir, normal), 0.0);
+
+    // specular - blinn-phong
+    vec3 halfway = normalize(lightDir + viewDir);
+    float spec = pow(max(dot(normal, halfway), 0.0), 32.0);
+
+    return (diff + spec) * light.color * (light.intensity / 10.0);
+}
 
 vec3 calculatePointLight(PointLight light, vec3 fragPos, vec3 normal, vec3 viewDir) {
     vec3 lightDir = normalize(light.position - fragPos);
@@ -93,6 +107,11 @@ void main(void) {
     vec3 viewDir = normalize(cameraPos - fragPos);
 
     vec3 result = vec3(0.0);
+
+    for (int i = 0; i < directionalLightCount; i++) {
+        result += calculateDirectionalLight(directionalLights[i], fragPos, normal, viewDir);
+    }
+
     for (int i = 0; i < pointLightCount; i++) {
         result += calculatePointLight(pointLights[i], fragPos, normal, viewDir);
     }

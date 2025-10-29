@@ -21,6 +21,7 @@ public:
     void AddDrawableObject(const ref<DrawableObject>& drawableObject);
 
     void SetAmbientLight(const glm::vec3& color);
+    void AddLight(const ref<DirectionalLight>& light);
     void AddLight(const ref<PointLight>& light);
     void AddLight(const ref<SpotLight>& light);
 
