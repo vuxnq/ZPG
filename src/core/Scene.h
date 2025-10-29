@@ -8,6 +8,7 @@
 #include "light/LightManager.h"
 #include "object/DrawableObject.h"
 #include "light/PointLight.h"
+#include "light/SpotLight.h"
 
 class Scene {
 public:
@@ -18,7 +19,10 @@ public:
 
     void AddShaderProgram(const std::string& name, const ref<ShaderProgram> shaderProgram);
     void AddDrawableObject(const ref<DrawableObject>& drawableObject);
-    void AddPointLight(const ref<PointLight>& light); // TODO: interface light
+
+    void SetAmbientLight(const glm::vec3& color);
+    void AddLight(const ref<PointLight>& light);
+    void AddLight(const ref<SpotLight>& light);
 
     void SetAspectRatio(float aspect);
 

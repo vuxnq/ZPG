@@ -4,25 +4,28 @@
 #include "core/Core.h"
 #include "core/Observer.h"
 
-class PointLight : public Publisher {
+class SpotLight : public Publisher {
 public:
-    PointLight(const glm::vec3& color, const glm::vec3& position, int intensity)
-    : color(color), position(position), intensity(intensity) {}
-    ~PointLight() {}
+    SpotLight(const glm::vec3& color, const glm::vec3& position, const glm::vec3& direction, int intensity)
+    : color(color), position(position), direction(direction), intensity(intensity) {}
+    ~SpotLight() {}
 
     void SetIndex(int index);
     void SetColor(const glm::vec3& color);
     void SetPosition(const glm::vec3& position);
+    void SetDirection(const glm::vec3& direction);
     void SetIntensity(int intensity);
 
     const int GetIndex() { return index; }
     const glm::vec3& GetColor() { return color; }
     const glm::vec3& GetPosition() { return position; }
+    const glm::vec3& GetDirection() { return direction; }
     const int GetIntensity() { return intensity; }
 
 private:
     int index;
     glm::vec3 color;
     glm::vec3 position;
+    glm::vec3 direction;
     int intensity;
 };

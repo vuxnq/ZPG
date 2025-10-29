@@ -1,6 +1,5 @@
 #include "core/Scene.h"
 #include <iostream>
-#include "Scene.h"
 
 void Scene::OnUpdate(float delta) {
     controller.Update(delta);
@@ -22,8 +21,16 @@ void Scene::AddDrawableObject(const ref<DrawableObject>& drawableObject) {
     drawableObjects.push_back(drawableObject);
 }
 
-void Scene::AddPointLight(const ref<PointLight>& light) {
-    lightManager.AddPointLight(light);
+void Scene::SetAmbientLight(const glm::vec3& color) {
+    lightManager.SetAmbientLight(color);
+}
+
+void Scene::AddLight(const ref<PointLight>& light) {
+    lightManager.AddLight(light);
+}
+
+void Scene::AddLight(const ref<SpotLight>& light) {
+    lightManager.AddLight(light);
 }
 
 void Scene::SetAspectRatio(float aspect) {

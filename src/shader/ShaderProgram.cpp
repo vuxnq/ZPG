@@ -5,6 +5,7 @@
 #include <string>
 #include "core/Camera.h"
 #include "light/PointLight.h"
+#include "light/SpotLight.h"
 
 ShaderProgram::ShaderProgram(const std::vector<ref<Shader>>& shaders) {
 	id = glCreateProgram();
@@ -90,6 +91,10 @@ void ShaderProgram::OnNotify(const Event& event) {
 		SetUniform("viewMatrix", camera->GetViewMatrix());
 		SetUniform("projMatrix", camera->GetProjMatrix());
 		SetUniform("cameraPos", camera->GetPosition());
+	} else if (event.type == EventType::AmbientLightSet) {
+		auto color = *(glm::vec3*)event.payload;
+		Use();
+		SetUniform("ambient", color);
 	} else if (event.type == EventType::PointLightSet) {
 		auto light = (PointLight*)event.payload;
 		Use();
@@ -101,5 +106,17 @@ void ShaderProgram::OnNotify(const Event& event) {
 		int count = (size_t)event.payload;
 		Use();
 		SetUniform("pointLightCount", count);
+	} else if (event.type == EventType::SpotLightSet) {
+		auto light = (SpotLight*)event.payload;
+		Use();
+		std::string base = "spotLights[" + std::to_string(light->GetIndex()) + "].";
+		SetUniform(base + "color", light->GetColor());
+		SetUniform(base + "position", light->GetPosition());
+		SetUniform(base + "direction", light->GetDirection());
+		SetUniform(base + "intensity", light->GetIntensity());
+	} else if (event.type == EventType::SpotLightCountSet) {
+		int count = (size_t)event.payload;
+		Use();
+		SetUniform("spotLightCount", count);
 	}
 }
