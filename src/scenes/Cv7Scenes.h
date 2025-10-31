@@ -13,6 +13,9 @@
 #include "assets/models/bushes.h"
 
 
+#include "object/ModelLoader.h"
+
+
 class Cv7Scene1 : public Scene {
 public:
     Cv7Scene1() {
@@ -129,8 +132,10 @@ class Cv7Scene2 : public Scene {
 public:
     Cv7Scene2() {
         auto shaderVertex = make_ref(new Shader("../assets/vs.glsl", GL_VERTEX_SHADER));
+        auto shaderVertex3 = make_ref(new Shader("../assets/vs_3.glsl", GL_VERTEX_SHADER));
         auto shaderFragment = make_ref(new Shader("../assets/fs.glsl", GL_FRAGMENT_SHADER));
         AddShaderProgram("sp", make_ref(new ShaderProgram({shaderVertex, shaderFragment})));
+        AddShaderProgram("sp3", make_ref(new ShaderProgram({shaderVertex3, shaderFragment})));
 
         auto sphereVBO = make_ref(new VertexBuffer(sphere, sizeof(sphere), {{ElementType::Float, 3}, {ElementType::Float, 3}}));
         auto sphereVAO = make_ref(new VertexArray(sphereVBO));
@@ -142,5 +147,9 @@ public:
         SetAmbientLight(glm::vec3(0.025, 0.025, 0.025));
         AddLight(make_ref(new PointLight(glm::vec3(1, 1, 1), glm::vec3(0, 2, 0), 10)));
         // AddLight(make_ref(new SpotLight(glm::vec3(1, 1, 1), glm::vec3(0, 2, 0), glm::vec3(0, -1, 0), 10)));
+
+        auto ml = ModelLoader("formula1.obj");
+        auto obj = make_ref(new DrawableObject(make_ref(new Model(*ml.model)), make_ref(new Transformation()), shaderProgramManager.GetShaderProgram("sp3")));
+        AddDrawableObject(obj);
     }
 };

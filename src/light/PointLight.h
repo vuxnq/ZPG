@@ -24,5 +24,5 @@ private:
     int index;
     glm::vec3 color;
     glm::vec3 position;
-    int intensity;
+    int intensity; // TODO: float
 };
