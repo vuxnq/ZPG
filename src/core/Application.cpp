@@ -100,6 +100,10 @@ void Application::OnKey(int key, int action) {
 				sceneManager.SetActiveScene("scene7.1");
 				sceneManager.GetActiveScene()->SetAspectRatio(windowWidth / (float)windowHeight);
 				break;
+			case GLFW_KEY_2:
+				sceneManager.SetActiveScene("scene7.2");
+				sceneManager.GetActiveScene()->SetAspectRatio(windowWidth / (float)windowHeight);
+				break;
 			default:
 				break;
 		}
@@ -115,6 +119,7 @@ void Application::OnWindowResize(int width, int height) {
 
 void Application::OnCreate() {
 	sceneManager.AddScene("scene7.1", make_ref(new Cv7Scene1()));
+	sceneManager.AddScene("scene7.2", make_ref(new Cv7Scene2()));
 }
 
 void Application::Run() {

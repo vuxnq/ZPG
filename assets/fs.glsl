@@ -36,11 +36,12 @@ uniform int spotLightCount;
 
 uniform vec3 cameraPos;
 
-in vec4 worldPos;
+in vec3 worldPos;
 in vec3 worldNormal;
 
 out vec4 fragColor;
 
+// TODO: u spec shininess 1 musi byt test
 vec3 calculateDirectionalLight(DirectionalLight light, vec3 fragPos, vec3 normal, vec3 viewDir) {
     vec3 lightDir = normalize(-light.direction);
 
@@ -50,6 +51,8 @@ vec3 calculateDirectionalLight(DirectionalLight light, vec3 fragPos, vec3 normal
     // specular - blinn-phong
     vec3 halfway = normalize(lightDir + viewDir);
     float spec = pow(max(dot(normal, halfway), 0.0), 32.0);
+
+    if (dot(normal, lightDir) < 0.0) spec = 0;
 
     return (diff + spec) * light.color * (light.intensity / 10.0);
 }
@@ -62,11 +65,13 @@ vec3 calculatePointLight(PointLight light, vec3 fragPos, vec3 normal, vec3 viewD
 
     // specular - phong
     // vec3 reflectDir = reflect(-lightDir, normal);
-    // float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32.0);
+    // float spec = pow(max(dot(viewDir, reflectDir), 0.0), 1.0);
 
     // specular - blinn-phong
     vec3 halfway = normalize(lightDir + viewDir);
     float spec = pow(max(dot(normal, halfway), 0.0), 32.0);
+
+    if (dot(normal, lightDir) < 0.0) spec = 0;
 
     // attenuation
     float dist = length(light.position - fragPos);
@@ -94,6 +99,8 @@ vec3 calculateSpotLight(SpotLight light, vec3 fragPos, vec3 normal, vec3 viewDir
     vec3 halfway = normalize(lightDir + viewDir);
     float spec = pow(max(dot(normal, halfway), 0.0), 32.0);
 
+    if (dot(normal, lightDir) < 0.0) spec = 0;
+
     // attenuation
     float dist = length(light.position - fragPos);
     float attenuation = light.intensity / ((dist * dist * 10) + light.intensity);
@@ -102,22 +109,21 @@ vec3 calculateSpotLight(SpotLight light, vec3 fragPos, vec3 normal, vec3 viewDir
 }
 
 void main(void) {
-    vec3 fragPos = vec3(worldPos);
     vec3 normal = normalize(worldNormal);
-    vec3 viewDir = normalize(cameraPos - fragPos);
+    vec3 viewDir = normalize(cameraPos - worldPos);
 
     vec3 result = vec3(0.0);
 
     for (int i = 0; i < directionalLightCount; i++) {
-        result += calculateDirectionalLight(directionalLights[i], fragPos, normal, viewDir);
+        result += calculateDirectionalLight(directionalLights[i], worldPos, normal, viewDir);
     }
 
     for (int i = 0; i < pointLightCount; i++) {
-        result += calculatePointLight(pointLights[i], fragPos, normal, viewDir);
+        result += calculatePointLight(pointLights[i], worldPos, normal, viewDir);
     }
 
     for (int i = 0; i < spotLightCount; i++) {
-        result += calculateSpotLight(spotLights[i], fragPos, normal, viewDir);
+        result += calculateSpotLight(spotLights[i], worldPos, normal, viewDir);
     }
 
     // vec4 ambient = vec4(0.05, 0.05, 0.05, 1.0);

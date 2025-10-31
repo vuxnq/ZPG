@@ -94,10 +94,8 @@ public:
         auto plainObject = make_ref(new DrawableObject(plainModel, make_ref(new ScaleTransform(plainSize)), shaderProgramManager.GetShaderProgram("sp")));
         AddDrawableObject(plainObject);
 
-        // auto blueLight = make_ref(new PointLight(glm::vec3(0.0, 0.3, 0.9), glm::vec3(10.0f, 10.0f, 10.0f), 300));
-        // auto purpleLight = make_ref(new PointLight(glm::vec3(0.1, 0.1, 0.8), glm::vec3(-10.0f, 10.0f, -10.0f), 300));
-        // AddLight(blueLight);
-        // AddLight(purpleLight);
+        // AddLight(make_ref(new PointLight(glm::vec3(0.0, 0.3, 0.9), glm::vec3(10.0f, 10.0f, 10.0f), 300)));
+        // AddLight(make_ref(new PointLight(glm::vec3(0.1, 0.1, 0.8), glm::vec3(-10.0f, 10.0f, -10.0f), 300)));
 
         SetAmbientLight(glm::vec3(0.025, 0.025, 0.025));
         AddLight(make_ref(new DirectionalLight(glm::vec3(0.0, 0.3, 0.9), glm::vec3(-1.0, -1.0 , -1.0), 1)));
@@ -111,4 +109,25 @@ private:
     int bushesDensity = 4;
     int treeCount = 50;
     int fireflyCount = 20;
+};
+
+
+class Cv7Scene2 : public Scene {
+public:
+    Cv7Scene2() {
+        auto shaderVertex = make_ref(new Shader("../assets/vs.glsl", GL_VERTEX_SHADER));
+        auto shaderFragment = make_ref(new Shader("../assets/fs.glsl", GL_FRAGMENT_SHADER));
+        AddShaderProgram("sp", make_ref(new ShaderProgram({shaderVertex, shaderFragment})));
+
+        auto sphereVBO = make_ref(new VertexBuffer(sphere, sizeof(sphere), {{ElementType::Float, 3}, {ElementType::Float, 3}}));
+        auto sphereVAO = make_ref(new VertexArray(sphereVBO));
+        auto sphereModel = make_ref(new Model(sphereVAO));
+        auto sphereObject = make_ref(new DrawableObject(sphereModel, make_ref(new ScaleTransform(0.2)), shaderProgramManager.GetShaderProgram("sp")));
+
+        AddDrawableObject(sphereObject);
+
+        SetAmbientLight(glm::vec3(0.025, 0.025, 0.025));
+        AddLight(make_ref(new PointLight(glm::vec3(1, 1, 1), glm::vec3(0, 2, 0), 10)));
+        // AddLight(make_ref(new SpotLight(glm::vec3(1, 1, 1), glm::vec3(0, 2, 0), glm::vec3(0, -1, 0), 10)));
+    }
 };

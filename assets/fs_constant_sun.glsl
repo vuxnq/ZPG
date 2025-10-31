@@ -11,7 +11,7 @@ uniform int pointLightCount;
 
 uniform vec3 cameraPos;
 
-in vec4 worldPos;
+in vec3 worldPos;
 in vec3 worldNormal;
 
 out vec4 fragColor;

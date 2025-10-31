@@ -131,4 +131,5 @@ void ShaderProgram::OnNotify(const Event& event) {
 		Use();
 		SetUniform("spotLightCount", count);
 	}
+	UnUse();
 }
