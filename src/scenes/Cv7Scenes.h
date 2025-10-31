@@ -5,6 +5,7 @@
 #include "light/PointLight.h"
 #include "light/SpotLight.h"
 #include "light/LightObject.h"
+#include "light/Flashlight.h"
 
 #include "assets/models/sphere.h"
 #include "assets/models/plain.h"
@@ -94,14 +95,24 @@ public:
         auto plainObject = make_ref(new DrawableObject(plainModel, make_ref(new ScaleTransform(plainSize)), shaderProgramManager.GetShaderProgram("sp")));
         AddDrawableObject(plainObject);
 
-        // AddLight(make_ref(new PointLight(glm::vec3(0.0, 0.3, 0.9), glm::vec3(10.0f, 10.0f, 10.0f), 300)));
-        // AddLight(make_ref(new PointLight(glm::vec3(0.1, 0.1, 0.8), glm::vec3(-10.0f, 10.0f, -10.0f), 300)));
-
         SetAmbientLight(glm::vec3(0.025, 0.025, 0.025));
         AddLight(make_ref(new DirectionalLight(glm::vec3(0.0, 0.3, 0.9), glm::vec3(-1.0, -1.0 , -1.0), 1)));
         AddLight(make_ref(new DirectionalLight(glm::vec3(0.1, 0.1, 0.8), glm::vec3(1.0, -1.0 , 1.0), 1)));
         AddLight(make_ref(new SpotLight(glm::vec3(1.0, 0.0 , 0.0), glm::vec3(0.0, 1.0, 0.0), glm::vec3(1.0, -1.0 , 0.0), 2)));
         AddLight(make_ref(new SpotLight(glm::vec3(1.0, 1.0 , 1.0), glm::vec3(0.0, 1.0, 0.0), glm::vec3(0.0, 0.0 , -1.0), 300)));
+
+        camera.AddSubscriber(flashlight.get());
+        AddLight(flashlight);
+    }
+
+    void OnKey(int key, int action) override {
+        if (action == GLFW_PRESS && key == GLFW_KEY_F) {
+            if (flashlight->GetIntensity() != 0) {
+                flashlight->SetIntensity(0);
+                return;
+            };
+            flashlight->SetIntensity(flashlight->GetFlashlightIntensity());
+        }
     }
 
 private:
@@ -109,6 +120,8 @@ private:
     int bushesDensity = 4;
     int treeCount = 50;
     int fireflyCount = 20;
+
+    ref<Flashlight> flashlight = make_ref(new Flashlight(glm::vec3(1.0, 1.0, 1.0), 20));
 };
 
 

@@ -108,6 +108,7 @@ void Application::OnKey(int key, int action) {
 				break;
 		}
 	}
+	sceneManager.GetActiveScene()->OnKey(key, action);
 }
 
 void Application::OnWindowResize(int width, int height) {

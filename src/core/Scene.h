@@ -16,6 +16,7 @@ public:
     ~Scene() {}
 
     virtual void OnUpdate(float delta);
+    virtual void OnKey(int key, int action) {}
 
     void AddShaderProgram(const std::string& name, const ref<ShaderProgram> shaderProgram);
     void AddDrawableObject(const ref<DrawableObject>& drawableObject);
