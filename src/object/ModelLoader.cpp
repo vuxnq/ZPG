@@ -5,61 +5,56 @@
 
 
 /**
- *
 
-struct Vertex:
-    v3 pos
-    v3 normal;
-    v2 texcoord;
-
+    struct Vertex:
+        v3 pos
+        v3 normal;
+        v2 texcoord;
 
 
-def processMesh(t_mesh, t_materials):
-    t_material = t_materials[t_mesh.material_id]
+    def processMesh(t_mesh, materials):
+        material = materials[t_mesh.material_id]
 
-    Material material = processMaterial(t_material)
+        list<Vertex> vertices = getVertices(t_mesh) // vbo -> vao
 
-    list<Vertex> vertices = getVertices(t_mesh) // vbo -> vao
+        Mesh mesh = new Mesh(vertices, material)
 
-    Mesh mesh = new Mesh(vertices, material)
+        return mesh
 
-    return mesh
+    def processMaterial(t_material):
+        m = new Material(t_material)
+        return m
 
+    t_meshes, t_materials = LoadObj()
 
+    meshes = []
+    materials = []
 
+    for (t_material : t_materials) {
+        m = processMaterial(t_maaterial);
+        materials.push_back(m)
+    }
 
-t_meshes, t_materials = LoadObj()
+    for (t_mesh : t_meshes) {
+        Mesh mesh = processMesh(t_mesh, materials)
 
-model = new Model();
-
-for (t_mesh : t_meshes) {
-    Mesh mesh = processMesh(t_mesh, t_materials)
-
-    model.addMesh(mesh)
-}
-
-
-
-
-
-
+        model.addMesh(mesh)
+    }
 
  */
 
 ModelLoader::ModelLoader(const char* name) {
-    std::string inputfile = std::string("../assets/objmodels/") + name;
+    std::string inputfile = std::string("../assets/models/obj/") + name;
 
     tinyobj::attrib_t attrib;
     std::vector<tinyobj::shape_t> shapes;
     std::vector<tinyobj::material_t> materials;
     std::string err;
 
-    bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &err, inputfile.c_str(), "../assets/objmodels/");
+    bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &err, inputfile.c_str(), "../assets/models/obj/");
 
     if (!err.empty()) std::cerr << "Err: " << err << std::endl;
     if (!ret) throw std::runtime_error("Failed to load OBJ file!");
-
-    std::vector<float> vertices;
 
     for (const auto& shape : shapes) {
         for (const auto& index : shape.mesh.indices) {
@@ -91,28 +86,10 @@ ModelLoader::ModelLoader(const char* name) {
             }
         }
     }
+}
 
-    GLuint VBO = 0;
-    glGenBuffers(1, &VBO);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-
-
-    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
-    int vertexCount = (int)vertices.size() / 3;
-
-    GLuint VAO;
-
-    glGenVertexArrays(1, &VAO); //generate the VAO
-    glBindVertexArray(VAO); //bind the VAO
-    glEnableVertexAttribArray(0); //enable vertex attributes
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(1); //enable vertex attributes
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-    glEnableVertexAttribArray(2); //enable vertex attributes
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-
+Model ModelLoader::Load() {
     auto vbo = make_ref(new VertexBuffer(vertices.data(), vertices.size() * sizeof(float), {{ElementType::Float, 3}, {ElementType::Float, 3}, {ElementType::Float, 2}}));
     auto vao = make_ref(new VertexArray(vbo));
-    model = new Model(vao);
+    return Model(vao);
 }

@@ -6,6 +6,7 @@
 class Flashlight : public SpotLight, public Subscriber {
 public:
     Flashlight(const glm::vec3& color, int intensity) : SpotLight(color, glm::vec3(0.f, 0.f, 0.f),  glm::vec3(0.f, 0.f, -1.f), intensity), flashlightIntensity(intensity) {}
+    ~Flashlight() {}
 
     void SetFlashlightIntensity(int intensity) {
         this->flashlightIntensity = intensity;

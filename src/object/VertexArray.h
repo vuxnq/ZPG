@@ -6,7 +6,7 @@
 class VertexArray {
 public:
     VertexArray(const ref<VertexBuffer>& vertexBuffer);
-    ~VertexArray() {}
+    ~VertexArray();
 
 	void Bind();
     void Unbind();

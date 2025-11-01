@@ -1,9 +1,14 @@
 #include "object/VertexArray.h"
+#include "VertexArray.h"
 
 VertexArray::VertexArray(const ref<VertexBuffer>& vertexBuffer) : vertexBuffer(vertexBuffer) {
     glGenVertexArrays(1, &id);
 
     SetVertexBuffer(vertexBuffer);
+}
+
+VertexArray::~VertexArray() {
+	glDeleteVertexArrays(1, &id);
 }
 
 void VertexArray::Bind() {
