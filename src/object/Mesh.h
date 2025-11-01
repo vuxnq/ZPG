@@ -6,17 +6,12 @@
 
 class Mesh {
 public:
-    Mesh(const ref<VertexArray>& vertexArray, int vertexCount, const ref<Material>& material) : vertexArray(vertexArray), vertexCount(vertexCount), material(material) {}
+    Mesh(const ref<VertexArray>& vertexArray, const ref<Material>& material) : vertexArray(vertexArray), material(material) {}
     ~Mesh() {}
 
-    void Draw(const ref<ShaderProgram>& shaderProgram) {
-        if (material) material->Apply(shaderProgram);
-        vertexArray->Bind();
-        glDrawArrays(GL_TRIANGLES, 0, vertexCount);
-    }
+    void Draw(const ref<ShaderProgram>& shaderProgram);
 
 private:
     ref<VertexArray> vertexArray;
-    int vertexCount;
-    ref<Material> material;
+    ref<Material> material = nullptr;
 };

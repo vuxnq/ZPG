@@ -109,8 +109,8 @@ public:
         camera.AddSubscriber(flashlight.get());
         AddLight(flashlight);
 
-        // auto ml = ModelLoader("pou.obj");
-        // auto obj = make_ref(new DrawableObject(make_ref(new Model(ml.Load())), make_ref(new DynamicRotateTransform(45, glm::vec3(0.0, 1.0, 0.0), 5)), shaderProgramManager.GetShaderProgram("sp")));
+        // auto ml = ModelLoader("../assets/models/obj");
+        // auto obj = make_ref(new DrawableObject(make_ref(new Model(ml.Load("pou.obj"))), make_ref(new DynamicRotateTransform(45, glm::vec3(0.0, 1.0, 0.0), 5)), shaderProgramManager.GetShaderProgram("sp")));
         // AddDrawableObject(obj);
     }
 
@@ -137,29 +137,26 @@ private:
 class Cv7Scene2 : public Scene {
 public:
     Cv7Scene2() {
+
         auto shaderVertex = make_ref(new Shader("../assets/vs.glsl", GL_VERTEX_SHADER));
-        auto shaderVertexOld = make_ref(new Shader("../assets/vs_old.glsl", GL_VERTEX_SHADER));
         auto shaderFragment = make_ref(new Shader("../assets/fs.glsl", GL_FRAGMENT_SHADER));
         AddShaderProgram("sp", make_ref(new ShaderProgram({shaderVertex, shaderFragment})));
-        AddShaderProgram("sp_old", make_ref(new ShaderProgram({shaderVertexOld, shaderFragment})));
-
-        auto sphereVBO = make_ref(new VertexBuffer(sphere, sizeof(sphere), {{ElementType::Float, 3}, {ElementType::Float, 3}}));
-        auto sphereVAO = make_ref(new VertexArray(sphereVBO));
-        auto sphereModel = make_ref(new Model(sphereVAO));
-        auto sphereObject = make_ref(new DrawableObject(sphereModel, make_ref(new ScaleTransform(0.2)), shaderProgramManager.GetShaderProgram("sp_old")));
-
-        AddDrawableObject(sphereObject);
 
         SetAmbientLight(glm::vec3(0.025, 0.025, 0.025));
-        // AddLight(make_ref(new PointLight(glm::vec3(1, 1, 1), glm::vec3(0, 2, 0), 10)));
         AddLight(make_ref(new SpotLight(glm::vec3(1, 1, 1), glm::vec3(0, 2, 0), glm::vec3(0, -1, 0), 10)));
 
-        // auto ml = ModelLoader("pou.obj");
-        // auto obj = make_ref(new DrawableObject(make_ref(new Model(ml.Load())), make_ref(new Transformation()), shaderProgramManager.GetShaderProgram("sp")));
-        // AddDrawableObject(obj);
+        auto ml = ModelLoader("../assets/models/obj/");
+
+        auto obj = make_ref(new DrawableObject(
+            make_ref(new Model(ml.Load("ksr29.obj"))),
+            make_ref(new ScaleTransform(0.1)),
+            shaderProgramManager.GetShaderProgram("sp")));
+
+        AddDrawableObject(obj);
 
         camera.AddSubscriber(flashlight.get());
         AddLight(flashlight);
+
     }
 
     void OnKey(int key, int action) override {

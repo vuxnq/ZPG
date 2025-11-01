@@ -19,6 +19,7 @@ struct SpotLight {
     int intensity;
 };
 
+
 #define MAX_DIRECTIONALLIGHTS 10
 #define MAX_POINTLIGHTS 100
 #define MAX_SPOTLIGHTS 100
@@ -34,6 +35,15 @@ uniform int pointLightCount;
 uniform SpotLight spotLights[MAX_SPOTLIGHTS];
 uniform int spotLightCount;
 
+struct Material {
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;
+    float shininess;
+};
+
+uniform Material material;
+
 uniform vec3 cameraPos;
 
 in vec3 worldPos;
@@ -41,7 +51,6 @@ in vec3 worldNormal;
 
 out vec4 fragColor;
 
-// TODO: u spec shininess 1 musi byt test
 vec3 calculateDirectionalLight(DirectionalLight light, vec3 fragPos, vec3 normal, vec3 viewDir) {
     vec3 lightDir = normalize(-light.direction);
 
@@ -50,11 +59,11 @@ vec3 calculateDirectionalLight(DirectionalLight light, vec3 fragPos, vec3 normal
 
     // specular - blinn-phong
     vec3 halfway = normalize(lightDir + viewDir);
-    float spec = pow(max(dot(normal, halfway), 0.0), 32.0);
+    float spec = pow(max(dot(normal, halfway), 0.0), material.shininess);
 
     if (dot(normal, lightDir) < 0.0) spec = 0;
 
-    return (diff + spec) * light.color * (light.intensity / 10.0);
+    return (diff * material.diffuse + spec * material.specular) * light.color * (light.intensity / 10.0);
 }
 
 vec3 calculatePointLight(PointLight light, vec3 fragPos, vec3 normal, vec3 viewDir) {
@@ -69,7 +78,7 @@ vec3 calculatePointLight(PointLight light, vec3 fragPos, vec3 normal, vec3 viewD
 
     // specular - blinn-phong
     vec3 halfway = normalize(lightDir + viewDir);
-    float spec = pow(max(dot(normal, halfway), 0.0), 32.0);
+    float spec = pow(max(dot(normal, halfway), 0.0), material.shininess);
 
     if (dot(normal, lightDir) < 0.0) spec = 0;
 
@@ -77,7 +86,7 @@ vec3 calculatePointLight(PointLight light, vec3 fragPos, vec3 normal, vec3 viewD
     float dist = length(light.position - fragPos);
     float attenuation = light.intensity / ((dist * dist * 10) + light.intensity);
 
-    return (diff + spec) * attenuation * light.color;
+    return (diff * material.diffuse + spec * material.specular) * attenuation * light.color;
 }
 
 vec3 calculateSpotLight(SpotLight light, vec3 fragPos, vec3 normal, vec3 viewDir) {
@@ -97,7 +106,7 @@ vec3 calculateSpotLight(SpotLight light, vec3 fragPos, vec3 normal, vec3 viewDir
 
     // specular - blinn-phong
     vec3 halfway = normalize(lightDir + viewDir);
-    float spec = pow(max(dot(normal, halfway), 0.0), 32.0);
+    float spec = pow(max(dot(normal, halfway), 0.0), material.shininess);
 
     if (dot(normal, lightDir) < 0.0) spec = 0;
 
@@ -105,7 +114,7 @@ vec3 calculateSpotLight(SpotLight light, vec3 fragPos, vec3 normal, vec3 viewDir
     float dist = length(light.position - fragPos);
     float attenuation = light.intensity / ((dist * dist * 10) + light.intensity);
 
-    return (diff + spec) * attenuation * intens * light.color;
+    return (diff * material.diffuse + spec * material.specular) * attenuation * intens * light.color;
 }
 
 void main(void) {
@@ -126,6 +135,5 @@ void main(void) {
         result += calculateSpotLight(spotLights[i], worldPos, normal, viewDir);
     }
 
-    // vec4 ambient = vec4(0.05, 0.05, 0.05, 1.0);
-    fragColor = vec4(ambient, 1.0) + vec4(result, 1.0);
+    fragColor = vec4((ambient * material.ambient), 1.0) + vec4(result, 1.0);
 }

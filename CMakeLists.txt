@@ -64,3 +64,10 @@ find_package(OpenGL REQUIRED)
 target_link_libraries(ZPG PUBLIC OpenGL::GL)
 find_package(GLEW REQUIRED)
 target_link_libraries(ZPG PUBLIC GLEW::glew)
+
+
+
+add_custom_target(run
+        COMMAND ${CMAKE_COMMAND} -E chdir ${CMAKE_SOURCE_DIR} $<TARGET_FILE:ZPG>
+        DEPENDS ZPG
+)

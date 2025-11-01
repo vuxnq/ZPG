@@ -28,7 +28,7 @@
 
 Application::Application() {
 	if (s_application != nullptr) {
-		std::cerr << "Application already instantiated" << std::endl;
+		fprintf(stderr, "Application already instantiated\n");
 		exit(EXIT_FAILURE);
 	}
 	s_application = this;
@@ -38,7 +38,7 @@ void Application::Init() {
 	glfwSetErrorCallback(error_callback);
 
 	if (!glfwInit()) {
-		std::cerr << "Failed to initialize GLFW" << std::endl;
+		fprintf(stderr, "Failed to initialize GLFW\n");
 		exit(EXIT_FAILURE);
 	}
 

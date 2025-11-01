@@ -3,67 +3,47 @@
 #define TINYOBJLOADER_IMPLEMENTATION
 #include "tinyobjloader/tiny_obj_loader.h"
 
+ModelLoader::ModelLoader(const std::string& basedir) : basedir(basedir) {
+    if (!this->basedir.ends_with("/")) this->basedir.append("/");
+}
 
-/**
-
-    struct Vertex:
-        v3 pos
-        v3 normal;
-        v2 texcoord;
-
-
-    def processMesh(t_mesh, materials):
-        material = materials[t_mesh.material_id]
-
-        list<Vertex> vertices = getVertices(t_mesh) // vbo -> vao
-
-        Mesh mesh = new Mesh(vertices, material)
-
-        return mesh
-
-    def processMaterial(t_material):
-        m = new Material(t_material)
-        return m
-
-    t_meshes, t_materials = LoadObj()
-
-    meshes = []
-    materials = []
-
-    for (t_material : t_materials) {
-        m = processMaterial(t_maaterial);
-        materials.push_back(m)
-    }
-
-    for (t_mesh : t_meshes) {
-        Mesh mesh = processMesh(t_mesh, materials)
-
-        model.addMesh(mesh)
-    }
-
- */
-
-ModelLoader::ModelLoader(const char* name) {
-    std::string inputfile = std::string("../assets/models/obj/") + name;
-
+Model ModelLoader::Load(const std::string& filename) {
     tinyobj::attrib_t attrib;
     std::vector<tinyobj::shape_t> shapes;
     std::vector<tinyobj::material_t> materials;
     std::string err;
 
-    bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &err, inputfile.c_str(), "../assets/models/obj/");
+    bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &err, (basedir + filename).c_str(), basedir.c_str());
 
-    if (!err.empty()) std::cerr << "Err: " << err << std::endl;
+    if (!err.empty()) fprintf(stderr, "Err: %s\n", err.c_str());
     if (!ret) throw std::runtime_error("Failed to load OBJ file!");
 
+    // materials
+    std::vector<ref<Material>> materialRefs;
+
+    for (auto& m : materials) {
+        MaterialProps props;
+        props.ambient = glm::vec3(m.ambient[0], m.ambient[1], m.ambient[2]);
+        props.diffuse = glm::vec3(m.diffuse[0], m.diffuse[1], m.diffuse[2]);
+        props.specular = glm::vec3(m.specular[0], m.specular[1], m.specular[2]);
+        props.shininess = m.shininess;
+        materialRefs.push_back(make_ref(new Material(props)));
+    }
+
+    Model model;
+
+    // vertices
     for (const auto& shape : shapes) {
+
+        std::vector<float> vertices;
+
         for (const auto& index : shape.mesh.indices) {
-            // Position
+            // position
             vertices.push_back(attrib.vertices[3 * index.vertex_index + 0]);
             vertices.push_back(attrib.vertices[3 * index.vertex_index + 1]);
             vertices.push_back(attrib.vertices[3 * index.vertex_index + 2]);
 
-            // Normals (if exist)
+            // normals
             if (index.normal_index >= 0) {
                 vertices.push_back(attrib.normals[3 * index.normal_index + 0]);
                 vertices.push_back(attrib.normals[3 * index.normal_index + 1]);
@@ -75,7 +55,7 @@ ModelLoader::ModelLoader(const char* name) {
                 vertices.push_back(0.0f);
             }
 
-            //  UV coordinates (if exist)
+            //  uv coords
             if (index.texcoord_index >= 0) {
                 vertices.push_back(attrib.texcoords[2 * index.texcoord_index + 0]);
                 vertices.push_back(attrib.texcoords[2 * index.texcoord_index + 1]);
@@ -85,11 +65,35 @@ ModelLoader::ModelLoader(const char* name) {
                 vertices.push_back(0.0f);
             }
         }
-    }
-}
 
-Model ModelLoader::Load() {
-    auto vbo = make_ref(new VertexBuffer(vertices.data(), vertices.size() * sizeof(float), {{ElementType::Float, 3}, {ElementType::Float, 3}, {ElementType::Float, 2}}));
-    auto vao = make_ref(new VertexArray(vbo));
-    return Model(vao);
+        std::vector<std::tuple<ElementType::Type, int>> layout = {
+            {ElementType::Float, 3},
+            {ElementType::Float, 3},
+            {ElementType::Float, 2}
+        };
+
+        auto vbo = make_ref(new VertexBuffer(vertices.data(), vertices.size() * sizeof(float), layout));
+        auto vao = make_ref(new VertexArray(vbo));
+
+        int material_id = -1;
+        if (!shape.mesh.material_ids.empty()) {
+            material_id = shape.mesh.material_ids[0];
+
+            for (int mat_id : shape.mesh.material_ids) {
+                if (mat_id != material_id) {
+                    fprintf(stderr, "Warning: material ids differ inside a shape\n");
+                    break;
+                }
+            }
+        }
+
+        ref<Material> material;
+        if (materialRefs.empty() || material_id < 0 || material_id >= (int)materialRefs.size()) material = make_ref(new Material({}));
+        else material = materialRefs[material_id];
+
+        auto mesh = make_ref(new Mesh(vao, material));
+        model.AddMesh(mesh);
+    }
+
+    return model;
 }
