@@ -12,7 +12,7 @@ public:
 
     void SetShaderProgram(const ref<ShaderProgram>& shaderProgram);
     virtual void Update(float delta);
-    void Draw(); // TODO: renderer
+    void Draw();
 
 protected:
     ref<TransformComponent> transformation;

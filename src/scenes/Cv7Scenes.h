@@ -109,9 +109,9 @@ public:
         camera.AddSubscriber(flashlight.get());
         AddLight(flashlight);
 
-        auto ml = ModelLoader("pou.obj");
-        auto obj = make_ref(new DrawableObject(make_ref(new Model(ml.Load())), make_ref(new DynamicRotateTransform(45, glm::vec3(0.0, 1.0, 0.0), 5)), shaderProgramManager.GetShaderProgram("sp")));
-        AddDrawableObject(obj);
+        // auto ml = ModelLoader("pou.obj");
+        // auto obj = make_ref(new DrawableObject(make_ref(new Model(ml.Load())), make_ref(new DynamicRotateTransform(45, glm::vec3(0.0, 1.0, 0.0), 5)), shaderProgramManager.GetShaderProgram("sp")));
+        // AddDrawableObject(obj);
     }
 
     void OnKey(int key, int action) override {
@@ -154,9 +154,9 @@ public:
         // AddLight(make_ref(new PointLight(glm::vec3(1, 1, 1), glm::vec3(0, 2, 0), 10)));
         AddLight(make_ref(new SpotLight(glm::vec3(1, 1, 1), glm::vec3(0, 2, 0), glm::vec3(0, -1, 0), 10)));
 
-        auto ml = ModelLoader("pou.obj");
-        auto obj = make_ref(new DrawableObject(make_ref(new Model(ml.Load())), make_ref(new Transformation()), shaderProgramManager.GetShaderProgram("sp")));
-        AddDrawableObject(obj);
+        // auto ml = ModelLoader("pou.obj");
+        // auto obj = make_ref(new DrawableObject(make_ref(new Model(ml.Load())), make_ref(new Transformation()), shaderProgramManager.GetShaderProgram("sp")));
+        // AddDrawableObject(obj);
 
         camera.AddSubscriber(flashlight.get());
         AddLight(flashlight);
