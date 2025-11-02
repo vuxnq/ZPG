@@ -1,28 +1,17 @@
 #pragma once
-#include <glm/mat4x4.hpp>
-#include <glm/vec3.hpp>
-#include "core/Core.h"
-#include "core/Observer.h"
+#include "light/Light.h"
 
-class PointLight : public Publisher {
+class PointLight : public Light {
 public:
-    PointLight(const glm::vec3& color, const glm::vec3& position, float intensity)
-    : color(color), position(position), intensity(intensity) {}
+    PointLight(const glm::vec3& color, const glm::vec3& position, const LightAttenuation& attenuation)
+    : Light(color, attenuation), position(position) {}
     ~PointLight() {}
 
-    void SetIndex(int index);
-    void SetColor(const glm::vec3& color);
     void SetPosition(const glm::vec3& position);
-    void SetIntensity(float intensity);
-
-    const int GetIndex() { return index; }
-    const glm::vec3& GetColor() { return color; }
     const glm::vec3& GetPosition() { return position; }
-    const float GetIntensity() { return intensity; }
+
+    EventType GetEventType() override { return EventType::PointLightSet; }
 
 private:
-    int index;
-    glm::vec3 color;
     glm::vec3 position;
-    float intensity;
 };

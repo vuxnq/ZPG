@@ -109,23 +109,31 @@ void ShaderProgram::OnNotify(const Event& event) {
 		SetUniform("directionalLightCount", count);
 	} else if (event.type == EventType::PointLightSet) {
 		auto light = (PointLight*)event.payload;
+		auto attenuation = light->GetAttenuation();
 		Use();
 		std::string base = "pointLights[" + std::to_string(light->GetIndex()) + "].";
 		SetUniform(base + "color", light->GetColor());
 		SetUniform(base + "position", light->GetPosition());
-		SetUniform(base + "intensity", light->GetIntensity());
+		SetUniform(base + "attenuation.intensity", attenuation.intensity);
+		SetUniform(base + "attenuation.constant", attenuation.constant);
+		SetUniform(base + "attenuation.linear", attenuation.linear);
+		SetUniform(base + "attenuation.quadratic", attenuation.quadratic);
 	} else if (event.type == EventType::PointLightCountSet) {
 		int count = (size_t)event.payload;
 		Use();
 		SetUniform("pointLightCount", count);
 	} else if (event.type == EventType::SpotLightSet) {
 		auto light = (SpotLight*)event.payload;
+		auto attenuation = light->GetAttenuation();
 		Use();
 		std::string base = "spotLights[" + std::to_string(light->GetIndex()) + "].";
 		SetUniform(base + "color", light->GetColor());
 		SetUniform(base + "position", light->GetPosition());
 		SetUniform(base + "direction", light->GetDirection());
-		SetUniform(base + "intensity", light->GetIntensity());
+		SetUniform(base + "attenuation.intensity", attenuation.intensity);
+		SetUniform(base + "attenuation.constant", attenuation.constant);
+		SetUniform(base + "attenuation.linear", attenuation.linear);
+		SetUniform(base + "attenuation.quadratic", attenuation.quadratic);
 	} else if (event.type == EventType::SpotLightCountSet) {
 		int count = (size_t)event.payload;
 		Use();

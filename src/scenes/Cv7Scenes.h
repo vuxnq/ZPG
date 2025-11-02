@@ -91,7 +91,7 @@ public:
             fireflyTransform->Add(make_ref(new TranslateTransform(glm::vec3(rBushOffset(gen), rBushOffset(gen), rBushOffset(gen)))));
             fireflyTransform->Add(make_ref(new DynamicRotateTransform(90, glm::vec3(rBushOffset(gen), (float)rBushOffset(gen), rBushOffset(gen)), 1)));
             fireflyTransform->Add(make_ref(new TranslateTransform(glm::vec3(rTreeOffset(gen), std::max(rTreeOffset(gen) / 2, 0.5f), rTreeOffset(gen)))));
-            auto fireflyLight = make_ref(new PointLight(glm::vec3(0.8, 1.0, 0.8), glm::vec3(0), 1.0f));
+            auto fireflyLight = make_ref(new PointLight(glm::vec3(0.8, 1.0, 0.8), glm::vec3(0), {1.0, 1.0, 1.0, 1.0}));
             auto fireflyObject = make_ref(new LightObject(sphereModel, fireflyTransform, shaderProgramManager.GetShaderProgram("sp_old_firefly"), fireflyLight));
             AddLight(fireflyLight);
             AddDrawableObject(fireflyObject);
@@ -103,8 +103,8 @@ public:
         SetAmbientLight(glm::vec3(0.025, 0.025, 0.025));
         AddLight(make_ref(new DirectionalLight(glm::vec3(0.0, 0.3, 0.9), glm::vec3(-1.0, -1.0 , -1.0), 1.0f)));
         AddLight(make_ref(new DirectionalLight(glm::vec3(0.1, 0.1, 0.8), glm::vec3(1.0, -1.0 , 1.0), 1.0f)));
-        AddLight(make_ref(new SpotLight(glm::vec3(1.0, 0.0 , 0.0), glm::vec3(0.0, 1.0, 0.0), glm::vec3(1.0, -1.0 , 0.0), 2.0f)));
-        AddLight(make_ref(new SpotLight(glm::vec3(1.0, 1.0 , 1.0), glm::vec3(0.0, 1.0, 0.0), glm::vec3(0.0, 0.0 , -1.0), 300.0f)));
+        AddLight(make_ref(new SpotLight(glm::vec3(1.0, 0.0 , 0.0), glm::vec3(0.0, 1.0, 0.0), glm::vec3(1.0, -1.0 , 0.0), {})));
+        AddLight(make_ref(new SpotLight(glm::vec3(1.0, 1.0 , 1.0), glm::vec3(0.0, 1.0, 0.0), glm::vec3(0.0, 0.0 , -1.0), {})));
 
         camera.AddSubscriber(flashlight.get());
         AddLight(flashlight);
@@ -116,7 +116,7 @@ public:
 
     void OnKey(int key, int action) override {
         if (action == GLFW_PRESS && key == GLFW_KEY_F) {
-            if (flashlight->GetIntensity() != 0.0f) {
+            if (flashlight->GetAttenuation().intensity != 0.0f) {
                 flashlight->SetIntensity(0.0f);
                 return;
             };
@@ -130,7 +130,7 @@ private:
     int treeCount = 50;
     int fireflyCount = 20;
 
-    ref<Flashlight> flashlight = make_ref(new Flashlight(glm::vec3(1.0, 1.0, 1.0), 20.0f));
+    ref<Flashlight> flashlight = make_ref(new Flashlight(glm::vec3(1.0, 1.0, 1.0), {}));
 };
 
 
@@ -143,7 +143,7 @@ public:
         AddShaderProgram("sp", make_ref(new ShaderProgram({shaderVertex, shaderFragment})));
 
         SetAmbientLight(glm::vec3(0.025, 0.025, 0.025));
-        AddLight(make_ref(new SpotLight(glm::vec3(1, 1, 1), glm::vec3(0, 2, 0), glm::vec3(0, -1, 0), 10.0f)));
+        AddLight(make_ref(new SpotLight(glm::vec3(1, 0, 0), glm::vec3(0, 2, 0), glm::vec3(0, -1, 0), {})));
 
         auto ml = ModelLoader("../assets/models/obj/");
 
@@ -161,7 +161,7 @@ public:
 
     void OnKey(int key, int action) override {
         if (action == GLFW_PRESS && key == GLFW_KEY_F) {
-            if (flashlight->GetIntensity() != 0.0f) {
+            if (flashlight->GetAttenuation().intensity != 0.0f) {
                 flashlight->SetIntensity(0.0f);
                 return;
             };
@@ -170,5 +170,5 @@ public:
     }
 
 private:
-    ref<Flashlight> flashlight = make_ref(new Flashlight(glm::vec3(1.0, 1.0, 1.0), 20.0f));
+    ref<Flashlight> flashlight = make_ref(new Flashlight(glm::vec3(1.0, 1.0, 1.0), {}));
 };
