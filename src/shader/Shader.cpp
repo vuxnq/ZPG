@@ -19,7 +19,7 @@ Shader::Shader(const std::string& shaderSourcePath, GLenum shaderType) {
 		glGetShaderiv(id, GL_INFO_LOG_LENGTH, &infoLogLength);
 		GLchar *strInfoLog = new GLchar[infoLogLength + 1];
 		glGetShaderInfoLog(id, infoLogLength, NULL, strInfoLog);
-		fprintf(stderr, "Shader compilation failure %s: %s\n", shaderSourcePath, strInfoLog);
+		fprintf(stderr, "Shader compilation failure %s: %s\n", shaderSourcePath.c_str(), strInfoLog);
 		delete[] strInfoLog;
 		exit(EXIT_FAILURE);
 	}
@@ -32,7 +32,7 @@ void Shader::Attach(GLuint programId) {
 std::string Shader::ReadShaderSource(const std::string& shaderSourcePath) {
     std::ifstream file(shaderSourcePath);
     if (!file.is_open()) {
-        std::cerr << "Failed to read shader file: " << shaderSourcePath << std::endl;
+        fprintf(stderr, "Failed to read shader file: %s\n", shaderSourcePath.c_str());
         exit(EXIT_FAILURE);
     }
 

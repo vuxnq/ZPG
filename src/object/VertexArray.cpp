@@ -1,9 +1,14 @@
 #include "object/VertexArray.h"
+#include "VertexArray.h"
 
 VertexArray::VertexArray(const ref<VertexBuffer>& vertexBuffer) : vertexBuffer(vertexBuffer) {
     glGenVertexArrays(1, &id);
 
     SetVertexBuffer(vertexBuffer);
+}
+
+VertexArray::~VertexArray() {
+	glDeleteVertexArrays(1, &id);
 }
 
 void VertexArray::Bind() {
@@ -22,18 +27,20 @@ void VertexArray::SetVertexBuffer(const ref<VertexBuffer>& vertexBuffer) {
 
 	size_t stride = vertexBuffer->GetStride();
 
+	vertexCount = vertexBuffer->GetSize() / stride;
+
 	int offset = 0;
     for (int i = 0; i < layout.size(); i++) {
 		auto& [type, size] = layout[i];
 
 		glEnableVertexAttribArray(i);
 		glVertexAttribPointer(
-			i,  // index
-			size,  // size
-			ElementType::GlTypeOf(type),  // type
-			GL_FALSE,  // normalized
-			stride,  // stride
-			reinterpret_cast<void*>(offset)  // pointer
+			i,									// index
+			size,								// size
+			ElementType::GlTypeOf(type),		// type
+			GL_FALSE,							// normalized
+			stride,  							// stride
+			reinterpret_cast<void*>(offset)  	// pointer
 		);
 		offset += size * ElementType::SizeOf(type);
     }

@@ -4,7 +4,9 @@
 #include <sstream>
 #include <string>
 #include "core/Camera.h"
+#include "light/DirectionalLight.h"
 #include "light/PointLight.h"
+#include "light/SpotLight.h"
 
 ShaderProgram::ShaderProgram(const std::vector<ref<Shader>>& shaders) {
 	id = glCreateProgram();
@@ -90,16 +92,52 @@ void ShaderProgram::OnNotify(const Event& event) {
 		SetUniform("viewMatrix", camera->GetViewMatrix());
 		SetUniform("projMatrix", camera->GetProjMatrix());
 		SetUniform("cameraPos", camera->GetPosition());
+	} else if (event.type == EventType::AmbientLightSet) {
+		auto color = *(glm::vec3*)event.payload;
+		Use();
+		SetUniform("ambient", color);
+	} else if (event.type == EventType::DirectionalLightSet) {
+		auto light = (DirectionalLight*)event.payload;
+		Use();
+		std::string base = "directionalLights[" + std::to_string(light->GetIndex()) + "].";
+		SetUniform(base + "color", light->GetColor());
+		SetUniform(base + "direction", light->GetDirection());
+		SetUniform(base + "intensity", light->GetIntensity());
+	} else if (event.type == EventType::DirectionalLightCountSet) {
+		int count = (size_t)event.payload;
+		Use();
+		SetUniform("directionalLightCount", count);
 	} else if (event.type == EventType::PointLightSet) {
 		auto light = (PointLight*)event.payload;
+		auto attenuation = light->GetAttenuation();
 		Use();
 		std::string base = "pointLights[" + std::to_string(light->GetIndex()) + "].";
 		SetUniform(base + "color", light->GetColor());
 		SetUniform(base + "position", light->GetPosition());
-		SetUniform(base + "intensity", light->GetIntensity());
+		SetUniform(base + "attenuation.intensity", attenuation.intensity);
+		SetUniform(base + "attenuation.constant", attenuation.constant);
+		SetUniform(base + "attenuation.linear", attenuation.linear);
+		SetUniform(base + "attenuation.quadratic", attenuation.quadratic);
 	} else if (event.type == EventType::PointLightCountSet) {
 		int count = (size_t)event.payload;
 		Use();
 		SetUniform("pointLightCount", count);
+	} else if (event.type == EventType::SpotLightSet) {
+		auto light = (SpotLight*)event.payload;
+		auto attenuation = light->GetAttenuation();
+		Use();
+		std::string base = "spotLights[" + std::to_string(light->GetIndex()) + "].";
+		SetUniform(base + "color", light->GetColor());
+		SetUniform(base + "position", light->GetPosition());
+		SetUniform(base + "direction", light->GetDirection());
+		SetUniform(base + "attenuation.intensity", attenuation.intensity);
+		SetUniform(base + "attenuation.constant", attenuation.constant);
+		SetUniform(base + "attenuation.linear", attenuation.linear);
+		SetUniform(base + "attenuation.quadratic", attenuation.quadratic);
+	} else if (event.type == EventType::SpotLightCountSet) {
+		int count = (size_t)event.payload;
+		Use();
+		SetUniform("spotLightCount", count);
 	}
+	UnUse();
 }

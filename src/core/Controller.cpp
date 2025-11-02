@@ -47,7 +47,7 @@ void Controller::ProcessKeyboardInput(float delta) {
 void Controller::ProcessMouseInput() {
     GLFWwindow* window = Application::Get()->GetWindow();
 
-    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS) {
         double mouseCurrentPosition[2];
         double offset[2];
         glfwGetCursorPos(window, &mouseCurrentPosition[0], &mouseCurrentPosition[1]);

@@ -12,18 +12,10 @@ void DrawableObject::Update(float delta) {
 }
 
 void DrawableObject::Draw() {
-    model->Bind();
-
     if (shaderProgram == nullptr) {
         fprintf(stderr, "Shader program must be set.");
         exit(EXIT_FAILURE);
     }
 
-    shaderProgram->Use();
-    shaderProgram->SetUniform("modelMatrix", transformation->GetMatrix());
-
-    const auto& vertexBuffer = model->GetVertexArray().GetVertexBuffer();
-    GLsizei count = vertexBuffer.GetSize() / vertexBuffer.GetStride();
-
-    glDrawArrays(GL_TRIANGLES, 0, count);
+    model->Draw(shaderProgram, transformation->GetMatrix());
 }

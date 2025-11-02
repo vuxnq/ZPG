@@ -6,15 +6,17 @@
 class VertexArray {
 public:
     VertexArray(const ref<VertexBuffer>& vertexBuffer);
-    ~VertexArray() {}
+    ~VertexArray();
 
 	void Bind();
     void Unbind();
     void SetVertexBuffer(const ref<VertexBuffer>& vertexBuffer);
 
     const VertexBuffer& GetVertexBuffer() const { return *vertexBuffer; }
+    int GetVertexCount() { return vertexCount; }
 
 private:
     GLuint id;
     ref<VertexBuffer> vertexBuffer;
+    int vertexCount;
 };

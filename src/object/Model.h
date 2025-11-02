@@ -2,15 +2,19 @@
 #include <GL/glew.h>
 #include "core/Core.h"
 #include "object/VertexArray.h"
+#include "object/Mesh.h"
+#include "shader/ShaderProgram.h"
 
 class Model {
 public:
+    Model() {}
     Model(const ref<VertexArray>& vertexArray);
     ~Model() {}
 
-    void Bind();
-    const VertexArray& GetVertexArray() const { return *vertexArray; }
+    void AddMesh(const ref<Mesh>& mesh) { meshes.push_back(mesh); }
+
+    void Draw(const ref<ShaderProgram>& shaderProgram, const glm::mat4& modelMatrix);
 
 private:
-    ref<VertexArray> vertexArray;
+    std::vector<ref<Mesh>> meshes;
 };
