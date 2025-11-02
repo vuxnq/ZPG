@@ -3,8 +3,9 @@
 struct PointLight {
     vec3 position;
     vec3 color;
-    int intensity;
+    float intensity;
 };
+
 #define MAX_POINTLIGHTS 100
 uniform PointLight pointLights[MAX_POINTLIGHTS];
 uniform int pointLightCount;

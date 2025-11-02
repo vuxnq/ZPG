@@ -1,22 +1,29 @@
 #version 330
 
+struct LightAttenuation {
+    float intensity;
+    float constant;
+    float linear;
+    float quadratic;
+};
+
 struct DirectionalLight {
     vec3 color;
     vec3 direction;
-    int intensity;
+    float intensity;
 };
 
 struct PointLight {
     vec3 color;
     vec3 position;
-    int intensity;
+    LightAttenuation attenuation;
 };
 
 struct SpotLight {
     vec3 color;
     vec3 position;
     vec3 direction;
-    int intensity;
+    LightAttenuation attenuation;
 };
 
 
@@ -84,7 +91,8 @@ vec3 calculatePointLight(PointLight light, vec3 fragPos, vec3 normal, vec3 viewD
 
     // attenuation
     float dist = length(light.position - fragPos);
-    float attenuation = light.intensity / ((dist * dist * 10) + light.intensity);
+    LightAttenuation a = light.attenuation;
+    float attenuation = a.intensity / (a.constant + a.constant * dist + a.quadratic * dist * dist);
 
     return (diff * material.diffuse + spec * material.specular) * attenuation * light.color;
 }
@@ -112,7 +120,8 @@ vec3 calculateSpotLight(SpotLight light, vec3 fragPos, vec3 normal, vec3 viewDir
 
     // attenuation
     float dist = length(light.position - fragPos);
-    float attenuation = light.intensity / ((dist * dist * 10) + light.intensity);
+    LightAttenuation a = light.attenuation;
+    float attenuation = a.intensity / (a.constant + a.constant * dist + a.quadratic * dist * dist);
 
     return (diff * material.diffuse + spec * material.specular) * attenuation * intens * light.color;
 }

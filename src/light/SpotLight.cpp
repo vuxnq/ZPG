@@ -20,7 +20,7 @@ void SpotLight::SetDirection(const glm::vec3& direction) {
     Notify(Event(EventType::SpotLightSet, this));
 }
 
-void SpotLight::SetIntensity(int intensity) {
+void SpotLight::SetIntensity(float intensity) {
     this->intensity = intensity;
     Notify(Event(EventType::SpotLightSet, this));
 }

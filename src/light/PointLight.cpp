@@ -15,7 +15,7 @@ void PointLight::SetPosition(const glm::vec3& position) {
     Notify(Event(EventType::PointLightSet, this));
 }
 
-void PointLight::SetIntensity(int intensity) {
+void PointLight::SetIntensity(float intensity) {
     this->intensity = intensity;
     Notify(Event(EventType::PointLightSet, this));
 }

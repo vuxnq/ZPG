@@ -15,7 +15,7 @@ void DirectionalLight::SetDirection(const glm::vec3& direction) {
     Notify(Event(EventType::DirectionalLightSet, this));
 }
 
-void DirectionalLight::SetIntensity(int intensity) {
+void DirectionalLight::SetIntensity(float intensity) {
     this->intensity = intensity;
     Notify(Event(EventType::DirectionalLightSet, this));
 }

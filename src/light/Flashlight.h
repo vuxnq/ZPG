@@ -5,14 +5,14 @@
 
 class Flashlight : public SpotLight, public Subscriber {
 public:
-    Flashlight(const glm::vec3& color, int intensity) : SpotLight(color, glm::vec3(0.f, 0.f, 0.f),  glm::vec3(0.f, 0.f, -1.f), intensity), flashlightIntensity(intensity) {}
+    Flashlight(const glm::vec3& color, float intensity) : SpotLight(color, glm::vec3(0.f, 0.f, 0.f),  glm::vec3(0.f, 0.f, -1.f), intensity), flashlightIntensity(intensity) {}
     ~Flashlight() {}
 
-    void SetFlashlightIntensity(int intensity) {
+    void SetFlashlightIntensity(float intensity) {
         this->flashlightIntensity = intensity;
     }
 
-    int GetFlashlightIntensity() { return flashlightIntensity; }
+    float GetFlashlightIntensity() { return flashlightIntensity; }
 
     void OnNotify(const Event& event) override {
         if (event.type == EventType::CameraPositionChanged) {
@@ -23,5 +23,5 @@ public:
     }
 
 private:
-    int flashlightIntensity; // TODO: rename this shit
+    float flashlightIntensity; // TODO: rename this shit
 };
