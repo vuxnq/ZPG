@@ -91,7 +91,7 @@ public:
             fireflyTransform->Add(make_ref(new TranslateTransform(glm::vec3(rBushOffset(gen), rBushOffset(gen), rBushOffset(gen)))));
             fireflyTransform->Add(make_ref(new DynamicRotateTransform(90, glm::vec3(rBushOffset(gen), (float)rBushOffset(gen), rBushOffset(gen)), 1)));
             fireflyTransform->Add(make_ref(new TranslateTransform(glm::vec3(rTreeOffset(gen), std::max(rTreeOffset(gen) / 2, 0.5f), rTreeOffset(gen)))));
-            auto fireflyLight = make_ref(new PointLight(glm::vec3(0.8, 1.0, 0.8), glm::vec3(0), {0.5, 0.5, 2.5, 70.0}));
+            auto fireflyLight = make_ref(new PointLight(glm::vec3(0.8, 1.0, 0.8), glm::vec3(0), {0.05, 0.05, 1.0, 1.0}));
             auto fireflyObject = make_ref(new LightObject(sphereModel, fireflyTransform, shaderProgramManager.GetShaderProgram("sp_old_firefly"), fireflyLight));
             AddLight(fireflyLight);
             AddDrawableObject(fireflyObject);
@@ -103,7 +103,7 @@ public:
         SetAmbientLight(glm::vec3(0.025, 0.025, 0.025));
         AddLight(make_ref(new DirectionalLight(glm::vec3(0.0, 0.3, 0.9), glm::vec3(-1.0, -1.0 , -1.0), 0.1)));
         AddLight(make_ref(new DirectionalLight(glm::vec3(0.1, 0.1, 0.8), glm::vec3(1.0, -1.0 , 1.0), 0.1)));
-        // AddLight(make_ref(new SpotLight(glm::vec3(1.0, 0.0 , 0.0), glm::vec3(0.0, 1.0, 0.0), glm::vec3(1.0, -1.0 , 0.0), {})));
+        // AddLight(make_ref(new SpotLight(glm::vec3(1.0, 0.0 , 0.0), glm::vec3(0.0, 1.0, 0.0), glm::vec3(1.0, -1.0 , 0.0), { .intensity = 10.0 })));
         // AddLight(make_ref(new SpotLight(glm::vec3(1.0, 1.0 , 1.0), glm::vec3(0.0, 1.0, 0.0), glm::vec3(0.0, 0.0 , -1.0), {})));
 
         camera.AddSubscriber(flashlight.get());
@@ -112,11 +112,11 @@ public:
 
     void OnKey(int key, int action) override {
         if (action == GLFW_PRESS && key == GLFW_KEY_F) {
-            if (flashlight->GetAttenuation().intensity != 0.0f) {
-                flashlight->SetIntensity(0.0f);
+            if (flashlight->GetAttenuation().intensity != 0.0) {
+                flashlight->SetAttenuation({ .intensity = 0.0 });
                 return;
             };
-            flashlight->SetIntensity(flashlight->GetFlashlightIntensity());
+            flashlight->SetAttenuation(flashlight->GetFlashlightAttenuation());
         }
     }
 
@@ -144,8 +144,8 @@ public:
         auto ml = ModelLoader("../assets/models/obj/");
 
         auto obj = make_ref(new DrawableObject(
-            make_ref(new Model(ml.Load("ksr29.obj"))),
-            make_ref(new ScaleTransform(0.1)),
+            make_ref(new Model(ml.Load("IronMan.obj"))),
+            make_ref(new ScaleTransform(0.01)),
             shaderProgramManager.GetShaderProgram("sp")
         ));
 
@@ -158,11 +158,11 @@ public:
 
     void OnKey(int key, int action) override {
         if (action == GLFW_PRESS && key == GLFW_KEY_F) {
-            if (flashlight->GetAttenuation().intensity != 0.0f) {
-                flashlight->SetIntensity(0.0f);
+            if (flashlight->GetAttenuation().intensity != 0.0) {
+                flashlight->SetAttenuation({ .intensity = 0.0 });
                 return;
             };
-            flashlight->SetIntensity(flashlight->GetFlashlightIntensity());
+            flashlight->SetAttenuation(flashlight->GetFlashlightAttenuation());
         }
     }
 

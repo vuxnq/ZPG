@@ -26,11 +26,7 @@ void LightManager::AddLight(const ref<SpotLight>& light) {
 }
 
 void LightManager::OnNotify(const Event& event) {
-    if (event.type == EventType::DirectionalLightSet) { // TODO: mby drop ifs
-        Notify(event);
-    } else if (event.type == EventType::PointLightSet) {
-        Notify(event);
-    } else if (event.type == EventType::SpotLightSet) {
-        Notify(event);
-    }
+    if (event.type == EventType::DirectionalLightSet) Notify(event);
+    else if (event.type == EventType::PointLightSet) Notify(event);
+    else if (event.type == EventType::SpotLightSet) Notify(event);
 }
