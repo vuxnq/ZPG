@@ -70,7 +70,7 @@ vec3 calculateDirectionalLight(DirectionalLight light, vec3 fragPos, vec3 normal
 
     if (dot(normal, lightDir) < 0.0) spec = 0;
 
-    return (diff * material.diffuse + spec * material.specular) * light.color * (light.intensity / 10.0);
+    return (diff * material.diffuse + spec * material.specular) * light.color * light.intensity;
 }
 
 vec3 calculatePointLight(PointLight light, vec3 fragPos, vec3 normal, vec3 viewDir) {
@@ -92,7 +92,8 @@ vec3 calculatePointLight(PointLight light, vec3 fragPos, vec3 normal, vec3 viewD
     // attenuation
     float dist = length(light.position - fragPos);
     LightAttenuation a = light.attenuation;
-    float attenuation = a.intensity / (a.constant + a.constant * dist + a.quadratic * dist * dist);
+    float attenuation = a.intensity / (a.constant + a.linear * dist + a.quadratic * dist * dist);
+    attenuation = clamp(attenuation, 0.0 , 1.0);
 
     return (diff * material.diffuse + spec * material.specular) * attenuation * light.color;
 }
@@ -121,7 +122,8 @@ vec3 calculateSpotLight(SpotLight light, vec3 fragPos, vec3 normal, vec3 viewDir
     // attenuation
     float dist = length(light.position - fragPos);
     LightAttenuation a = light.attenuation;
-    float attenuation = a.intensity / (a.constant + a.constant * dist + a.quadratic * dist * dist);
+    float attenuation = a.intensity / (a.constant + a.linear * dist + a.quadratic * dist * dist);
+    attenuation = clamp(attenuation, 0.0 , 1.0);
 
     return (diff * material.diffuse + spec * material.specular) * attenuation * intens * light.color;
 }

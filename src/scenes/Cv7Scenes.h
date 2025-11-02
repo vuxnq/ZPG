@@ -91,7 +91,7 @@ public:
             fireflyTransform->Add(make_ref(new TranslateTransform(glm::vec3(rBushOffset(gen), rBushOffset(gen), rBushOffset(gen)))));
             fireflyTransform->Add(make_ref(new DynamicRotateTransform(90, glm::vec3(rBushOffset(gen), (float)rBushOffset(gen), rBushOffset(gen)), 1)));
             fireflyTransform->Add(make_ref(new TranslateTransform(glm::vec3(rTreeOffset(gen), std::max(rTreeOffset(gen) / 2, 0.5f), rTreeOffset(gen)))));
-            auto fireflyLight = make_ref(new PointLight(glm::vec3(0.8, 1.0, 0.8), glm::vec3(0), {1.0, 1.0, 1.0, 1.0}));
+            auto fireflyLight = make_ref(new PointLight(glm::vec3(0.8, 1.0, 0.8), glm::vec3(0), {0.5, 0.5, 2.5, 70.0}));
             auto fireflyObject = make_ref(new LightObject(sphereModel, fireflyTransform, shaderProgramManager.GetShaderProgram("sp_old_firefly"), fireflyLight));
             AddLight(fireflyLight);
             AddDrawableObject(fireflyObject);
@@ -101,17 +101,13 @@ public:
         AddDrawableObject(plainObject);
 
         SetAmbientLight(glm::vec3(0.025, 0.025, 0.025));
-        AddLight(make_ref(new DirectionalLight(glm::vec3(0.0, 0.3, 0.9), glm::vec3(-1.0, -1.0 , -1.0), 1.0f)));
-        AddLight(make_ref(new DirectionalLight(glm::vec3(0.1, 0.1, 0.8), glm::vec3(1.0, -1.0 , 1.0), 1.0f)));
-        AddLight(make_ref(new SpotLight(glm::vec3(1.0, 0.0 , 0.0), glm::vec3(0.0, 1.0, 0.0), glm::vec3(1.0, -1.0 , 0.0), {})));
-        AddLight(make_ref(new SpotLight(glm::vec3(1.0, 1.0 , 1.0), glm::vec3(0.0, 1.0, 0.0), glm::vec3(0.0, 0.0 , -1.0), {})));
+        AddLight(make_ref(new DirectionalLight(glm::vec3(0.0, 0.3, 0.9), glm::vec3(-1.0, -1.0 , -1.0), 0.1)));
+        AddLight(make_ref(new DirectionalLight(glm::vec3(0.1, 0.1, 0.8), glm::vec3(1.0, -1.0 , 1.0), 0.1)));
+        // AddLight(make_ref(new SpotLight(glm::vec3(1.0, 0.0 , 0.0), glm::vec3(0.0, 1.0, 0.0), glm::vec3(1.0, -1.0 , 0.0), {})));
+        // AddLight(make_ref(new SpotLight(glm::vec3(1.0, 1.0 , 1.0), glm::vec3(0.0, 1.0, 0.0), glm::vec3(0.0, 0.0 , -1.0), {})));
 
         camera.AddSubscriber(flashlight.get());
         AddLight(flashlight);
-
-        // auto ml = ModelLoader("../assets/models/obj");
-        // auto obj = make_ref(new DrawableObject(make_ref(new Model(ml.Load("pou.obj"))), make_ref(new DynamicRotateTransform(45, glm::vec3(0.0, 1.0, 0.0), 5)), shaderProgramManager.GetShaderProgram("sp")));
-        // AddDrawableObject(obj);
     }
 
     void OnKey(int key, int action) override {
@@ -128,7 +124,7 @@ private:
     float plainSize = 10.0f;
     int bushesDensity = 4;
     int treeCount = 50;
-    int fireflyCount = 20;
+    int fireflyCount = 50;
 
     ref<Flashlight> flashlight = make_ref(new Flashlight(glm::vec3(1.0, 1.0, 1.0), {}));
 };
@@ -150,7 +146,8 @@ public:
         auto obj = make_ref(new DrawableObject(
             make_ref(new Model(ml.Load("ksr29.obj"))),
             make_ref(new ScaleTransform(0.1)),
-            shaderProgramManager.GetShaderProgram("sp")));
+            shaderProgramManager.GetShaderProgram("sp")
+        ));
 
         AddDrawableObject(obj);
 
@@ -171,4 +168,52 @@ public:
 
 private:
     ref<Flashlight> flashlight = make_ref(new Flashlight(glm::vec3(1.0, 1.0, 1.0), {}));
+};
+
+
+class Cv7Scene3 : public Scene {
+public:
+    Cv7Scene3() {
+        auto vertexShader = make_ref(new Shader("../assets/vs.glsl", GL_VERTEX_SHADER));
+        auto vertexShaderOld = make_ref(new Shader("../assets/vs_old.glsl", GL_VERTEX_SHADER));
+        auto fragmentShader = make_ref(new Shader("../assets/fs.glsl", GL_FRAGMENT_SHADER));
+        auto fragmentShaderFirefly = make_ref(new Shader("../assets/fs_constant_firefly.glsl", GL_FRAGMENT_SHADER));
+
+        AddShaderProgram("sp", make_ref(new ShaderProgram({vertexShader, fragmentShader})));
+        AddShaderProgram("sp_old", make_ref(new ShaderProgram({vertexShaderOld, fragmentShader})));
+        AddShaderProgram("sp_firefly", make_ref(new ShaderProgram({vertexShaderOld, fragmentShaderFirefly})));
+
+        auto sphereVBO = make_ref(new VertexBuffer(sphere, sizeof(sphere), {{ElementType::Float, 3}, {ElementType::Float, 3}}));
+        auto sphereVAO = make_ref(new VertexArray(sphereVBO));
+        auto sphereModel = make_ref(new Model(sphereVAO));
+
+        SetAmbientLight(glm::vec3(0.025));
+
+        auto ml = ModelLoader("../assets/models/obj/");
+        auto square = make_ref(new DrawableObject(
+            make_ref(new Model(ml.Load("square.obj"))),
+            make_ref(new ScaleTransform(5.0)),
+            shaderProgramManager.GetShaderProgram("sp")
+        ));
+        AddDrawableObject(square);
+
+        for (int x = 0; x < 10; x++) {
+            for (int z = 0; z < 10; z++) {
+                auto fireflyTrans = make_ref(new Transformation());
+                fireflyTrans->Add(make_ref(new ScaleTransform(0.03)));
+                fireflyTrans->Add(make_ref(new TranslateTransform(glm::vec3(-4.5 + x, 0.1, -4.5 + z))));
+                auto fireflyAttenuation = LightAttenuation{
+                    .intensity = 0.5,
+                    .constant = 1.0,
+                    .linear = x / 10.0f,
+                    .quadratic = z * 10.0f
+                };
+                auto fireflyLight = make_ref(new PointLight(glm::vec3(0.8, 1.0, 0.8), glm::vec3(0), fireflyAttenuation));
+                auto firefly = make_ref(new LightObject(sphereModel, fireflyTrans, shaderProgramManager.GetShaderProgram("sp_firefly"), fireflyLight));
+                AddLight(fireflyLight);
+                AddDrawableObject(firefly);
+            }
+        }
+    }
+private:
 };
