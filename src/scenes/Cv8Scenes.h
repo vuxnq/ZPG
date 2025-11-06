@@ -15,9 +15,9 @@
 #include "object/ModelLoader.h"
 
 
-class Cv7Scene1 : public Scene {
+class Cv8Scene1 : public Scene {
 public:
-    Cv7Scene1() {
+    Cv8Scene1() {
         auto vertexShader = make_ref(new Shader("../assets/vs.glsl", GL_VERTEX_SHADER));
         auto vertexShaderOld = make_ref(new Shader("../assets/vs_old.glsl", GL_VERTEX_SHADER));
         auto fragmentShader = make_ref(new Shader("../assets/fs.glsl", GL_FRAGMENT_SHADER));
@@ -129,22 +129,22 @@ private:
 };
 
 
-class Cv7Scene2 : public Scene {
+class Cv8Scene2 : public Scene {
 public:
-    Cv7Scene2() {
+    Cv8Scene2() {
 
         auto shaderVertex = make_ref(new Shader("../assets/vs.glsl", GL_VERTEX_SHADER));
         auto shaderFragment = make_ref(new Shader("../assets/fs.glsl", GL_FRAGMENT_SHADER));
         AddShaderProgram("sp", make_ref(new ShaderProgram({shaderVertex, shaderFragment})));
 
-        SetAmbientLight(glm::vec3(0.025, 0.025, 0.025));
-        AddLight(make_ref(new SpotLight(glm::vec3(1, 0, 0), glm::vec3(0, 2, 0), glm::vec3(0, -1, 0), {})));
+        SetAmbientLight(glm::vec3(0.05, 0.05, 0.05));
+        AddLight(make_ref(new SpotLight(glm::vec3(1, 0, 0), glm::vec3(0, 3, 0), glm::vec3(0, -1, 0), {})));
 
         auto ml = ModelLoader("../assets/models/");
 
         auto obj = make_ref(new DrawableObject(
-            make_ref(new Model(ml.Load("IronMan.obj"))),
-            make_ref(new ScaleTransform(0.01)),
+            make_ref(new Model(ml.Load("shrek.obj"))),
+            make_ref(new ScaleTransform(1)),
             shaderProgramManager.GetShaderProgram("sp")
         ));
 
@@ -167,52 +167,4 @@ public:
 
 private:
     ref<Flashlight> flashlight = make_ref(new Flashlight(glm::vec3(1.0, 1.0, 1.0), {}));
-};
-
-
-class Cv7Scene3 : public Scene {
-public:
-    Cv7Scene3() {
-        auto vertexShader = make_ref(new Shader("../assets/vs.glsl", GL_VERTEX_SHADER));
-        auto vertexShaderOld = make_ref(new Shader("../assets/vs_old.glsl", GL_VERTEX_SHADER));
-        auto fragmentShader = make_ref(new Shader("../assets/fs.glsl", GL_FRAGMENT_SHADER));
-        auto fragmentShaderFirefly = make_ref(new Shader("../assets/fs_constant_firefly.glsl", GL_FRAGMENT_SHADER));
-
-        AddShaderProgram("sp", make_ref(new ShaderProgram({vertexShader, fragmentShader})));
-        AddShaderProgram("sp_old", make_ref(new ShaderProgram({vertexShaderOld, fragmentShader})));
-        AddShaderProgram("sp_firefly", make_ref(new ShaderProgram({vertexShaderOld, fragmentShaderFirefly})));
-
-        auto sphereVBO = make_ref(new VertexBuffer(sphere, sizeof(sphere), {{ElementType::Float, 3}, {ElementType::Float, 3}}));
-        auto sphereVAO = make_ref(new VertexArray(sphereVBO));
-        auto sphereModel = make_ref(new Model(sphereVAO));
-
-        SetAmbientLight(glm::vec3(0.025));
-
-        auto ml = ModelLoader("../assets/models/");
-        auto square = make_ref(new DrawableObject(
-            make_ref(new Model(ml.Load("square.obj"))),
-            make_ref(new ScaleTransform(5.0)),
-            shaderProgramManager.GetShaderProgram("sp")
-        ));
-        AddDrawableObject(square);
-
-        for (int x = 0; x < 10; x++) {
-            for (int z = 0; z < 10; z++) {
-                auto fireflyTrans = make_ref(new Transformation());
-                fireflyTrans->Add(make_ref(new ScaleTransform(0.03)));
-                fireflyTrans->Add(make_ref(new TranslateTransform(glm::vec3(-4.5 + x, 0.1, -4.5 + z))));
-                auto fireflyAttenuation = LightAttenuation{
-                    .intensity = 0.5,
-                    .constant = 1.0,
-                    .linear = x / 10.0f,
-                    .quadratic = z * 10.0f
-                };
-                auto fireflyLight = make_ref(new PointLight(glm::vec3(0.8, 1.0, 0.8), glm::vec3(0), fireflyAttenuation));
-                auto firefly = make_ref(new LightObject(sphereModel, fireflyTrans, shaderProgramManager.GetShaderProgram("sp_firefly"), fireflyLight));
-                AddLight(fireflyLight);
-                AddDrawableObject(firefly);
-            }
-        }
-    }
-private:
 };

@@ -24,7 +24,7 @@
 #include "object/DrawableObject.h"
 #include "transform/Transformation.h"
 
-#include "scenes/Cv7Scenes.h"
+#include "scenes/Cv8Scenes.h"
 
 Application::Application() {
 	if (s_application != nullptr) {
@@ -97,18 +97,13 @@ void Application::OnKey(int key, int action) {
 				glfwSetWindowShouldClose(window, GL_TRUE);
 				break;
 			case GLFW_KEY_1:
-				sceneManager.SetActiveScene("scene7.1");
+				sceneManager.SetActiveScene("scene8.1");
 				sceneManager.GetActiveScene()->SetAspectRatio(windowWidth / (float)windowHeight);
 				break;
 			case GLFW_KEY_2:
-				sceneManager.SetActiveScene("scene7.2");
+				sceneManager.SetActiveScene("scene8.2");
 				sceneManager.GetActiveScene()->SetAspectRatio(windowWidth / (float)windowHeight);
 				break;
-			case GLFW_KEY_3:
-				sceneManager.SetActiveScene("scene7.3");
-				sceneManager.GetActiveScene()->SetAspectRatio(windowWidth / (float)windowHeight);
-				break;
-
 			default:
 				break;
 		}
@@ -124,9 +119,8 @@ void Application::OnWindowResize(int width, int height) {
 }
 
 void Application::OnCreate() {
-	sceneManager.AddScene("scene7.1", make_ref(new Cv7Scene1()));
-	sceneManager.AddScene("scene7.2", make_ref(new Cv7Scene2()));
-	sceneManager.AddScene("scene7.3", make_ref(new Cv7Scene3()));
+	sceneManager.AddScene("scene8.1", make_ref(new Cv8Scene1()));
+	sceneManager.AddScene("scene8.2", make_ref(new Cv8Scene2()));
 }
 
 void Application::Run() {

@@ -49,12 +49,15 @@ struct Material {
     float shininess;
 };
 
+uniform vec3 cameraPos;
+
 uniform Material material;
 
-uniform vec3 cameraPos;
+uniform sampler2D textureUnitId;
 
 in vec3 worldPos;
 in vec3 worldNormal;
+in vec2 texCoord;
 
 out vec4 fragColor;
 
@@ -147,4 +150,5 @@ void main(void) {
     }
 
     fragColor = vec4((ambient * material.ambient), 1.0) + vec4(result, 1.0);
+    // fragColor = texture(textureUnitId, texCoord);
 }
