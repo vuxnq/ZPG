@@ -126,13 +126,19 @@ void Application::OnCreate() {
 void Application::Run() {
 	float lastTime = 0.0f;
 	while (!glfwWindowShouldClose(window)) {
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 		float currentTime = glfwGetTime();
 		float delta = currentTime - lastTime;
 		lastTime = currentTime;
 
 		sceneManager.GetActiveScene()->OnUpdate(delta);
+
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		sceneManager.GetActiveScene()->DrawSkybox();
+
+		glClear(GL_DEPTH_BUFFER_BIT);
+
+		sceneManager.GetActiveScene()->OnDraw();
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();

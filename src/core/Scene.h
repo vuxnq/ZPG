@@ -9,6 +9,7 @@
 #include "object/DrawableObject.h"
 #include "light/PointLight.h"
 #include "light/SpotLight.h"
+#include "core/Skybox.h"
 
 class Scene {
 public:
@@ -16,6 +17,7 @@ public:
     ~Scene() {}
 
     virtual void OnUpdate(float delta);
+    virtual void OnDraw();
     virtual void OnKey(int key, int action) {}
 
     void AddShaderProgram(const std::string& name, const ref<ShaderProgram> shaderProgram);
@@ -28,8 +30,13 @@ public:
 
     void SetAspectRatio(float aspect);
 
+    void SetSkybox(const SkyboxFaces& faces);
+
+    void DrawSkybox(); // TODO: maybe rename
+
 private:
     std::vector<ref<DrawableObject>> drawableObjects;
+    Skybox skybox;
 
 protected:
     Camera camera;

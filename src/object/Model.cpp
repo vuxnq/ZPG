@@ -10,6 +10,7 @@ Model::Model(const ref<VertexArray>& vertexArray) {
 void Model::Draw(const ref<ShaderProgram>& shaderProgram, const glm::mat4& modelMatrix) {
     shaderProgram->Use();
     shaderProgram->SetUniform("modelMatrix", modelMatrix);
+    shaderProgram->UnUse();
     for (auto& mesh : meshes) {
         mesh->Draw(shaderProgram);
     }
