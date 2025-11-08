@@ -1,6 +1,5 @@
 #include "core/Skybox.h"
 
-#define STB_IMAGE_IMPLEMENTATION
 #include "vendor/stb/stb_image.h"
 
 Skybox::Skybox() {

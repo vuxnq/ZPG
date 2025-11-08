@@ -13,11 +13,14 @@ struct MaterialProps {
 
 class Material {
 public:
-    Material(const MaterialProps& props) : props(props) {}
+    Material(const MaterialProps& props, GLuint texture = 0) : props(props), texture(texture) {}
     ~Material() {}
+
+    void SetTexture(GLuint texture);
 
     void Apply(const ref<ShaderProgram>& shaderProgram);
 
 private:
     MaterialProps props;
+    GLuint texture; // TODO:
 };

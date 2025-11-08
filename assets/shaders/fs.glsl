@@ -53,7 +53,8 @@ uniform vec3 cameraPos;
 
 uniform Material material;
 
-uniform sampler2D textureUnitId;
+uniform sampler2D diffuseTexture;
+uniform bool useDiffuseTexture;
 
 in vec3 worldPos;
 in vec3 worldNormal;
@@ -132,6 +133,15 @@ vec3 calculateSpotLight(SpotLight light, vec3 fragPos, vec3 normal, vec3 viewDir
 }
 
 void main(void) {
+    vec4 diffuseTexel;
+
+    if (useDiffuseTexture) {
+        diffuseTexel = texture(diffuseTexture, texCoord);
+        if (diffuseTexel.a < 0.5) discard;
+    } else {
+        diffuseTexel = vec4(1.0);
+    }
+
     vec3 normal = normalize(worldNormal);
     vec3 viewDir = normalize(cameraPos - worldPos);
 
@@ -149,6 +159,5 @@ void main(void) {
         result += calculateSpotLight(spotLights[i], worldPos, normal, viewDir);
     }
 
-    fragColor = vec4((ambient * material.ambient), 1.0) + vec4(result, 1.0);
-    // fragColor = texture(textureUnitId, texCoord);
+    fragColor = (vec4((ambient * material.ambient), 1.0) + vec4(result, 1.0)) * diffuseTexel; // TODO:
 }

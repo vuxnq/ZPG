@@ -3,6 +3,9 @@
 #define TINYOBJLOADER_IMPLEMENTATION
 #include "tinyobjloader/tiny_obj_loader.h"
 
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb/stb_image.h"
+
 ModelLoader::ModelLoader(const std::string& basedir) : basedir(basedir) {
     if (!this->basedir.ends_with("/")) this->basedir.append("/");
 }
@@ -22,12 +25,21 @@ Model ModelLoader::Load(const std::string& filename) {
     std::vector<ref<Material>> materialRefs;
 
     for (auto& m : materials) {
+        // props
         MaterialProps props;
         props.ambient = glm::vec3(m.ambient[0], m.ambient[1], m.ambient[2]);
         props.diffuse = glm::vec3(m.diffuse[0], m.diffuse[1], m.diffuse[2]);
         props.specular = glm::vec3(m.specular[0], m.specular[1], m.specular[2]);
         props.shininess = m.shininess;
-        materialRefs.push_back(make_ref(new Material(props)));
+
+        auto material = make_ref(new Material(props));
+
+        // texture
+        if (m.diffuse_texname != "") {
+            material->SetTexture(LoadTexture((basedir + m.diffuse_texname)));
+        }
+
+        materialRefs.push_back(material);
     }
 
     Model model;
@@ -96,4 +108,30 @@ Model ModelLoader::Load(const std::string& filename) {
     }
 
     return model;
+}
+
+GLuint ModelLoader::LoadTexture(const std::string& filename) {
+    GLuint texture;
+    int width, height, channels;
+    stbi_set_flip_vertically_on_load(true);
+
+    unsigned char* data = stbi_load(filename.c_str(), &width, &height, &channels, 4);
+    if (!data) fprintf(stderr, "Error loading texture: %s\n", filename.c_str());
+
+    glActiveTexture(GL_TEXTURE0);
+
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+    glGenerateMipmap(GL_TEXTURE_2D);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    stbi_image_free(data);
+
+    return texture;
 }

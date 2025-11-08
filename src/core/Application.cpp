@@ -61,6 +61,10 @@ void Application::Init() {
 	// depth comparisons and update the depth buffer
 	glEnable(GL_DEPTH_TEST);
 
+	// // alpha blending
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	// get version info
 	printf("OpenGL Version: %s\n",glGetString(GL_VERSION));
 	printf("Using GLEW %s\n", glewGetString(GLEW_VERSION));

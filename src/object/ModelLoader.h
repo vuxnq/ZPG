@@ -11,4 +11,6 @@ public:
 
 private:
     std::string basedir;
+
+    GLuint LoadTexture(const std::string& filename);
 };

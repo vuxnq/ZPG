@@ -154,8 +154,9 @@ public:
         auto shaderFragment = make_ref(new Shader("../assets/shaders/fs.glsl", GL_FRAGMENT_SHADER));
         AddShaderProgram("sp", make_ref(new ShaderProgram({shaderVertex, shaderFragment})));
 
-        SetAmbientLight(glm::vec3(0.05, 0.05, 0.05));
-        AddLight(make_ref(new SpotLight(glm::vec3(1, 0, 0), glm::vec3(0, 3, 0), glm::vec3(0, -1, 0), {})));
+        SetAmbientLight(glm::vec3(0.5, 0.5, 0.5));
+        AddLight(make_ref(new DirectionalLight(glm::vec3(0.9, 0.9, 1), glm::vec3(0, -1, 0), 1)));
+        AddLight(make_ref(new PointLight(glm::vec3(1, 0, 1), glm::vec3(0, 2, 1), {})));
 
         auto ml = ModelLoader("../assets/3rdparty/models/");
 
@@ -166,6 +167,34 @@ public:
         ));
 
         AddDrawableObject(obj);
+
+        auto obj2 = make_ref(new DrawableObject(
+            make_ref(new Model(ml.Load("fiona.obj"))),
+            make_ref(new TranslateTransform(glm::vec3(1.5, 0, 0))),
+            shaderProgramManager.GetShaderProgram("sp")
+        ));
+
+        AddDrawableObject(obj2);
+
+        auto obj3 = make_ref(new DrawableObject(
+            make_ref(new Model(ml.Load("toiled.obj"))), // TODO: proc se to jmenuje toiled more
+            make_ref(new TranslateTransform(glm::vec3(0, 0, 2))),
+            shaderProgramManager.GetShaderProgram("sp")
+        ));
+
+        AddDrawableObject(obj3);
+
+        auto obj4t = make_ref(new Transformation());
+        obj4t->Add(make_ref(new ScaleTransform(1)));
+        obj4t->Add(make_ref(new TranslateTransform(glm::vec3(5, 0, 2))));
+        auto obj4 = make_ref(new DrawableObject(
+            make_ref(new Model(ml.Load("tree.obj"))),
+            obj4t,
+            shaderProgramManager.GetShaderProgram("sp")
+        ));
+
+        AddDrawableObject(obj4);
+
 
         camera.AddSubscriber(flashlight.get());
         AddLight(flashlight);
