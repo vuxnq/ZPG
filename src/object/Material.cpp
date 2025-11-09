@@ -7,7 +7,6 @@ void Material::SetTexture(GLuint texture) {
 void Material::Apply(const ref<ShaderProgram>& shaderProgram) {
     shaderProgram->Use();
 
-    // TODO: pico
     if (texture != 0) {
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture);
@@ -16,7 +15,6 @@ void Material::Apply(const ref<ShaderProgram>& shaderProgram) {
     } else {
         shaderProgram->SetUniform("useDiffuseTexture", false);
     }
-
 
     shaderProgram->SetUniform("material.ambient", props.ambient);
     shaderProgram->SetUniform("material.diffuse", props.diffuse);

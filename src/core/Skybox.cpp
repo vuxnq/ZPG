@@ -4,7 +4,7 @@
 
 Skybox::Skybox() {
     auto vertexShader = make_ref(new Shader("../assets/shaders/vs_skybox.glsl", GL_VERTEX_SHADER));
-    auto fragmentShader = make_ref(new Shader("../assets/shaders/fs_skybox.glsl", GL_FRAGMENT_SHADER)); // TODO: move shaders closer to skybox.h
+    auto fragmentShader = make_ref(new Shader("../assets/shaders/fs_skybox.glsl", GL_FRAGMENT_SHADER));
     shaderProgram = make_ref(new ShaderProgram({vertexShader, fragmentShader}));
 
     auto vertexBuffer = make_ref(new VertexBuffer(skycube, sizeof(skycube), {{ElementType::Float, 3}}));

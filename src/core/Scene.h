@@ -32,7 +32,7 @@ public:
 
     void SetSkybox(const SkyboxFaces& faces);
 
-    void DrawSkybox(); // TODO: maybe rename
+    void DrawSkybox();
 
 private:
     std::vector<ref<DrawableObject>> drawableObjects;

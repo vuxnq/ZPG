@@ -159,5 +159,5 @@ void main(void) {
         result += calculateSpotLight(spotLights[i], worldPos, normal, viewDir);
     }
 
-    fragColor = (vec4((ambient * material.ambient), 1.0) + vec4(result, 1.0)) * diffuseTexel; // TODO:
+    fragColor = (vec4((ambient * material.ambient), 1.0) + vec4(result, 1.0)) * diffuseTexel;
 }

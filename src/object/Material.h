@@ -22,5 +22,5 @@ public:
 
 private:
     MaterialProps props;
-    GLuint texture; // TODO:
+    GLuint texture;
 };
