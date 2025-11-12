@@ -5,8 +5,7 @@ void Mesh::Draw(const ref<ShaderProgram>& shaderProgram) {
 
     shaderProgram->Use();
     vertexArray->Bind();
-
     glDrawArrays(GL_TRIANGLES, 0, vertexArray->GetVertexCount());
-
+    vertexArray->Unbind();
     shaderProgram->UnUse();
 }

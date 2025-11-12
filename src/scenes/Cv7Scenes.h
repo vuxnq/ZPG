@@ -7,11 +7,10 @@
 #include "light/LightObject.h"
 #include "light/Flashlight.h"
 
-#include "assets/models/sphere.h"
-#include "assets/models/plain.h"
-#include "assets/models/tree.h"
-#include "assets/models/bushes.h"
-
+#include "assets/vertices/sphere.h"
+#include "assets/vertices/plain.h"
+#include "assets/vertices/tree.h"
+#include "assets/vertices/bushes.h"
 
 #include "object/ModelLoader.h"
 
@@ -141,7 +140,7 @@ public:
         SetAmbientLight(glm::vec3(0.025, 0.025, 0.025));
         AddLight(make_ref(new SpotLight(glm::vec3(1, 0, 0), glm::vec3(0, 2, 0), glm::vec3(0, -1, 0), {})));
 
-        auto ml = ModelLoader("../assets/models/obj/");
+        auto ml = ModelLoader("../assets/models/");
 
         auto obj = make_ref(new DrawableObject(
             make_ref(new Model(ml.Load("IronMan.obj"))),
@@ -189,7 +188,7 @@ public:
 
         SetAmbientLight(glm::vec3(0.025));
 
-        auto ml = ModelLoader("../assets/models/obj/");
+        auto ml = ModelLoader("../assets/models/");
         auto square = make_ref(new DrawableObject(
             make_ref(new Model(ml.Load("square.obj"))),
             make_ref(new ScaleTransform(5.0)),
