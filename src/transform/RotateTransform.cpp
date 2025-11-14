@@ -1,7 +1,8 @@
 #include "transform/RotateTransform.h"
 #include <glm/gtc/matrix_transform.hpp>
 
-RotateTransform::RotateTransform(const float angle, const glm::vec3& axis) : angle(angle), axis(axis) {}
+RotateTransform::RotateTransform(const float angle, const glm::vec3& axis)
+: angle(angle), axis(axis) {}
 
 glm::mat4 RotateTransform::GetMatrix() {
     if (cached) {

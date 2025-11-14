@@ -32,7 +32,7 @@ public:
     VertexBuffer(const float vertices[], size_t size, std::vector<std::tuple<ElementType::Type, int>> layout = {});
     ~VertexBuffer() {}
 
-	void Bind();
+    void Bind();
     void Unbind();
 
     const std::vector<std::tuple<ElementType::Type, int>>& GetLayout() const;

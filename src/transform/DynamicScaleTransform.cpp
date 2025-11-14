@@ -1,7 +1,8 @@
 #include "transform/DynamicScaleTransform.h"
 #include <glm/gtc/matrix_transform.hpp>
 
-DynamicScaleTransform::DynamicScaleTransform(const float growth, const float speed) : growth(growth), speed(speed) {}
+DynamicScaleTransform::DynamicScaleTransform(const float growth, const float speed)
+: growth(growth), speed(speed) {}
 
 void DynamicScaleTransform::Update(const float delta) {
     scale += growth * speed * delta;

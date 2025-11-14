@@ -1,7 +1,7 @@
 #include "object/DrawableObject.h"
 
 DrawableObject::DrawableObject(const ref<Model>& model, const ref<TransformComponent>& transformation, const ref<ShaderProgram>& shaderProgram)
-: model(model), transformation(transformation), shaderProgram(shaderProgram) {}
+: model(model), transformation(transformation), shaderProgram(shaderProgram), index(s_index++) {}
 
 void DrawableObject::SetShaderProgram(const ref<ShaderProgram>& shaderProgram) {
     this->shaderProgram = shaderProgram;

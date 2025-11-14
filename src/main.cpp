@@ -1,13 +1,13 @@
 #include "core/Application.h"
 
 int main() {
-	Application* app = new Application();
+    Application* app = new Application();
 
-	app->Init();
+    app->Init();
     app->SetUpCallbacks();
     app->OnCreate();
     app->Run();
     app->Shutdown();
 
-	delete app;
+    delete app;
 }

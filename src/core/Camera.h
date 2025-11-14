@@ -12,8 +12,8 @@ public:
     Camera();
     ~Camera() {}
 
-    const glm::mat4& GetViewMatrix();
-    const glm::mat4& GetProjMatrix();
+    const glm::mat4& GetViewMatrix() const;
+    const glm::mat4& GetProjMatrix() const;
 
     void SetPosition(const glm::vec3& position);
     void SetDirection(const glm::vec3& direction);

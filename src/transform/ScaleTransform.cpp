@@ -1,7 +1,8 @@
 #include "transform/ScaleTransform.h"
 #include <glm/gtc/matrix_transform.hpp>
 
-ScaleTransform::ScaleTransform(const float scale) : scale(scale) {}
+ScaleTransform::ScaleTransform(const float scale)
+: scale(scale) {}
 
 glm::mat4 ScaleTransform::GetMatrix() {
     if (cached) {

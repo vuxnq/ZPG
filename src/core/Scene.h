@@ -1,6 +1,7 @@
 #pragma once
 #include <GL/glew.h>
 #include <vector>
+#include <map>
 #include "core/Core.h"
 #include "core/Camera.h"
 #include "core/Controller.h"
@@ -19,9 +20,12 @@ public:
     virtual void OnUpdate(float delta);
     virtual void OnDraw();
     virtual void OnKey(int key, int action) {}
+    virtual void OnMouseButton(int button, int action, int mods, int x, int y) {}
 
     void AddShaderProgram(const std::string& name, const ref<ShaderProgram> shaderProgram);
     void AddDrawableObject(const ref<DrawableObject>& drawableObject);
+    void RemoveDrawableObject(const ref<DrawableObject>& drawableObject);
+    void RemoveDrawableObject(int index);
 
     void SetAmbientLight(const glm::vec3& color);
     void AddLight(const ref<DirectionalLight>& light);

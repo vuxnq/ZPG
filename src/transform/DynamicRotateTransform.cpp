@@ -1,7 +1,8 @@
 #include "transform/DynamicRotateTransform.h"
 #include <glm/gtc/matrix_transform.hpp>
 
-DynamicRotateTransform::DynamicRotateTransform(const float spin, const glm::vec3& axis, const float speed) : spin(spin), axis(glm::normalize(axis)), speed(speed) {}
+DynamicRotateTransform::DynamicRotateTransform(const float spin, const glm::vec3& axis, const float speed)
+: spin(spin), axis(glm::normalize(axis)), speed(speed) {}
 
 void DynamicRotateTransform::Update(const float delta) {
     angle += spin * speed * delta;
