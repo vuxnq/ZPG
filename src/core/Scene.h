@@ -38,14 +38,9 @@ public:
 
     void DrawSkybox();
 
-    glm::vec3 ScreenToWorld(float x, float y, float depth); // TODO: not sure where to put this
-
 private:
     std::vector<ref<DrawableObject>> drawableObjects;
     Skybox skybox;
-
-    int stencil = 1; // TODO: next stencil index
-    // TODO: add available stencil slots instead of 'int stencil = 1' when removing object make the slot available
 
 protected:
     Camera camera;

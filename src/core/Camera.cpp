@@ -8,11 +8,11 @@ Camera::Camera() {
 }
 
 
-const glm::mat4& Camera::GetViewMatrix() {
+const glm::mat4& Camera::GetViewMatrix() const {
     return viewMatrix;
 }
 
-const glm::mat4& Camera::GetProjMatrix() {
+const glm::mat4& Camera::GetProjMatrix() const {
     return projectionMatrix;
 }
 

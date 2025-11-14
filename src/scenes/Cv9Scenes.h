@@ -14,6 +14,7 @@
 
 #include "object/ModelLoader.h"
 #include "core/Application.h"
+#include "core/Utils.h"
 
 
 class Cv9Scene1 : public Scene {
@@ -64,6 +65,7 @@ public:
                 flashlight->SetAttenuation(flashlight->GetFlashlightAttenuation());
             } else if (key == GLFW_KEY_E) {
                 destroyMode = !destroyMode;
+                printf("destroy mode: %d\n", destroyMode);
             }
         }
     }
@@ -83,7 +85,7 @@ public:
         if (destroyMode) {
             RemoveDrawableObject(index);
         } else {
-            glm::vec3 worldPos = ScreenToWorld(x, y, depth);
+            glm::vec3 worldPos = utils::ScreenToWorld(x, y, depth, camera);
             printf("unProject [%f,%f,%f]\n", worldPos.x, worldPos.y, worldPos.z);
 
             AddDrawableObject(make_ref(new DrawableObject(

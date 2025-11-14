@@ -24,4 +24,6 @@ private:
     int index;
     ref<Model> model;
     ref<ShaderProgram> shaderProgram;
+
+    inline static int s_index = 1;
 };

@@ -61,6 +61,10 @@ void Application::Init() {
 	// depth comparisons and update the depth buffer
 	glEnable(GL_DEPTH_TEST);
 
+	// stencil
+	glEnable(GL_STENCIL_TEST);
+    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+
 	// // alpha blending
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -148,7 +152,7 @@ void Application::Run() {
 
 		sceneManager.GetActiveScene()->OnUpdate(delta);
 
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 		sceneManager.GetActiveScene()->DrawSkybox();
 

@@ -1,6 +1,5 @@
 #include "core/Scene.h"
 #include <iostream>
-#include <glm/gtc/matrix_transform.hpp>
 #include "core/Application.h"
 
 void Scene::OnUpdate(float delta) {
@@ -12,14 +11,10 @@ void Scene::OnUpdate(float delta) {
 }
 
 void Scene::OnDraw() {
-    glEnable(GL_STENCIL_TEST);
-    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
-
-    glClear(GL_STENCIL_BUFFER_BIT); // TODO
-
     for (auto& drawableObject : drawableObjects) {
         glStencilFunc(GL_ALWAYS, (GLuint)drawableObject->GetIndex(), 0xFF);
         drawableObject->Draw();
+        glStencilFunc(GL_ALWAYS, 0, 0xFF);
     }
 }
 
@@ -30,8 +25,6 @@ void Scene::AddShaderProgram(const std::string& name, const ref<ShaderProgram> s
 }
 
 void Scene::AddDrawableObject(const ref<DrawableObject>& drawableObject) {
-    int index = stencil++ % 255;
-    drawableObject->SetIndex(index);
     drawableObjects.push_back(drawableObject);
 }
 
@@ -46,7 +39,7 @@ void Scene::RemoveDrawableObject(const ref<DrawableObject>& drawableObject) {
 
 void Scene::RemoveDrawableObject(int index) {
     for (int i = 0; i < drawableObjects.size(); i++) {
-        if (drawableObjects[i]->GetIndex() == index) {
+        if (drawableObjects[i]->GetIndex() % 0xFF == index) {
             drawableObjects.erase(drawableObjects.begin() + i);
             return;
         }
@@ -80,18 +73,4 @@ void Scene::SetSkybox(const SkyboxFaces& faces) {
 
 void Scene::DrawSkybox() {
     skybox.Draw();
-}
-
-glm::vec3 Scene::ScreenToWorld(float x, float y, float depth) {
-    auto app = Application::Get();
-    int windowWidth = app->GetResolution().x;
-    int windowHeight = app->GetResolution().y;
-    float invertedY = windowHeight - y;
-
-    glm::vec3 screenPos = glm::vec3(x, invertedY, depth);
-    glm::mat4 view = camera.GetViewMatrix();
-    glm::mat4 projection = camera.GetProjMatrix();
-    glm::vec4 viewPort = glm::vec4(0, 0, windowWidth, windowHeight);
-    glm::vec3 pos = glm::unProject(screenPos, view, projection, viewPort);
-    return pos;
 }
