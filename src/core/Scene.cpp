@@ -30,10 +30,27 @@ void Scene::AddShaderProgram(const std::string& name, const ref<ShaderProgram> s
 }
 
 void Scene::AddDrawableObject(const ref<DrawableObject>& drawableObject) {
-    int index = stencil++;
-    if (drawableObject->GetIndex() <= 255) drawableObject->SetIndex(index);
-    else drawableObject->SetIndex(255);
+    int index = stencil++ % 255;
+    drawableObject->SetIndex(index);
     drawableObjects.push_back(drawableObject);
+}
+
+void Scene::RemoveDrawableObject(const ref<DrawableObject>& drawableObject) {
+    for (int i = 0; i < drawableObjects.size(); i++) {
+        if (drawableObjects[i] == drawableObject) {
+            drawableObjects.erase(drawableObjects.begin() + i);
+            return;
+        }
+    }
+}
+
+void Scene::RemoveDrawableObject(int index) {
+    for (int i = 0; i < drawableObjects.size(); i++) {
+        if (drawableObjects[i]->GetIndex() == index) {
+            drawableObjects.erase(drawableObjects.begin() + i);
+            return;
+        }
+    }
 }
 
 void Scene::SetAmbientLight(const glm::vec3& color) {

@@ -13,9 +13,9 @@ out vec3 worldNormal;
 out vec2 texCoord;
 
 void main() {
-    vec4 wPos4 = modelMatrix * vec4(vp, 1.0);
-    // TODO: w
-    worldPos = wPos4.xyz;
+    float w = 1.0;
+    vec4 wPos4 = modelMatrix * vec4(vp * w, w);
+    worldPos = wPos4.xyz / wPos4.w;
     worldNormal = mat3(transpose(inverse(modelMatrix))) * vn;
     texCoord = tc;
     gl_Position = projMatrix * viewMatrix * wPos4;

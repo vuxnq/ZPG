@@ -24,6 +24,8 @@ public:
 
     void AddShaderProgram(const std::string& name, const ref<ShaderProgram> shaderProgram);
     void AddDrawableObject(const ref<DrawableObject>& drawableObject);
+    void RemoveDrawableObject(const ref<DrawableObject>& drawableObject);
+    void RemoveDrawableObject(int index);
 
     void SetAmbientLight(const glm::vec3& color);
     void AddLight(const ref<DirectionalLight>& light);
@@ -43,6 +45,7 @@ private:
     Skybox skybox;
 
     int stencil = 1; // TODO: next stencil index
+    // TODO: add available stencil slots instead of 'int stencil = 1' when removing object make the slot available
 
 protected:
     Camera camera;

@@ -55,12 +55,16 @@ public:
     }
 
     void OnKey(int key, int action) override {
-        if (action == GLFW_PRESS && key == GLFW_KEY_F) {
-            if (flashlight->GetAttenuation().intensity != 0.0) {
-                flashlight->SetAttenuation({ .intensity = 0.0 });
-                return;
-            };
-            flashlight->SetAttenuation(flashlight->GetFlashlightAttenuation());
+        if (action == GLFW_PRESS) {
+            if (key == GLFW_KEY_F) {
+                if (flashlight->GetAttenuation().intensity != 0.0) {
+                    flashlight->SetAttenuation({ .intensity = 0.0 });
+                    return;
+                };
+                flashlight->SetAttenuation(flashlight->GetFlashlightAttenuation());
+            } else if (key == GLFW_KEY_E) {
+                destroyMode = !destroyMode;
+            }
         }
     }
 
@@ -76,18 +80,25 @@ public:
 
     	printf("Clicked on pixel %d, %d, color %02hhx%02hhx%02hhx%02hhx, depth %f, stencil index %u\n", x, y, color[0], color[1], color[2], color[3], depth, index);
 
-        glm::vec3 worldPos = ScreenToWorld(x, y, depth);
-        printf("unProject [%f,%f,%f]\n", worldPos.x, worldPos.y, worldPos.z);
+        if (destroyMode) {
+            RemoveDrawableObject(index);
+        } else {
+            glm::vec3 worldPos = ScreenToWorld(x, y, depth);
+            printf("unProject [%f,%f,%f]\n", worldPos.x, worldPos.y, worldPos.z);
 
-        AddDrawableObject(make_ref(new DrawableObject(
-            make_ref(new Model(ml3rdparty.Load("tree.obj"))),
-            make_ref(new TranslateTransform(worldPos)),
-            shaderProgramManager.GetShaderProgram("sp")
-        )));
+            AddDrawableObject(make_ref(new DrawableObject(
+                treeModel,
+                make_ref(new TranslateTransform(worldPos)),
+                shaderProgramManager.GetShaderProgram("sp")
+            )));
+        }
     }
 
 private:
     ref<Flashlight> flashlight = make_ref(new Flashlight(glm::vec3(1.0, 1.0, 1.0), {1, 1, 0, 0.1}));
     ModelLoader ml = ModelLoader("../assets/models/");
     ModelLoader ml3rdparty = ModelLoader("../assets/3rdparty/models/");
+    bool destroyMode = false;
+
+    ref<Model> treeModel = make_ref(new Model(ml3rdparty.Load("tree.obj")));
 };
