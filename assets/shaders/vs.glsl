@@ -14,6 +14,7 @@ out vec2 texCoord;
 
 void main() {
     vec4 wPos4 = modelMatrix * vec4(vp, 1.0);
+    // TODO: w
     worldPos = wPos4.xyz;
     worldNormal = mat3(transpose(inverse(modelMatrix))) * vn;
     texCoord = tc;

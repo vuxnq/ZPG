@@ -19,6 +19,9 @@ public:
     static Application* Get() { return s_application; }
     GLFWwindow* GetWindow() { return window; }
 
+    const glm::vec2 GetResolution() { return glm::vec2(windowWidth, windowHeight); }
+    void ReadPixel(int x, int y, GLbyte* color, GLfloat& depth, GLuint& index);
+
 private:
     inline static Application* s_application = nullptr;
 
@@ -30,4 +33,5 @@ private:
 
     void OnKey(int key, int action);
     void OnWindowResize(int width, int height);
+    void OnMouseButton(int button, int action, int mods);
 };

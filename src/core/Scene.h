@@ -1,6 +1,7 @@
 #pragma once
 #include <GL/glew.h>
 #include <vector>
+#include <map>
 #include "core/Core.h"
 #include "core/Camera.h"
 #include "core/Controller.h"
@@ -19,6 +20,7 @@ public:
     virtual void OnUpdate(float delta);
     virtual void OnDraw();
     virtual void OnKey(int key, int action) {}
+    virtual void OnMouseButton(int button, int action, int mods, int x, int y) {}
 
     void AddShaderProgram(const std::string& name, const ref<ShaderProgram> shaderProgram);
     void AddDrawableObject(const ref<DrawableObject>& drawableObject);
@@ -34,9 +36,13 @@ public:
 
     void DrawSkybox();
 
+    glm::vec3 ScreenToWorld(float x, float y, float depth); // TODO: not sure where to put this
+
 private:
     std::vector<ref<DrawableObject>> drawableObjects;
     Skybox skybox;
+
+    int stencil = 1; // TODO: next stencil index
 
 protected:
     Camera camera;

@@ -10,6 +10,9 @@ public:
     DrawableObject(const ref<Model>& model, const ref<TransformComponent>& transformation, const ref<ShaderProgram>& shaderProgram);
     ~DrawableObject() {}
 
+    void SetIndex(int index) { this->index = index; }
+    int GetIndex() { return index; }
+
     void SetShaderProgram(const ref<ShaderProgram>& shaderProgram);
     virtual void Update(float delta);
     void Draw();
@@ -18,6 +21,7 @@ protected:
     ref<TransformComponent> transformation;
 
 private:
+    int index;
     ref<Model> model;
     ref<ShaderProgram> shaderProgram;
 };

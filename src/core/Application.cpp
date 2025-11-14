@@ -24,7 +24,7 @@
 #include "object/DrawableObject.h"
 #include "transform/Transformation.h"
 
-#include "scenes/Cv8Scenes.h"
+#include "scenes/Cv9Scenes.h"
 
 Application::Application() {
 	if (s_application != nullptr) {
@@ -83,6 +83,9 @@ void Application::SetUpCallbacks() {
 	});
 	// glfwSetCursorPosCallback(window, cursor_callback);
 	// glfwSetMouseButtonCallback(window, button_callback);
+	glfwSetMouseButtonCallback(window, [](GLFWwindow* window, int button, int action, int mods){
+		Application::Get()->OnMouseButton(button, action, mods);
+	});
 	// glfwSetWindowFocusCallback(window, window_focus_callback);
 	// glfwSetWindowIconifyCallback(window, window_iconify_callback);
 	// glfwSetWindowSizeCallback(window, window_size_callback);
@@ -101,11 +104,7 @@ void Application::OnKey(int key, int action) {
 				glfwSetWindowShouldClose(window, GL_TRUE);
 				break;
 			case GLFW_KEY_1:
-				sceneManager.SetActiveScene("scene8.1");
-				sceneManager.GetActiveScene()->SetAspectRatio(windowWidth / (float)windowHeight);
-				break;
-			case GLFW_KEY_2:
-				sceneManager.SetActiveScene("scene8.2");
+				sceneManager.SetActiveScene("scene9.1");
 				sceneManager.GetActiveScene()->SetAspectRatio(windowWidth / (float)windowHeight);
 				break;
 			default:
@@ -122,9 +121,22 @@ void Application::OnWindowResize(int width, int height) {
 	sceneManager.GetActiveScene()->SetAspectRatio(windowWidth / (float)windowHeight);
 }
 
+void Application::OnMouseButton(int button, int action, int mods) {
+	double x, y;
+	glfwGetCursorPos(window, &x, &y);
+
+	sceneManager.GetActiveScene()->OnMouseButton(button, action, mods, x, y);
+}
+
+void Application::ReadPixel(int x, int y, GLbyte* color, GLfloat& depth, GLuint& index) {
+	GLint invertedY = windowHeight - y;
+	glReadPixels(x, invertedY, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, color);
+	glReadPixels(x, invertedY, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &depth);
+	glReadPixels(x, invertedY, 1, 1, GL_STENCIL_INDEX, GL_UNSIGNED_INT, &index);
+}
+
 void Application::OnCreate() {
-	sceneManager.AddScene("scene8.1", make_ref(new Cv8Scene1()));
-	sceneManager.AddScene("scene8.2", make_ref(new Cv8Scene2()));
+	sceneManager.AddScene("scene9.1", make_ref(new Cv9Scene1()));
 }
 
 void Application::Run() {
