@@ -8,7 +8,7 @@ public:
     VertexArray(const ref<VertexBuffer>& vertexBuffer);
     ~VertexArray();
 
-	void Bind();
+    void Bind();
     void Unbind();
     void SetVertexBuffer(const ref<VertexBuffer>& vertexBuffer);
 

@@ -1,7 +1,8 @@
 #include "transform/TranslateTransform.h"
 #include <glm/gtc/matrix_transform.hpp>
 
-TranslateTransform::TranslateTransform(const glm::vec3& offset) : offset(offset) {}
+TranslateTransform::TranslateTransform(const glm::vec3& offset)
+: offset(offset) {}
 
 glm::mat4 TranslateTransform::GetMatrix() {
     if (cached) {
