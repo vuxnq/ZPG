@@ -1,4 +1,4 @@
-#include "transform/ScaleTransform.h"
+#include "transform/static/ScaleTransform.h"
 #include <glm/gtc/matrix_transform.hpp>
 
 ScaleTransform::ScaleTransform(const float scale)

@@ -1,7 +1,7 @@
 #pragma once
 #include <GL/glew.h>
 #include <glm/mat4x4.hpp>
-#include "transform/StaticTransformComponent.h"
+#include "transform/static/StaticTransformComponent.h"
 
 class TranslateTransform : public StaticTransformComponent {
 public:

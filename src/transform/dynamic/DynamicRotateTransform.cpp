@@ -1,4 +1,4 @@
-#include "transform/DynamicRotateTransform.h"
+#include "transform/dynamic/DynamicRotateTransform.h"
 #include <glm/gtc/matrix_transform.hpp>
 
 DynamicRotateTransform::DynamicRotateTransform(const float spin, const glm::vec3& axis, const float speed)
