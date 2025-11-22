@@ -1,6 +1,8 @@
 #pragma once
 #include <random>
 #include <algorithm>
+#include <vector>
+#include <utility>
 #include "core/Scene.h"
 #include "light/PointLight.h"
 #include "light/SpotLight.h"
@@ -42,12 +44,11 @@ public:
         AddDrawableObject(terrain);
 
         auto shrekTransformation = make_ref(new ScaleTransform(0.5));
-        float w = 1;
         shrekTransformation->SetMatrix(glm::mat4(
-            .5 * w, 0     , 0     , 0,
-            0     , .5 * w, 0     , 0,
-            0     , 0     , .5 * w, 0,
-            0     , 0     , 0     , w // TODO: <- ts (😛) shouldnt change the scale
+            .5, 0 , 0 , 0,
+            0 , .5, 0 , 0,
+            0 , 0 , .5, 0,
+            0 , 0 , 0 , 20
         ));
 
         auto shrek = make_ref(new DrawableObject(
@@ -145,15 +146,21 @@ public:
 
     void OnUpdate(float delta) override {
         Scene::OnUpdate(delta);
-        static float timer = 0.0;
-        static int moleId = 0;
-        timer += delta;
+        static float delayTimer = 0.0f;
+        delayTimer += delta;
 
-        if (timer >= moleLifespan) {
-            if (moleId) RemoveDrawableObject(moleId);
-            moleId = SpawnMole();
-            printf("mole spawned\n");
-            timer = 0.0;
+        if (moles.size() < maxMoles && delayTimer >= 2.0f) {
+            int moleIndex = SpawnMole();
+            moles.push_back(std::pair(moleIndex, 0.0f));
+            delayTimer = 0.0f;
+        }
+
+        for (int i = 0; i < moles.size(); i++) {
+            moles[i].second += delta;
+            if (moles[i].second >= moleLifespan) {
+                RemoveDrawableObject(moles[i].first);
+                moles.erase(moles.begin() + i);
+            }
         }
     }
 
@@ -170,6 +177,13 @@ public:
         if (index != groundIndex && index != 0) {
             RemoveDrawableObject(index);
             printf("score: %d\n", ++score);
+
+            for (int i = 0; i < moles.size(); i++) {
+                if (moles[i].first == (int)index) {
+                    moles.erase(moles.begin() + i);
+                    break;
+                }
+            }
         }
     }
 
@@ -181,12 +195,19 @@ public:
         float x = offset(gen);
         float z = offset(gen);
 
+        float endX = offset(gen);
+        float endZ = offset(gen);
+
         auto transform = make_ref(new PolylineTransform(
             {
                 glm::vec3(x, -2, z),
                 glm::vec3(x, 0, z),
-                glm::vec3(x, 0, z),
-                glm::vec3(x, -2, z)
+                glm::vec3(offset(gen), 0, offset(gen)),
+                glm::vec3(offset(gen), 0, offset(gen)),
+                glm::vec3(offset(gen), 0, offset(gen)),
+                glm::vec3(offset(gen), 0, offset(gen)),
+                glm::vec3(endX, 0, endZ),
+                glm::vec3(endX, -2, endZ)
             },
             moleLifespan
         ));
@@ -206,7 +227,10 @@ private:
     ModelLoader ml3rdparty = ModelLoader("../assets/3rdparty/models/");
     ref<Model> moleModel = make_ref(new Model(ml3rdparty.Load("shrek.obj")));
     int groundIndex;
-    float moleLifespan = 1.0;
+
+    std::vector<std::pair<int, float>> moles;
+    float moleLifespan = 5.0;
+    int maxMoles = 3;
 
     int score = 0;
 };
