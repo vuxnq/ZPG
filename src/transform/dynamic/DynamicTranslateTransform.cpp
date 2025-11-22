@@ -1,4 +1,4 @@
-#include "transform/DynamicTranslateTransform.h"
+#include "transform/dynamic/DynamicTranslateTransform.h"
 #include <glm/gtc/matrix_transform.hpp>
 
 DynamicTranslateTransform::DynamicTranslateTransform(const glm::vec3& drift, const float speed)

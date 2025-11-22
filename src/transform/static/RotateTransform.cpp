@@ -1,4 +1,4 @@
-#include "transform/RotateTransform.h"
+#include "transform/static/RotateTransform.h"
 #include <glm/gtc/matrix_transform.hpp>
 
 RotateTransform::RotateTransform(const float angle, const glm::vec3& axis)

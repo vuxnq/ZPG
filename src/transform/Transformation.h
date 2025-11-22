@@ -5,13 +5,15 @@
 #include <core/Core.h>
 #include "transform/TransformComponent.h"
 
-#include "transform/DynamicRotateTransform.h"
-#include "transform/DynamicScaleTransform.h"
-#include "transform/DynamicTranslateTransform.h"
+#include "transform/dynamic/DynamicRotateTransform.h"
+#include "transform/dynamic/DynamicScaleTransform.h"
+#include "transform/dynamic/DynamicTranslateTransform.h"
 
-#include "transform/RotateTransform.h"
-#include "transform/ScaleTransform.h"
-#include "transform/TranslateTransform.h"
+#include "transform/static/RotateTransform.h"
+#include "transform/static/ScaleTransform.h"
+#include "transform/static/TranslateTransform.h"
+
+#include "transform/movement/PolylineTransform.h"
 
 class Transformation : public TransformComponent {
 public:

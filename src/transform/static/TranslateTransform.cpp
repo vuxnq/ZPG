@@ -1,4 +1,4 @@
-#include "transform/TranslateTransform.h"
+#include "transform/static/TranslateTransform.h"
 #include <glm/gtc/matrix_transform.hpp>
 
 TranslateTransform::TranslateTransform(const glm::vec3& offset)

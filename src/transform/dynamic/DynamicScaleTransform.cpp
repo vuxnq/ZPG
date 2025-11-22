@@ -1,4 +1,4 @@
-#include "transform/DynamicScaleTransform.h"
+#include "transform/dynamic/DynamicScaleTransform.h"
 #include <glm/gtc/matrix_transform.hpp>
 
 DynamicScaleTransform::DynamicScaleTransform(const float growth, const float speed)

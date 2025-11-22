@@ -131,11 +131,19 @@ public:
         auto fragmentShader = make_ref(new Shader("../assets/shaders/fs.glsl", GL_FRAGMENT_SHADER));
 
         AddShaderProgram("sp", make_ref(new ShaderProgram({vertexShader, fragmentShader})));
+        SetAmbientLight(glm::vec3(1, 1, 1));
 
+        auto t = make_ref(new PolylineTransform({glm::vec3(1, 0, 0), glm::vec3(1, 1, 0), glm::vec3(0, 0, 1), glm::vec3(0, 0, 10), glm::vec3(0, 0, 0)}, 10));
+
+        AddDrawableObject(make_ref(new DrawableObject(
+            make_ref(new Model(ml.Load("shrek.obj"))),
+            t,
+            shaderProgramManager.GetShaderProgram("sp")
+        )));
     }
 
 private:
-    ModelLoader ml = ModelLoader("../assets/models/");
+    ModelLoader ml = ModelLoader("../assets/3rdparty/models/");
 };
 
 
@@ -153,20 +161,74 @@ public:
 
         auto vertexShader = make_ref(new Shader("../assets/shaders/vs.glsl", GL_VERTEX_SHADER));
         auto fragmentShader = make_ref(new Shader("../assets/shaders/fs.glsl", GL_FRAGMENT_SHADER));
+        auto fragmentShaderConstant = make_ref(new Shader("../assets/shaders/fs_constant.glsl", GL_FRAGMENT_SHADER));
 
         AddShaderProgram("sp", make_ref(new ShaderProgram({vertexShader, fragmentShader})));
+        AddShaderProgram("sp_sun", make_ref(new ShaderProgram({vertexShader, fragmentShaderConstant})));
+
+        // sun ----------------------------------------------------------------
+        auto sunTransformation = make_ref(new Transformation());
+        sunTransformation->Add(make_ref(new DynamicRotateTransform(180, glm::vec3(0, 1, 0), speed)));
+
+        auto sunLight = make_ref(new PointLight(glm::vec3(1, 1, 1), glm::vec3(0, 0, 0), {1, 0, 0, 0}));
+        AddLight(sunLight);
+        AddDrawableObject(make_ref(new LightObject(
+            make_ref(new Model(ml.Load("sun.obj"))),
+            sunTransformation,
+            shaderProgramManager.GetShaderProgram("sp_sun"),
+            sunLight
+        )));
+
+        // earth --------------------------------------------------------------
+        auto earthBaseTransformation = make_ref(new Transformation());
+        earthBaseTransformation->Add(make_ref(new RotateTransform(23.5, glm::vec3(0, 0, 1))));
+        earthBaseTransformation->Add(make_ref(new TranslateTransform(glm::vec3(3, 0, 0))));
+        earthBaseTransformation->Add(make_ref(new DynamicRotateTransform(360, glm::vec3(0, 1, 0), speed)));
+
+        auto earthTransformation = make_ref(new Transformation());
+        earthTransformation->Add(make_ref(new ScaleTransform(0.3)));
+        earthTransformation->Add(make_ref(new DynamicRotateTransform(360 * 365, glm::vec3(0, 1, 0), speed)));
+        earthTransformation->Add(make_ref(new Transformation(*earthBaseTransformation.get())));
 
         AddDrawableObject(make_ref(new DrawableObject(
-                make_ref(new Model(ml.Load("earth.obj"))),
-                make_ref(new Transformation()),
-                shaderProgramManager.GetShaderProgram("sp")
+            make_ref(new Model(ml.Load("earth.obj"))),
+            earthTransformation,
+            shaderProgramManager.GetShaderProgram("sp")
         )));
+
+        // moon ---------------------------------------------------------------
+        auto moonTransformation = make_ref(new Transformation());
+        moonTransformation->Add(make_ref(new ScaleTransform(0.3 / 4)));
+        moonTransformation->Add(make_ref(new RotateTransform(180, glm::vec3(0, 1, 0))));
+        moonTransformation->Add(make_ref(new TranslateTransform(glm::vec3(1, 0, 0))));
+        moonTransformation->Add(make_ref(new DynamicRotateTransform(360 * 12, glm::vec3(0, 1, 0), speed)));
+
+        moonTransformation->Add(make_ref(new Transformation(*earthBaseTransformation.get())));
+
+        AddDrawableObject(make_ref(new DrawableObject(
+            make_ref(new Model(ml.Load("moon.obj"))),
+            moonTransformation,
+            shaderProgramManager.GetShaderProgram("sp")
+        )));
+
+
 
         camera.AddSubscriber(flashlight.get());
         AddLight(flashlight);
     }
 
+    void OnKey(int key, int action) override {
+        if (action == GLFW_PRESS && key == GLFW_KEY_F) {
+            if (flashlight->GetAttenuation().intensity != 0.0) {
+                flashlight->SetAttenuation({ .intensity = 0.0 });
+                return;
+            };
+            flashlight->SetAttenuation(flashlight->GetFlashlightAttenuation());
+        }
+    }
+
 private:
     ref<Flashlight> flashlight = make_ref(new Flashlight(glm::vec3(1.0, 1.0, 1.0), {1, 1, 0, 0.1}));
     ModelLoader ml = ModelLoader("../assets/models/");
+    float speed = 0.005;
 };
