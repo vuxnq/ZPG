@@ -131,19 +131,84 @@ public:
         auto fragmentShader = make_ref(new Shader("../assets/shaders/fs.glsl", GL_FRAGMENT_SHADER));
 
         AddShaderProgram("sp", make_ref(new ShaderProgram({vertexShader, fragmentShader})));
-        SetAmbientLight(glm::vec3(1, 1, 1));
+        AddLight(make_ref(new DirectionalLight(glm::vec3(0.9, 0.8, 1.0), glm::vec3(0.0, -1.0 , 0.0), 1)));
+        SetAmbientLight(glm::vec3(0.5, 0.5, 0.5));
 
-        auto t = make_ref(new PolylineTransform({glm::vec3(1, 0, 0), glm::vec3(1, 1, 0), glm::vec3(0, 0, 1), glm::vec3(0, 0, 10), glm::vec3(0, 0, 0)}, 10));
-
-        AddDrawableObject(make_ref(new DrawableObject(
-            make_ref(new Model(ml.Load("shrek.obj"))),
-            t,
+        auto ground = make_ref(new DrawableObject(
+            make_ref(new Model(ml.Load("ground.obj"))),
+            make_ref(new ScaleTransform(10.0f)),
             shaderProgramManager.GetShaderProgram("sp")
-        )));
+        ));
+        AddDrawableObject(ground);
+        groundIndex = ground->GetIndex();
+    }
+
+    void OnUpdate(float delta) override {
+        Scene::OnUpdate(delta);
+        static float timer = 0.0;
+        static int moleId = 0;
+        timer += delta;
+
+        if (timer >= moleLifespan) {
+            if (moleId) RemoveDrawableObject(moleId);
+            moleId = SpawnMole();
+            printf("mole spawned\n");
+            timer = 0.0;
+        }
+    }
+
+    void OnMouseButton(int button, int action, int mods, int x, int y) override {
+        if (action != GLFW_PRESS) return;
+    	if (button != GLFW_MOUSE_BUTTON_LEFT) return;
+
+        GLbyte color[4];
+        GLfloat depth;
+        GLuint index;
+
+        Application::Get()->ReadPixel(x, y, color, depth, index);
+
+        if (index != groundIndex && index != 0) {
+            RemoveDrawableObject(index);
+            printf("score: %d\n", ++score);
+        }
+    }
+
+    int SpawnMole() {
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_real_distribution<float> offset(-10.0f, 10.0f);
+
+        float x = offset(gen);
+        float z = offset(gen);
+
+        auto transform = make_ref(new PolylineTransform(
+            {
+                glm::vec3(x, -2, z),
+                glm::vec3(x, 0, z),
+                glm::vec3(x, 0, z),
+                glm::vec3(x, -2, z)
+            },
+            moleLifespan
+        ));
+
+        auto mole = make_ref(new DrawableObject(
+            moleModel,
+            transform,
+            shaderProgramManager.GetShaderProgram("sp")
+        ));
+        AddDrawableObject(mole);
+
+        return mole->GetIndex();
     }
 
 private:
-    ModelLoader ml = ModelLoader("../assets/3rdparty/models/");
+    ModelLoader ml = ModelLoader("../assets/models/");
+    ModelLoader ml3rdparty = ModelLoader("../assets/3rdparty/models/");
+    ref<Model> moleModel = make_ref(new Model(ml3rdparty.Load("shrek.obj")));
+    int groundIndex;
+    float moleLifespan = 1.0;
+
+    int score = 0;
 };
 
 
