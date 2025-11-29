@@ -1,12 +1,8 @@
 #include "transform/movement/PolylineTransform.h"
 #include <glm/gtc/matrix_transform.hpp>
 
-PolylineTransform::PolylineTransform(const std::vector<glm::vec3>& points, const float duration)
-: MovementTransformComponent(duration), points(points) {}
-
-void PolylineTransform::Update(const float delta) {
-    elapsed = std::min(elapsed + delta, duration);
-}
+PolylineTransform::PolylineTransform(const std::vector<glm::vec3>& points, const float duration, const bool loop)
+: MovementTransformComponent(duration, loop), points(points) {}
 
 glm::mat4 PolylineTransform::GetMatrix() {
     if (points.empty()) return glm::mat4(1.0f);
