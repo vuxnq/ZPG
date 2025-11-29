@@ -6,7 +6,7 @@
 
 class PolylineTransform : public MovementTransformComponent {
 public:
-    PolylineTransform(const std::vector<glm::vec3>& points, const float duration, const bool loop = false);
+    PolylineTransform(const std::vector<glm::vec3>& points, const float duration, const bool rotate = true, const bool loop = false);
     ~PolylineTransform() {}
 
     glm::mat4 GetMatrix() override;

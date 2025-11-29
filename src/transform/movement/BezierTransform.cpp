@@ -1,11 +1,19 @@
 #include "transform/movement/BezierTransform.h"
 #include <glm/gtc/matrix_transform.hpp>
 
-BezierTransform::BezierTransform(const std::vector<CubicCurve>& spline, const float duration, const float loop)
-: MovementTransformComponent(duration, loop), spline(spline) {}
+#include <iostream>
+
+static glm::mat4 bezierCoefficientsMatrix = glm::mat4(
+    glm::vec4(-1.0,  3.0, -3.0, 1.0),
+    glm::vec4( 3.0, -6.0,  3.0, 0.0),
+    glm::vec4(-3.0,  3.0,  0.0, 0.0),
+    glm::vec4( 1.0,  0.0,  0.0, 0.0)
+);
+
+BezierTransform::BezierTransform(const std::vector<CubicCurve>& spline, const float duration, const bool rotate, const bool loop)
+: MovementTransformComponent(duration, rotate, loop), spline(spline) {}
 
 glm::mat4 BezierTransform::GetMatrix() {
-    // TODO: check
     if (spline.empty()) return glm::mat4(1.0f);
 
     float time = elapsed / duration;
@@ -13,13 +21,13 @@ glm::mat4 BezierTransform::GetMatrix() {
     int curvesCount = spline.size();
     float scaled = time * curvesCount;
 
-    float index = std::floor(scaled);
-    if (index >= curvesCount) index = curvesCount - 1;
+    int index = std::floor(scaled);
+    index = std::min(index, curvesCount - 1);
 
     float localTime = scaled - index;
 
-    glm::vec4 parameters = glm::vec4(localTime * localTime * localTime, localTime * localTime, localTime, 1.0f);
-    glm::vec3 pos = parameters * bezierMatrix * spline[index].GetMatrix();
+    glm::vec4 timeVector = glm::vec4(localTime * localTime * localTime, localTime * localTime, localTime, 1.0f);
+    glm::vec3 pos = timeVector * bezierCoefficientsMatrix * spline[index].GetMatrix();
 
     // glm::vec3 pos =
     //     (float)pow(1 - localTime, 3) * spline[index].point1 +
@@ -27,5 +35,23 @@ glm::mat4 BezierTransform::GetMatrix() {
     //     3 * (1 - localTime) * (float)pow(localTime, 2) * spline[index].point3 +
     //     (float)pow(localTime, 3) * spline[index].point4;
 
-    return glm::translate(glm::mat4(1.f), pos);
+    glm::mat4 rotationMatrix = glm::mat4(1.0f);
+    if (rotate) {
+        glm::vec4 derivedTimeVector = glm::vec4(3.0f * localTime * localTime, 2.0f * localTime, 1.0f, 0.0f);
+        glm::vec3 tangent = derivedTimeVector * bezierCoefficientsMatrix * spline[index].GetMatrix();
+
+        glm::vec3 worldUp = glm::vec3(0, 1, 0);
+        glm::vec3 front = glm::normalize(tangent);
+        glm::vec3 right = glm::cross(front, worldUp);
+        glm::vec3 up = glm::cross(right, front);
+
+        rotationMatrix = glm::mat4(
+            glm::vec4(right,   0),
+            glm::vec4(up,      0),
+            glm::vec4(front,   0),
+            glm::vec4(0, 0, 0, 1)
+        );
+    }
+
+    return glm::translate(glm::mat4(1.f), pos) * rotationMatrix;
 }

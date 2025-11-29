@@ -17,18 +17,11 @@ struct CubicCurve {
 
 class BezierTransform : public MovementTransformComponent {
 public:
-    BezierTransform(const std::vector<CubicCurve>& spline, const float duration, const float loop = false);
+    BezierTransform(const std::vector<CubicCurve>& spline, const float duration, const bool rotate = true, const bool loop = false);
     ~BezierTransform() {}
 
     glm::mat4 GetMatrix() override;
 
 private:
     std::vector<CubicCurve> spline;
-
-    glm::mat4 bezierMatrix = glm::mat4(
-        glm::vec4(-1.0,  3.0, -3.0, 1.0),
-        glm::vec4( 3.0, -6.0,  3.0, 0.0),
-        glm::vec4(-3.0,  3.0,  0.0, 0.0),
-        glm::vec4( 1.0,  0.0,  0.0, 0.0)
-    );
 };

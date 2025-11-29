@@ -5,7 +5,8 @@
 
 class MovementTransformComponent : public TransformComponent {
 public:
-    MovementTransformComponent(const float duration, const bool loop = false) : duration(duration), loop(loop) {};
+    MovementTransformComponent(const float duration, const bool rotate = true, const bool loop = false)
+    : duration(duration), rotate(rotate), loop(loop) {};
 
     void Update(const float delta) override {
         if (loop) elapsed = std::fmod((elapsed + delta), duration);
@@ -14,6 +15,7 @@ public:
 
 protected:
     float duration;
+    bool rotate = true;
     bool loop = false;
     float elapsed = 0;
 };

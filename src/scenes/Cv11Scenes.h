@@ -68,6 +68,11 @@ public:
                 flashlight->SetAttenuation(flashlight->GetFlashlightAttenuation());
             }
             if (key == GLFW_KEY_C) {
+                rotate = !rotate;
+                printf("rotate: %d\n", rotate);
+                UpdateTransformation();
+            }
+            if (key == GLFW_KEY_V) {
                 loop = !loop;
                 printf("loop: %d\n", loop);
                 UpdateTransformation();
@@ -94,13 +99,12 @@ public:
         }
     }
 
-
     void UpdateTransformation() {
         RemoveDrawableObject(shrekIndex);
 
         auto shrek = make_ref(new DrawableObject(
             shrekModel,
-            make_ref(new BezierTransform(curves, duration, loop)),
+            make_ref(new BezierTransform(curves, duration, rotate, loop)),
             shaderProgramManager.GetShaderProgram("sp")
         ));
         shrekIndex = shrek->GetIndex();
@@ -114,6 +118,7 @@ private:
     ModelLoader ml3rdparty = ModelLoader("../assets/3rdparty/models/");
 
     ref<Model> shrekModel = make_ref(new Model(ml3rdparty.Load("shrek.obj")));
+    // ref<Model> shrekModel = make_ref(new Model(ml.Load("formula.obj")));
 
     int shrekIndex = 0;
 
@@ -121,5 +126,6 @@ private:
 
     std::vector<CubicCurve> curves = {};
     float duration = 0;
+    bool rotate = true;
     bool loop = true;
 };
