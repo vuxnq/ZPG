@@ -15,7 +15,6 @@ glm::mat4 PolylineTransform::GetMatrix() {
     float time = elapsed / duration;
 
     int segCount = points.size() - 1;
-
     float scaled = time * segCount;
     // TODO: kdyz 3 segmenty a time = 0.5 -> scaled = 1.5 -> v pulce v 1. indexu
 
