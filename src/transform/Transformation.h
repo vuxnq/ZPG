@@ -14,6 +14,7 @@
 #include "transform/static/TranslateTransform.h"
 
 #include "transform/movement/PolylineTransform.h"
+#include "transform/movement/BezierTransform.h"
 
 class Transformation : public TransformComponent {
 public:

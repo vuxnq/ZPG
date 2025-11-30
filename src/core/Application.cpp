@@ -25,6 +25,7 @@
 #include "transform/Transformation.h"
 
 #include "scenes/Cv10Scenes.h"
+#include "scenes/Cv11Scenes.h"
 
 Application::Application() {
     if (s_application != nullptr) {
@@ -118,6 +119,14 @@ void Application::OnKey(int key, int action) {
                 sceneManager.SetActiveScene("scene10.3");
                 sceneManager.GetActiveScene()->SetAspectRatio(windowWidth / (float)windowHeight);
                 break;
+            case GLFW_KEY_4:
+                sceneManager.SetActiveScene("scene11.1");
+                sceneManager.GetActiveScene()->SetAspectRatio(windowWidth / (float)windowHeight);
+                break;
+            case GLFW_KEY_5:
+                sceneManager.SetActiveScene("scene11.2");
+                sceneManager.GetActiveScene()->SetAspectRatio(windowWidth / (float)windowHeight);
+                break;
             default:
                 break;
         }
@@ -150,6 +159,8 @@ void Application::OnCreate() {
     sceneManager.AddScene("scene10.1", make_ref(new Cv10Scene1()));
     sceneManager.AddScene("scene10.2", make_ref(new Cv10Scene2()));
     sceneManager.AddScene("scene10.3", make_ref(new Cv10Scene3()));
+    sceneManager.AddScene("scene11.1", make_ref(new Cv11Scene1()));
+    sceneManager.AddScene("scene11.2", make_ref(new Cv11Scene2()));
 }
 
 void Application::Run() {

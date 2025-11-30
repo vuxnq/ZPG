@@ -300,6 +300,21 @@ public:
             shaderProgramManager.GetShaderProgram("sp")
         )));
 
+        // login --------------------------------------------------------------
+        auto loginTransformation = make_ref(new Transformation());
+        loginTransformation->Add(make_ref(new ScaleTransform(0.3 / 4)));
+        loginTransformation->Add(make_ref(new RotateTransform(180, glm::vec3(0, 1, 0))));
+        loginTransformation->Add(make_ref(new TranslateTransform(glm::vec3(-1, 0, 0))));
+        loginTransformation->Add(make_ref(new DynamicRotateTransform(-360 * 12, glm::vec3(0, 1, 0), speed)));
+
+        // TODO: Update() is called for eathBaseTrans 3x
+        loginTransformation->Add(make_ref(new Transformation(*earthBaseTransformation.get())));
+
+        AddDrawableObject(make_ref(new DrawableObject(
+            make_ref(new Model(ml.Load("login.obj"))),
+            loginTransformation,
+            shaderProgramManager.GetShaderProgram("sp")
+        )));
 
 
         camera.AddSubscriber(flashlight.get());
