@@ -29,12 +29,6 @@ glm::mat4 BezierTransform::GetMatrix() {
     glm::vec4 timeVector = glm::vec4(localTime * localTime * localTime, localTime * localTime, localTime, 1.0f);
     glm::vec3 pos = timeVector * bezierCoefficientsMatrix * spline[index].GetMatrix();
 
-    // glm::vec3 pos =
-    //     (float)pow(1 - localTime, 3) * spline[index].point1 +
-    //     3 * (float)pow(1 - localTime, 2) * localTime * spline[index].point2 +
-    //     3 * (1 - localTime) * (float)pow(localTime, 2) * spline[index].point3 +
-    //     (float)pow(localTime, 3) * spline[index].point4;
-
     glm::mat4 rotationMatrix = glm::mat4(1.0f);
     if (rotate) {
         glm::vec4 derivedTimeVector = glm::vec4(3.0f * localTime * localTime, 2.0f * localTime, 1.0f, 0.0f);
