@@ -13,7 +13,7 @@ static glm::mat4 bezierCoefficientsMatrix = glm::mat4(
 BezierTransform::BezierTransform(const std::vector<CubicCurve>& spline, const float duration, const bool rotate, const bool loop)
 : MovementTransformComponent(duration, rotate, loop), spline(spline) {}
 
-glm::mat4 BezierTransform::GetMatrix() {
+glm::mat4 BezierTransform::GetMatrix() const {
     if (spline.empty()) return glm::mat4(1.0f);
 
     float time = elapsed / duration;

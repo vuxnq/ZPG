@@ -292,7 +292,7 @@ public:
         moonTransformation->Add(make_ref(new TranslateTransform(glm::vec3(1, 0, 0))));
         moonTransformation->Add(make_ref(new DynamicRotateTransform(360 * 12, glm::vec3(0, 1, 0), speed)));
 
-        moonTransformation->Add(make_ref(new Transformation(*earthBaseTransformation.get())));
+        moonTransformation->SetParent(earthBaseTransformation);
 
         AddDrawableObject(make_ref(new DrawableObject(
             make_ref(new Model(ml.Load("moon.obj"))),
@@ -307,7 +307,7 @@ public:
         loginTransformation->Add(make_ref(new TranslateTransform(glm::vec3(-1, 0, 0))));
         loginTransformation->Add(make_ref(new DynamicRotateTransform(-360 * 12, glm::vec3(0, 1, 0), speed)));
 
-        loginTransformation->Add(make_ref(new Transformation(*earthBaseTransformation.get())));
+        loginTransformation->SetParent(earthBaseTransformation);
 
         AddDrawableObject(make_ref(new DrawableObject(
             make_ref(new Model(ml.Load("login.obj"))),

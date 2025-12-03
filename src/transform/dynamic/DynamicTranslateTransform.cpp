@@ -8,6 +8,6 @@ void DynamicTranslateTransform::Update(const float delta) {
     offset += drift * speed * delta;
 }
 
-glm::mat4 DynamicTranslateTransform::GetMatrix() {
+glm::mat4 DynamicTranslateTransform::GetMatrix() const {
     return glm::translate(glm::mat4(1.0f), offset);
 }

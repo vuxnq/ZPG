@@ -9,7 +9,7 @@ public:
     ~DynamicScaleTransform() {}
 
     void Update(const float delta) override;
-    glm::mat4 GetMatrix() override;
+    glm::mat4 GetMatrix() const override;
 
 private:
     float scale = 1;

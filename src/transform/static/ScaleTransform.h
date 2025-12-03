@@ -8,8 +8,6 @@ public:
     ScaleTransform(const float scale);
     ~ScaleTransform() {}
 
-    glm::mat4 GetMatrix() override;
-
 private:
     float scale;
 };

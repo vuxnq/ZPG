@@ -4,7 +4,7 @@
 PolylineTransform::PolylineTransform(const std::vector<glm::vec3>& points, const float duration, const bool rotate, const bool loop)
 : MovementTransformComponent(duration, rotate, loop), points(points) {}
 
-glm::mat4 PolylineTransform::GetMatrix() {
+glm::mat4 PolylineTransform::GetMatrix() const {
     if (points.empty()) return glm::mat4(1.0f);
     if (points.size() == 1) return glm::translate(glm::mat4(1.0f), points[0]);
 

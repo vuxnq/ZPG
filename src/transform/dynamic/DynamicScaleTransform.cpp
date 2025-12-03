@@ -8,6 +8,6 @@ void DynamicScaleTransform::Update(const float delta) {
     scale += growth * speed * delta;
 }
 
-glm::mat4 DynamicScaleTransform::GetMatrix() {
+glm::mat4 DynamicScaleTransform::GetMatrix() const {
     return glm::scale(glm::mat4(1.0f), glm::vec3((float)scale));
 }
