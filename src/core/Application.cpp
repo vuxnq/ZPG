@@ -24,6 +24,7 @@
 #include "object/DrawableObject.h"
 #include "transform/Transformation.h"
 
+#include "scenes/Cv8Scenes.h"
 #include "scenes/Cv10Scenes.h"
 #include "scenes/Cv11Scenes.h"
 
@@ -127,6 +128,10 @@ void Application::OnKey(int key, int action) {
                 sceneManager.SetActiveScene("scene11.2");
                 sceneManager.GetActiveScene()->SetAspectRatio(windowWidth / (float)windowHeight);
                 break;
+            case GLFW_KEY_6:
+                sceneManager.SetActiveScene("scene8.1");
+                sceneManager.GetActiveScene()->SetAspectRatio(windowWidth / (float)windowHeight);
+                break;
             default:
                 break;
         }
@@ -161,6 +166,7 @@ void Application::OnCreate() {
     sceneManager.AddScene("scene10.3", make_ref(new Cv10Scene3()));
     sceneManager.AddScene("scene11.1", make_ref(new Cv11Scene1()));
     sceneManager.AddScene("scene11.2", make_ref(new Cv11Scene2()));
+    sceneManager.AddScene("scene8.1", make_ref(new Cv8Scene1()));
 }
 
 void Application::Run() {
