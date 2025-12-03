@@ -8,8 +8,6 @@ public:
     TranslateTransform(const glm::vec3& offset);
     ~TranslateTransform() {}
 
-    glm::mat4 GetMatrix() override;
-
 private:
     glm::vec3 offset;
 };

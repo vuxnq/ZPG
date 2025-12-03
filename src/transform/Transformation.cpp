@@ -5,11 +5,15 @@ void Transformation::Add(const ref<TransformComponent>& transformation) {
     children.push_back(transformation);
 }
 
-glm::mat4 Transformation::GetMatrix() {
+glm::mat4 Transformation::GetMatrix() const {
     glm::mat4 matrix = glm::mat4(1.0f);
 
     for (auto child : children) {
         matrix = child->GetMatrix() * matrix;
+    }
+
+    if (parent) {
+        matrix = parent->GetMatrix() * matrix;
     }
 
     return matrix;

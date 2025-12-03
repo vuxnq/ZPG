@@ -4,7 +4,7 @@
 PolylineTransform::PolylineTransform(const std::vector<glm::vec3>& points, const float duration, const bool rotate, const bool loop)
 : MovementTransformComponent(duration, rotate, loop), points(points) {}
 
-glm::mat4 PolylineTransform::GetMatrix() {
+glm::mat4 PolylineTransform::GetMatrix() const {
     if (points.empty()) return glm::mat4(1.0f);
     if (points.size() == 1) return glm::translate(glm::mat4(1.0f), points[0]);
 
@@ -12,7 +12,6 @@ glm::mat4 PolylineTransform::GetMatrix() {
 
     int segCount = points.size() - 1;
     float scaled = time * segCount;
-    // TODO: kdyz 3 segmenty a time = 0.5 -> scaled = 1.5 -> v pulce v 1. indexu
 
     int index = std::floor(scaled);
     index = std::min(index, segCount - 1);

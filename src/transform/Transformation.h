@@ -22,9 +22,13 @@ public:
     ~Transformation() {}
 
     void Add(const ref<TransformComponent>& transformation);
-    glm::mat4 GetMatrix() override;
+    glm::mat4 GetMatrix() const override;
     void Update(const float delta) override;
 
+    void SetParent(ref<TransformComponent> const& parent) {
+        this->parent = parent;
+    }
 private:
     std::vector<ref<TransformComponent>> children;
+    ref<TransformComponent> parent = nullptr;
 };

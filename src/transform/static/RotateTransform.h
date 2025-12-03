@@ -8,8 +8,6 @@ public:
     RotateTransform(const float angle, const glm::vec3& axis);
     ~RotateTransform() {}
 
-    glm::mat4 GetMatrix() override;
-
 private:
     float angle;
     glm::vec3 axis;

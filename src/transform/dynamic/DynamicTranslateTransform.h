@@ -9,7 +9,7 @@ public:
     ~DynamicTranslateTransform() {}
 
     void Update(const float delta) override;
-    glm::mat4 GetMatrix() override;
+    glm::mat4 GetMatrix() const override;
 
 private:
     glm::vec3 offset = glm::vec3(0.0f);

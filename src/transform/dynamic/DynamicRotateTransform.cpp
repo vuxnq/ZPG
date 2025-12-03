@@ -7,6 +7,6 @@ DynamicRotateTransform::DynamicRotateTransform(const float spin, const glm::vec3
 void DynamicRotateTransform::Update(const float delta) {
     angle += spin * speed * delta;
 }
-glm::mat4 DynamicRotateTransform::GetMatrix() {
+glm::mat4 DynamicRotateTransform::GetMatrix() const {
     return glm::rotate(glm::mat4(1.f), glm::radians(angle), axis);
 }
