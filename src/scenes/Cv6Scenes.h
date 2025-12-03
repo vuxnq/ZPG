@@ -204,12 +204,11 @@ public:
 class Cv6Scene4 : public Scene {
 public:
     Cv6Scene4() {
-        auto vertexShader = make_ref(new Shader("../assets/shaders/cv6/vs.glsl", GL_VERTEX_SHADER));
-        auto fragmentShader = make_ref(new Shader("../assets/shaders/cv6/fs.glsl", GL_FRAGMENT_SHADER));
+        auto vertexShader = make_ref(new Shader("../assets/shaders/vs.glsl", GL_VERTEX_SHADER));
+        auto fragmentShader = make_ref(new Shader("../assets/shaders/fs.glsl", GL_FRAGMENT_SHADER));
         auto fragmentShaderWrong = make_ref(new Shader("../assets/shaders/cv6/fs_wrong.glsl", GL_FRAGMENT_SHADER));
 
         AddShaderProgram("sp", make_ref(new ShaderProgram({vertexShader, fragmentShader})));
-        AddShaderProgram("sp_wrong", make_ref(new ShaderProgram({vertexShader, fragmentShaderWrong})));
 
         auto sphereVBO = make_ref(new VertexBuffer(sphere, sizeof(sphere), {{ElementType::Float, 3}, {ElementType::Float, 3}}));
         auto sphereVAO = make_ref(new VertexArray(sphereVBO));
