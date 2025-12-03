@@ -5,16 +5,16 @@
 #include "light/PointLight.h"
 #include "light/LightObject.h"
 
-#include "assets/models/sphere.h"
-#include "assets/models/plain.h"
-#include "assets/models/tree.h"
-#include "assets/models/bushes.h"
+#include "assets/vertices/sphere.h"
+#include "assets/vertices/plain.h"
+#include "assets/vertices/tree.h"
+#include "assets/vertices/bushes.h"
 
 class Cv6Scene1 : public Scene {
 public:
     Cv6Scene1() {
-        auto vertexShader = make_ref(new Shader("../assets/vs.glsl", GL_VERTEX_SHADER));
-        auto fragmentShader = make_ref(new Shader("../assets/fs.glsl", GL_FRAGMENT_SHADER));
+        auto vertexShader = make_ref(new Shader("../assets/shaders/cv6/vs.glsl", GL_VERTEX_SHADER));
+        auto fragmentShader = make_ref(new Shader("../assets/shaders/cv6/fs.glsl", GL_FRAGMENT_SHADER));
         auto shaderProgram = make_ref(new ShaderProgram({vertexShader, fragmentShader}));
 
         AddShaderProgram("sp", shaderProgram);
@@ -31,16 +31,16 @@ public:
             AddDrawableObject(sphere1);
         }
 
-        auto light = make_ref(new PointLight(glm::vec3(1.0, 1.0, 1.0), glm::vec3(0.0, 0.0, 0.0), 30));
-        AddPointLight(light);
+        auto light = make_ref(new PointLight(glm::vec3(1.0, 1.0, 1.0), glm::vec3(0.0, 0.0, 0.0), {}));
+        AddLight(light);
 
         auto circling = make_ref(new Transformation());
         circling->Add(make_ref(new ScaleTransform(0.1)));
         circling->Add(make_ref(new TranslateTransform(glm::vec3(1.0, 0.0, 0.0))));
         circling->Add(make_ref(new DynamicRotateTransform(20, glm::vec3(0.0, 1.0, 0.0), 4)));
 
-        auto redlight = make_ref(new PointLight(glm::vec3(1.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0), 10));
-        AddPointLight(redlight);
+        auto redlight = make_ref(new PointLight(glm::vec3(1.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0), {}));
+        AddLight(redlight);
         auto lighObject = make_ref(new LightObject(sphereModel, circling, shaderProgramManager.GetShaderProgram("sp"), redlight));
         AddDrawableObject(lighObject);
     }
@@ -50,9 +50,9 @@ public:
 class Cv6Scene2 : public Scene {
 public:
     Cv6Scene2() {
-        auto vertexShader = make_ref(new Shader("../assets/vs.glsl", GL_VERTEX_SHADER));
-        auto fragmentShader = make_ref(new Shader("../assets/fs.glsl", GL_FRAGMENT_SHADER));
-        auto fragmentShaderFirefly = make_ref(new Shader("../assets/fs_constant_firefly.glsl", GL_FRAGMENT_SHADER));
+        auto vertexShader = make_ref(new Shader("../assets/shaders/cv6/vs.glsl", GL_VERTEX_SHADER));
+        auto fragmentShader = make_ref(new Shader("../assets/shaders/cv6/fs.glsl", GL_FRAGMENT_SHADER));
+        auto fragmentShaderFirefly = make_ref(new Shader("../assets/shaders/cv6/fs_constant_firefly.glsl", GL_FRAGMENT_SHADER));
 
         AddShaderProgram("sp", make_ref(new ShaderProgram({vertexShader, fragmentShader})));
         AddShaderProgram("sp_firefly", make_ref(new ShaderProgram({vertexShader, fragmentShaderFirefly})));
@@ -120,19 +120,19 @@ public:
             fireflyTransform->Add(make_ref(new TranslateTransform(glm::vec3(rBushOffset(gen), rBushOffset(gen), rBushOffset(gen)))));
             fireflyTransform->Add(make_ref(new DynamicRotateTransform(90, glm::vec3(rBushOffset(gen), (float)rBushOffset(gen), rBushOffset(gen)), 1)));
             fireflyTransform->Add(make_ref(new TranslateTransform(glm::vec3(rTreeOffset(gen), std::max(rTreeOffset(gen) / 2, 0.5f), rTreeOffset(gen)))));
-            auto fireflyLight = make_ref(new PointLight(glm::vec3(0.8, 1.0, 0.8), glm::vec3(0), 1));
+            auto fireflyLight = make_ref(new PointLight(glm::vec3(0.8, 1.0, 0.8), glm::vec3(0), {}));
             auto fireflyObject = make_ref(new LightObject(sphereModel, fireflyTransform, shaderProgramManager.GetShaderProgram("sp_firefly"), fireflyLight));
-            AddPointLight(fireflyLight);
+            AddLight(fireflyLight);
             AddDrawableObject(fireflyObject);
         }
 
         auto plainObject = make_ref(new DrawableObject(plainModel, make_ref(new ScaleTransform(plainSize)), shaderProgramManager.GetShaderProgram("sp")));
         AddDrawableObject(plainObject);
 
-        auto blueLight = make_ref(new PointLight(glm::vec3(0.0, 0.3, 0.9), glm::vec3(10.0f, 10.0f, 10.0f), 300));
-        auto purpleLight = make_ref(new PointLight(glm::vec3(0.1, 0.1, 0.8), glm::vec3(-10.0f, 10.0f, -10.0f), 300));
-        AddPointLight(blueLight);
-        AddPointLight(purpleLight);
+        auto blueLight = make_ref(new PointLight(glm::vec3(0.0, 0.3, 0.9), glm::vec3(10.0f, 10.0f, 10.0f), {}));
+        auto purpleLight = make_ref(new PointLight(glm::vec3(0.1, 0.1, 0.8), glm::vec3(-10.0f, 10.0f, -10.0f), {}));
+        AddLight(blueLight);
+        AddLight(purpleLight);
     }
 
 private:
@@ -147,10 +147,10 @@ private:
 class Cv6Scene3 : public Scene {
 public:
     Cv6Scene3() {
-        auto vertexShader = make_ref(new Shader("../assets/vs.glsl", GL_VERTEX_SHADER));
-        auto fragmentShader = make_ref(new Shader("../assets/fs.glsl", GL_FRAGMENT_SHADER));
-        auto fragmentShaderConstantSun = make_ref(new Shader("../assets/fs_constant_sun.glsl", GL_FRAGMENT_SHADER));
-        auto fragmentShaderLambert = make_ref(new Shader("../assets/fs_lambert.glsl", GL_FRAGMENT_SHADER));
+        auto vertexShader = make_ref(new Shader("../assets/shaders/cv6/vs.glsl", GL_VERTEX_SHADER));
+        auto fragmentShader = make_ref(new Shader("../assets/shaders/cv6/fs.glsl", GL_FRAGMENT_SHADER));
+        auto fragmentShaderConstantSun = make_ref(new Shader("../assets/shaders/cv6/fs_constant_sun.glsl", GL_FRAGMENT_SHADER));
+        auto fragmentShaderLambert = make_ref(new Shader("../assets/shaders/cv6/fs_lambert.glsl", GL_FRAGMENT_SHADER));
 
         AddShaderProgram("sp", make_ref(new ShaderProgram({vertexShader, fragmentShader})));
         AddShaderProgram("sp_constant", make_ref(new ShaderProgram({vertexShader, fragmentShaderConstantSun})));
@@ -194,8 +194,8 @@ public:
         AddDrawableObject(earthObject);
         AddDrawableObject(moonObject);
 
-        auto sunPointLight = make_ref(new PointLight(glm::vec3(1.0, 1.0, 0.9), glm::vec3(0.0, 0.0, 0.0), 1000));
-        AddPointLight(sunPointLight);
+        auto sunPointLight = make_ref(new PointLight(glm::vec3(1.0, 1.0, 0.9), glm::vec3(0.0, 0.0, 0.0), {}));
+        AddLight(sunPointLight);
     }
 };
 
@@ -204,9 +204,9 @@ public:
 class Cv6Scene4 : public Scene {
 public:
     Cv6Scene4() {
-        auto vertexShader = make_ref(new Shader("../assets/vs.glsl", GL_VERTEX_SHADER));
-        auto fragmentShader = make_ref(new Shader("../assets/fs.glsl", GL_FRAGMENT_SHADER));
-        auto fragmentShaderWrong = make_ref(new Shader("../assets/fs_wrong.glsl", GL_FRAGMENT_SHADER));
+        auto vertexShader = make_ref(new Shader("../assets/shaders/cv6/vs.glsl", GL_VERTEX_SHADER));
+        auto fragmentShader = make_ref(new Shader("../assets/shaders/cv6/fs.glsl", GL_FRAGMENT_SHADER));
+        auto fragmentShaderWrong = make_ref(new Shader("../assets/shaders/cv6/fs_wrong.glsl", GL_FRAGMENT_SHADER));
 
         AddShaderProgram("sp", make_ref(new ShaderProgram({vertexShader, fragmentShader})));
         AddShaderProgram("sp_wrong", make_ref(new ShaderProgram({vertexShader, fragmentShaderWrong})));
@@ -239,8 +239,8 @@ public:
         auto sphere4 = make_ref(new DrawableObject(sphereModel, trans4, shaderProgramManager.GetShaderProgram("sp")));
         AddDrawableObject(sphere4);
 
-        auto light = make_ref(new PointLight(glm::vec3(1.0, 1.0, 1.0), glm::vec3(0.0, 0.0, -2.0), 30));
-        AddPointLight(light);
+        auto light = make_ref(new PointLight(glm::vec3(1.0, 1.0, 1.0), glm::vec3(0.0, 0.0, -2.0), {}));
+        AddLight(light);
     }
 };
 
@@ -249,9 +249,9 @@ public:
 class Cv6Scene5 : public Scene {
 public:
     Cv6Scene5() {
-        auto vertexShader = make_ref(new Shader("../assets/vs.glsl", GL_VERTEX_SHADER));
-        auto fragmentShaderPhong = make_ref(new Shader("../assets/fs_phong.glsl", GL_FRAGMENT_SHADER));
-        auto fragmentShaderWrong = make_ref(new Shader("../assets/fs_wrong.glsl", GL_FRAGMENT_SHADER));
+        auto vertexShader = make_ref(new Shader("../assets/shaders/cv6/vs.glsl", GL_VERTEX_SHADER));
+        auto fragmentShaderPhong = make_ref(new Shader("../assets/shaders/cv6/fs_phong.glsl", GL_FRAGMENT_SHADER));
+        auto fragmentShaderWrong = make_ref(new Shader("../assets/shaders/cv6/fs_wrong.glsl", GL_FRAGMENT_SHADER));
 
         AddShaderProgram("sp_phong", make_ref(new ShaderProgram({vertexShader, fragmentShaderPhong})));
         AddShaderProgram("sp_wrong", make_ref(new ShaderProgram({vertexShader, fragmentShaderWrong})));
@@ -272,7 +272,7 @@ public:
         auto sphere2 = make_ref(new DrawableObject(sphereModel, trans2, shaderProgramManager.GetShaderProgram("sp_wrong")));
         AddDrawableObject(sphere2);
 
-        auto light = make_ref(new PointLight(glm::vec3(1.0, 1.0, 1.0), glm::vec3(0.0, 0.0, -1.0), 30));
-        AddPointLight(light);
+        auto light = make_ref(new PointLight(glm::vec3(1.0, 1.0, 1.0), glm::vec3(0.0, 0.0, -1.0), {}));
+        AddLight(light);
     }
 };

@@ -2,18 +2,18 @@
 #include "core/Scene.h"
 #include <random>
 
-#include "assets/models/bushes.h"
-#include "assets/models/plain.h"
-#include "assets/models/tree.h"
+#include "assets/vertices/bushes.h"
+#include "assets/vertices/plain.h"
+#include "assets/vertices/tree.h"
 
-class Cv4Scene : public Scene {
+class Cv4Scene1 : public Scene {
 public:
-    Cv4Scene() {
-        ref<Shader> vertexShader = make_ref(new Shader("../assets/vertex_shader_normal.glsl", GL_VERTEX_SHADER));
-        ref<Shader> fragmentShader = make_ref(new Shader("../assets/fragment_shader.glsl", GL_FRAGMENT_SHADER));
+    Cv4Scene1() {
+        ref<Shader> vertexShader = make_ref(new Shader("../assets/shaders/cv4/vertex_shader_normal.glsl", GL_VERTEX_SHADER));
+        ref<Shader> fragmentShader = make_ref(new Shader("../assets/shaders/cv4/fragment_shader.glsl", GL_FRAGMENT_SHADER));
         shaderProgram = make_ref(new ShaderProgram({vertexShader, fragmentShader}));
 
-        camera.AddSubscriber(shaderProgram);
+        camera.AddSubscriber(shaderProgram.get());
 
         ref<VertexBuffer> bushesVBO = make_ref(new VertexBuffer(bushes, sizeof(bushes), {{ElementType::Float, 3}, {ElementType::Float, 3}}));
         ref<VertexArray> bushesVAO = make_ref(new VertexArray(bushesVBO));

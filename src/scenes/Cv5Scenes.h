@@ -2,20 +2,20 @@
 #include "core/Scene.h"
 #include <random>
 
-#include "assets/models/bushes.h"
-#include "assets/models/plain.h"
-#include "assets/models/tree.h"
-#include "assets/models/sphere.h"
+#include "assets/vertices/bushes.h"
+#include "assets/vertices/plain.h"
+#include "assets/vertices/tree.h"
+#include "assets/vertices/sphere.h"
 
 class Cv5Scene1 : public Scene {
 public:
     Cv5Scene1() {
-        ref<Shader> vertexShader = make_ref(new Shader("../assets/vertex_shader.glsl", GL_VERTEX_SHADER));
-        ref<Shader> fragmentShader = make_ref(new Shader("../assets/fragment_shader.glsl", GL_FRAGMENT_SHADER));
+        ref<Shader> vertexShader = make_ref(new Shader("../assets/shaders/cv5/vertex_shader.glsl", GL_VERTEX_SHADER));
+        ref<Shader> fragmentShader = make_ref(new Shader("../assets/shaders/cv5/fragment_shader.glsl", GL_FRAGMENT_SHADER));
         ref<ShaderProgram> shaderProgram = make_ref(new ShaderProgram({vertexShader, fragmentShader}));
         shaderProgramManager.AddShaderProgram("sp", shaderProgram);
 
-        camera.AddSubscriber(shaderProgramManager.GetShaderProgram("sp"));
+        camera.AddSubscriber(shaderProgramManager.GetShaderProgram("sp").get());
 
         float points_triangle[] = {
             // pos              // normal
@@ -39,10 +39,8 @@ public:
 
         AddDrawableObject(triangleObject);
 
-        auto pointLight1 = make_ref(new PointLight(glm::vec3(0.385, 0.647, 0.812), glm::vec3(10.0f, 10.0f, 10.0f), 3));
-        AddPointLight(pointLight1);
-
-        SetPointLights();
+        auto pointLight1 = make_ref(new PointLight(glm::vec3(0.385, 0.647, 0.812), glm::vec3(10.0f, 10.0f, 10.0f), {}));
+        AddLight(pointLight1);
     }
 };
 
@@ -51,12 +49,12 @@ public:
 class Cv5Scene2 : public Scene {
 public:
     Cv5Scene2() {
-        ref<Shader> vertexShader = make_ref(new Shader("../assets/vertex_shader.glsl", GL_VERTEX_SHADER));
-        ref<Shader> fragmentShader = make_ref(new Shader("../assets/fragment_shader.glsl", GL_FRAGMENT_SHADER));
+        ref<Shader> vertexShader = make_ref(new Shader("../assets/shaders/cv5/vertex_shader.glsl", GL_VERTEX_SHADER));
+        ref<Shader> fragmentShader = make_ref(new Shader("../assets/shaders/cv5/fragment_shader.glsl", GL_FRAGMENT_SHADER));
         ref<ShaderProgram> shaderProgram = make_ref(new ShaderProgram({vertexShader, fragmentShader}));
         shaderProgramManager.AddShaderProgram("sp", shaderProgram);
 
-        camera.AddSubscriber(shaderProgramManager.GetShaderProgram("sp"));
+        camera.AddSubscriber(shaderProgramManager.GetShaderProgram("sp").get());
 
         ref<VertexBuffer> sphereVBO = make_ref(new VertexBuffer(sphere, sizeof(sphere), {{ElementType::Float, 3}, {ElementType::Float, 3}}));
         ref<VertexArray> sphereVAO = make_ref(new VertexArray(sphereVBO));
@@ -83,10 +81,8 @@ public:
         AddDrawableObject(sphereObject3);
         AddDrawableObject(sphereObject4);
 
-        auto pointLight1 = make_ref(new PointLight(glm::vec3(0.385, 0.647, 0.812), glm::vec3(0.0f, 0.0f, 0.0f), 3));
-        AddPointLight(pointLight1);
-
-        SetPointLights();
+        auto pointLight1 = make_ref(new PointLight(glm::vec3(0.385, 0.647, 0.812), glm::vec3(0.0f, 0.0f, 0.0f), {}));
+        AddLight(pointLight1);
     }
 };
 
@@ -95,12 +91,12 @@ public:
 class Cv5Scene3 : public Scene {
 public:
     Cv5Scene3() {
-        ref<Shader> vertexShader = make_ref(new Shader("../assets/vertex_shader.glsl", GL_VERTEX_SHADER));
-        ref<Shader> fragmentShader = make_ref(new Shader("../assets/fragment_shader.glsl", GL_FRAGMENT_SHADER));
+        ref<Shader> vertexShader = make_ref(new Shader("../assets/shaders/cv5/vertex_shader.glsl", GL_VERTEX_SHADER));
+        ref<Shader> fragmentShader = make_ref(new Shader("../assets/shaders/cv5/fragment_shader.glsl", GL_FRAGMENT_SHADER));
         ref<ShaderProgram> shaderProgram = make_ref(new ShaderProgram({vertexShader, fragmentShader}));
         shaderProgramManager.AddShaderProgram("sp", shaderProgram);
 
-        camera.AddSubscriber(shaderProgramManager.GetShaderProgram("sp"));
+        camera.AddSubscriber(shaderProgramManager.GetShaderProgram("sp").get());
 
         ref<VertexBuffer> bushesVBO = make_ref(new VertexBuffer(bushes, sizeof(bushes), {{ElementType::Float, 3}, {ElementType::Float, 3}}));
         ref<VertexArray> bushesVAO = make_ref(new VertexArray(bushesVBO));
@@ -157,10 +153,8 @@ public:
         ref<DrawableObject> plainObject = make_ref(new DrawableObject(plainModel, make_ref(new ScaleTransform(plainSize)), shaderProgram));
         AddDrawableObject(plainObject);
 
-        auto pointLight1 = make_ref(new PointLight(glm::vec3(0.385, 0.647, 0.812), glm::vec3(10.0f, 10.0f, 10.0f), 3));
-        AddPointLight(pointLight1);
-
-        SetPointLights();
+        auto pointLight1 = make_ref(new PointLight(glm::vec3(0.385, 0.647, 0.812), glm::vec3(10.0f, 10.0f, 10.0f), {}));
+        AddLight(pointLight1);
     }
 
 private:
@@ -174,20 +168,20 @@ private:
 class Cv5Scene4 : public Scene {
 public:
     Cv5Scene4() {
-        ref<Shader> vertexShader = make_ref(new Shader("../assets/vertex_shader.glsl", GL_VERTEX_SHADER));
-        ref<Shader> fragmentShader = make_ref(new Shader("../assets/fragment_shader.glsl", GL_FRAGMENT_SHADER));
-        ref<Shader> fragmentShaderConstantSun = make_ref(new Shader("../assets/fragment_shader_constant_sun.glsl", GL_FRAGMENT_SHADER));
-        ref<Shader> fragmentShaderLambert = make_ref(new Shader("../assets/fragment_shader_lambert.glsl", GL_FRAGMENT_SHADER));
-        ref<Shader> fragmentShaderPhong = make_ref(new Shader("../assets/fragment_shader_phong.glsl", GL_FRAGMENT_SHADER));
+        ref<Shader> vertexShader = make_ref(new Shader("../assets/shaders/cv5/vertex_shader.glsl", GL_VERTEX_SHADER));
+        ref<Shader> fragmentShader = make_ref(new Shader("../assets/shaders/cv5/fragment_shader.glsl", GL_FRAGMENT_SHADER));
+        ref<Shader> fragmentShaderConstantSun = make_ref(new Shader("../assets/shaders/cv5/fragment_shader_constant_sun.glsl", GL_FRAGMENT_SHADER));
+        ref<Shader> fragmentShaderLambert = make_ref(new Shader("../assets/shaders/cv5/fragment_shader_lambert.glsl", GL_FRAGMENT_SHADER));
+        ref<Shader> fragmentShaderPhong = make_ref(new Shader("../assets/shaders/cv5/fragment_shader_phong.glsl", GL_FRAGMENT_SHADER));
         shaderProgramManager.AddShaderProgram("sp", make_ref(new ShaderProgram({vertexShader, fragmentShader})));
         shaderProgramManager.AddShaderProgram("sp_constant", make_ref(new ShaderProgram({vertexShader, fragmentShaderConstantSun})));
         shaderProgramManager.AddShaderProgram("sp_lambert", make_ref(new ShaderProgram({vertexShader, fragmentShaderLambert})));
         shaderProgramManager.AddShaderProgram("sp_phong", make_ref(new ShaderProgram({vertexShader, fragmentShaderPhong})));
 
-        camera.AddSubscriber(shaderProgramManager.GetShaderProgram("sp"));
-        camera.AddSubscriber(shaderProgramManager.GetShaderProgram("sp_constant"));
-        camera.AddSubscriber(shaderProgramManager.GetShaderProgram("sp_lambert"));
-        camera.AddSubscriber(shaderProgramManager.GetShaderProgram("sp_phong"));
+        camera.AddSubscriber(shaderProgramManager.GetShaderProgram("sp").get());
+        camera.AddSubscriber(shaderProgramManager.GetShaderProgram("sp_constant").get());
+        camera.AddSubscriber(shaderProgramManager.GetShaderProgram("sp_lambert").get());
+        camera.AddSubscriber(shaderProgramManager.GetShaderProgram("sp_phong").get());
 
         auto sphereVBO = make_ref(new VertexBuffer(sphere, sizeof(sphere), {{ElementType::Float, 3}, {ElementType::Float, 3}}));
         auto sphereVAO = make_ref(new VertexArray(sphereVBO));
@@ -227,10 +221,8 @@ public:
         AddDrawableObject(earthObject);
         AddDrawableObject(moonObject);
 
-        auto sunPointLight = make_ref(new PointLight(glm::vec3(1.0, 1.0, 0.9), glm::vec3(0.0, 0.0, 0.0), 10));
-        AddPointLight(sunPointLight);
-
-        SetPointLights();
+        auto sunPointLight = make_ref(new PointLight(glm::vec3(1.0, 1.0, 0.9), glm::vec3(0.0, 0.0, 0.0), {}));
+        AddLight(sunPointLight);
     }
 };
 
@@ -239,21 +231,21 @@ public:
 class Cv5Scene5 : public Scene {
 public:
     Cv5Scene5() {
-        ref<Shader> vertexShader = make_ref(new Shader("../assets/vertex_shader.glsl", GL_VERTEX_SHADER));
-        ref<Shader> fragmentShader = make_ref(new Shader("../assets/fragment_shader.glsl", GL_FRAGMENT_SHADER));
-        ref<Shader> fragmentShaderConstant = make_ref(new Shader("../assets/fragment_shader_constant.glsl", GL_FRAGMENT_SHADER));
-        ref<Shader> fragmentShaderLambert = make_ref(new Shader("../assets/fragment_shader_lambert.glsl", GL_FRAGMENT_SHADER));
-        ref<Shader> fragmentShaderPhong = make_ref(new Shader("../assets/fragment_shader_phong.glsl", GL_FRAGMENT_SHADER));
+        ref<Shader> vertexShader = make_ref(new Shader("../assets/shaders/cv5/vertex_shader.glsl", GL_VERTEX_SHADER));
+        ref<Shader> fragmentShader = make_ref(new Shader("../assets/shaders/cv5/fragment_shader.glsl", GL_FRAGMENT_SHADER));
+        ref<Shader> fragmentShaderConstant = make_ref(new Shader("../assets/shaders/cv5/fragment_shader_constant.glsl", GL_FRAGMENT_SHADER));
+        ref<Shader> fragmentShaderLambert = make_ref(new Shader("../assets/shaders/cv5/fragment_shader_lambert.glsl", GL_FRAGMENT_SHADER));
+        ref<Shader> fragmentShaderPhong = make_ref(new Shader("../assets/shaders/cv5/fragment_shader_phong.glsl", GL_FRAGMENT_SHADER));
 
         shaderProgramManager.AddShaderProgram("sp", make_ref(new ShaderProgram({vertexShader, fragmentShader})));
         shaderProgramManager.AddShaderProgram("sp_constant", make_ref(new ShaderProgram({vertexShader, fragmentShaderConstant})));
         shaderProgramManager.AddShaderProgram("sp_lambert", make_ref(new ShaderProgram({vertexShader, fragmentShaderLambert})));
         shaderProgramManager.AddShaderProgram("sp_phong", make_ref(new ShaderProgram({vertexShader, fragmentShaderPhong})));
 
-        camera.AddSubscriber(shaderProgramManager.GetShaderProgram("sp"));
-        camera.AddSubscriber(shaderProgramManager.GetShaderProgram("sp_constant"));
-        camera.AddSubscriber(shaderProgramManager.GetShaderProgram("sp_lambert"));
-        camera.AddSubscriber(shaderProgramManager.GetShaderProgram("sp_phong"));
+        camera.AddSubscriber(shaderProgramManager.GetShaderProgram("sp").get());
+        camera.AddSubscriber(shaderProgramManager.GetShaderProgram("sp_constant").get());
+        camera.AddSubscriber(shaderProgramManager.GetShaderProgram("sp_lambert").get());
+        camera.AddSubscriber(shaderProgramManager.GetShaderProgram("sp_phong").get());
 
         ref<VertexBuffer> sphereVBO = make_ref(new VertexBuffer(sphere, sizeof(sphere), {{ElementType::Float, 3}, {ElementType::Float, 3}}));
         ref<VertexArray> sphereVAO = make_ref(new VertexArray(sphereVBO));
@@ -280,9 +272,7 @@ public:
         AddDrawableObject(sphereObject3);
         AddDrawableObject(sphereObject4);
 
-        auto pointLight1 = make_ref(new PointLight(glm::vec3(0.385, 0.647, 0.812), glm::vec3(0.0f, 0.0f, 0.0f), 3));
-        AddPointLight(pointLight1);
-
-        SetPointLights();
+        auto pointLight1 = make_ref(new PointLight(glm::vec3(0.385, 0.647, 0.812), glm::vec3(0.0f, 0.0f, 0.0f), {}));
+        AddLight(pointLight1);
     }
 };

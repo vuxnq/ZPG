@@ -2,23 +2,23 @@
 #include "core/Scene.h"
 #include <random>
 
-#include "assets/models/bushes.h"
-#include "assets/models/gift.h"
-#include "assets/models/plain.h"
-#include "assets/models/sphere.h"
-#include "assets/models/suzi_flat.h"
-#include "assets/models/suzi_smooth.h"
-#include "assets/models/tree.h"
+#include "assets/vertices/bushes.h"
+#include "assets/vertices/gift.h"
+#include "assets/vertices/plain.h"
+#include "assets/vertices/sphere.h"
+#include "assets/vertices/suzi_flat.h"
+#include "assets/vertices/suzi_smooth.h"
+#include "assets/vertices/tree.h"
 
 // scene1 - triangle
 class Cv3Scene1 : public Scene {
 public:
     Cv3Scene1() {
-        ref<Shader> vertexShader = make_ref(new Shader("../assets/vertex_shader.glsl", GL_VERTEX_SHADER));
-        ref<Shader> fragmentShader = make_ref(new Shader("../assets/fragment_shader.glsl", GL_FRAGMENT_SHADER));
+        ref<Shader> vertexShader = make_ref(new Shader("../assets/shaders/cv3/vertex_shader.glsl", GL_VERTEX_SHADER));
+        ref<Shader> fragmentShader = make_ref(new Shader("../assets/shaders/cv3/fragment_shader.glsl", GL_FRAGMENT_SHADER));
         shaderProgram = make_ref(new ShaderProgram({vertexShader, fragmentShader}));
 
-        camera.AddSubscriber(shaderProgram);
+        camera.AddSubscriber(shaderProgram.get());
 
         float points_triangle[] = {
             // pos              // color
@@ -53,11 +53,11 @@ private:
 class Cv3Scene2 : public Scene {
 public:
     Cv3Scene2() {
-        ref<Shader> vertexShader = make_ref(new Shader("../assets/vertex_shader_normal.glsl", GL_VERTEX_SHADER));
-        ref<Shader> fragmentShader = make_ref(new Shader("../assets/fragment_shader.glsl", GL_FRAGMENT_SHADER));
+        ref<Shader> vertexShader = make_ref(new Shader("../assets/shaders/cv3/vertex_shader_normal.glsl", GL_VERTEX_SHADER));
+        ref<Shader> fragmentShader = make_ref(new Shader("../assets/shaders/cv3/fragment_shader.glsl", GL_FRAGMENT_SHADER));
         shaderProgram = make_ref(new ShaderProgram({vertexShader, fragmentShader}));
 
-        camera.AddSubscriber(shaderProgram);
+        camera.AddSubscriber(shaderProgram.get());
 
         ref<VertexBuffer> sphereVBO = make_ref(new VertexBuffer(sphere, sizeof(sphere), {{ElementType::Float, 3}, {ElementType::Float, 3}}));
         ref<VertexArray> sphereVAO = make_ref(new VertexArray(sphereVBO));
@@ -95,10 +95,10 @@ private:
 class Cv3Scene3 : public Scene {
 public:
     Cv3Scene3() {
-        ref<Shader> vertexShader = make_ref(new Shader("../assets/vertex_shader_normal.glsl", GL_VERTEX_SHADER));
-        ref<Shader> fragmentShader = make_ref(new Shader("../assets/fragment_shader.glsl", GL_FRAGMENT_SHADER));
-        ref<Shader> fragmentShaderGrayscale = make_ref(new Shader("../assets/fragment_shader_grayscale.glsl", GL_FRAGMENT_SHADER));
-        ref<Shader> fragmentShaderYellow = make_ref(new Shader("../assets/fragment_shader_yellow.glsl", GL_FRAGMENT_SHADER));
+        ref<Shader> vertexShader = make_ref(new Shader("../assets/shaders/cv3/vertex_shader_normal.glsl", GL_VERTEX_SHADER));
+        ref<Shader> fragmentShader = make_ref(new Shader("../assets/shaders/cv3/fragment_shader.glsl", GL_FRAGMENT_SHADER));
+        ref<Shader> fragmentShaderGrayscale = make_ref(new Shader("../assets/shaders/cv3/fragment_shader_grayscale.glsl", GL_FRAGMENT_SHADER));
+        ref<Shader> fragmentShaderYellow = make_ref(new Shader("../assets/shaders/cv3/fragment_shader_yellow.glsl", GL_FRAGMENT_SHADER));
         std::vector<ref<ShaderProgram>> shaders = {
             make_ref(new ShaderProgram({vertexShader, fragmentShader})),
             make_ref(new ShaderProgram({vertexShader, fragmentShaderGrayscale})),
@@ -106,7 +106,7 @@ public:
         };
 
         for (auto& shader : shaders) {
-            camera.AddSubscriber(shader);
+            camera.AddSubscriber(shader.get());
         }
 
         std::vector<std::tuple<ElementType::Type, int>> layout = {{ElementType::Float, 3}, {ElementType::Float, 3}};
@@ -147,12 +147,12 @@ public:
 class Cv3Scene4 : public Scene {
 public:
     Cv3Scene4() {
-        ref<Shader> vertexShader = make_ref(new Shader("../assets/vertex_shader_normal.glsl", GL_VERTEX_SHADER));
-        ref<Shader> fragmentShader = make_ref(new Shader("../assets/fragment_shader.glsl", GL_FRAGMENT_SHADER));
+        ref<Shader> vertexShader = make_ref(new Shader("../assets/shaders/cv3/vertex_shader_normal.glsl", GL_VERTEX_SHADER));
+        ref<Shader> fragmentShader = make_ref(new Shader("../assets/shaders/cv3/fragment_shader.glsl", GL_FRAGMENT_SHADER));
         shaderProgram = make_ref(new ShaderProgram({vertexShader, fragmentShader}));
 
 
-        camera.AddSubscriber(shaderProgram);
+        camera.AddSubscriber(shaderProgram.get());
 
 
         std::vector<std::tuple<ElementType::Type, int>> layout = {{ElementType::Float, 3}, {ElementType::Float, 3}};

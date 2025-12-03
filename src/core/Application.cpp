@@ -24,7 +24,13 @@
 #include "object/DrawableObject.h"
 #include "transform/Transformation.h"
 
+#include "scenes/Cv3Scenes.h"
+#include "scenes/Cv4Scenes.h"
+#include "scenes/Cv5Scenes.h"
+#include "scenes/Cv6Scenes.h"
+#include "scenes/Cv7Scenes.h"
 #include "scenes/Cv8Scenes.h"
+#include "scenes/Cv9Scenes.h"
 #include "scenes/Cv10Scenes.h"
 #include "scenes/Cv11Scenes.h"
 
@@ -128,10 +134,6 @@ void Application::OnKey(int key, int action) {
                 sceneManager.SetActiveScene("scene11.2");
                 sceneManager.GetActiveScene()->SetAspectRatio(windowWidth / (float)windowHeight);
                 break;
-            case GLFW_KEY_6:
-                sceneManager.SetActiveScene("scene8.1");
-                sceneManager.GetActiveScene()->SetAspectRatio(windowWidth / (float)windowHeight);
-                break;
             default:
                 break;
         }
@@ -161,12 +163,42 @@ void Application::ReadPixel(int x, int y, GLbyte* color, GLfloat& depth, GLuint&
 }
 
 void Application::OnCreate() {
-    sceneManager.AddScene("scene10.1", make_ref(new Cv10Scene1()));
-    sceneManager.AddScene("scene10.2", make_ref(new Cv10Scene2()));
-    sceneManager.AddScene("scene10.3", make_ref(new Cv10Scene3()));
-    sceneManager.AddScene("scene11.1", make_ref(new Cv11Scene1()));
-    sceneManager.AddScene("scene11.2", make_ref(new Cv11Scene2()));
-    sceneManager.AddScene("scene8.1", make_ref(new Cv8Scene1()));
+    // sceneManager.AddScene("scene3.1", make_ref(new Cv3Scene1())); // spinning triangle
+    // sceneManager.AddScene("scene3.2", make_ref(new Cv3Scene2())); // four spheres
+    // sceneManager.AddScene("scene3.3", make_ref(new Cv3Scene3())); // více různých objektů s různými shader programy a transformacemi
+    // sceneManager.AddScene("scene3.4", make_ref(new Cv3Scene4())); // test
+
+    // sceneManager.AddScene("scene4.1", make_ref(new Cv4Scene1())); // forest
+
+    // depricated - doesn't work correctly because of the way the lights are passed into shaders in later implementaions
+    // sceneManager.AddScene("scene5.1", make_ref(new Cv5Scene1())); // triangle
+    // sceneManager.AddScene("scene5.2", make_ref(new Cv5Scene2())); // four spheres
+    // sceneManager.AddScene("scene5.3", make_ref(new Cv5Scene3())); // forest
+    // sceneManager.AddScene("scene5.4", make_ref(new Cv5Scene4())); // solar system
+    // sceneManager.AddScene("scene5.5", make_ref(new Cv5Scene5())); // test
+
+    // depricated - doesn't work correctly because of the way the lights are passed into shaders in later implementaions
+    // sceneManager.AddScene("scene6.1", make_ref(new Cv6Scene1())); // diffuse test
+    // sceneManager.AddScene("scene6.2", make_ref(new Cv6Scene2())); // forest
+    // sceneManager.AddScene("scene6.3", make_ref(new Cv6Scene3())); // solar system
+    // sceneManager.AddScene("scene6.4", make_ref(new Cv6Scene4())); // spheres test
+    // sceneManager.AddScene("scene6.5", make_ref(new Cv6Scene5())); // uncapped specular test
+
+    // sceneManager.AddScene("scene7.1", make_ref(new Cv7Scene1())); // night forest
+    // sceneManager.AddScene("scene7.2", make_ref(new Cv7Scene2())); // model loader
+    // sceneManager.AddScene("scene7.3", make_ref(new Cv7Scene3())); // lights attenuation test
+
+    // sceneManager.AddScene("scene8.1", make_ref(new Cv8Scene1())); // forest w shrek & fiona (& toilet)
+    // sceneManager.AddScene("scene8.2", make_ref(new Cv8Scene2())); // skybox
+
+    // sceneManager.AddScene("scene9.1", make_ref(new Cv9Scene1())); // spawning/removing trees
+
+    sceneManager.AddScene("scene10.1", make_ref(new Cv10Scene1())); // test of w coord
+    sceneManager.AddScene("scene10.2", make_ref(new Cv10Scene2())); // whack a mole
+    sceneManager.AddScene("scene10.3", make_ref(new Cv10Scene3())); // solar system
+
+    sceneManager.AddScene("scene11.1", make_ref(new Cv11Scene1())); // bezier control
+    sceneManager.AddScene("scene11.2", make_ref(new Cv11Scene2())); // banana car
 }
 
 void Application::Run() {

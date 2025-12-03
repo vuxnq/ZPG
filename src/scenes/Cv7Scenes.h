@@ -18,10 +18,10 @@
 class Cv7Scene1 : public Scene {
 public:
     Cv7Scene1() {
-        auto vertexShader = make_ref(new Shader("../assets/vs.glsl", GL_VERTEX_SHADER));
-        auto vertexShaderOld = make_ref(new Shader("../assets/vs_old.glsl", GL_VERTEX_SHADER));
-        auto fragmentShader = make_ref(new Shader("../assets/fs.glsl", GL_FRAGMENT_SHADER));
-        auto fragmentShaderFirefly = make_ref(new Shader("../assets/fs_constant_firefly.glsl", GL_FRAGMENT_SHADER));
+        auto vertexShader = make_ref(new Shader("../assets/shaders/vs.glsl", GL_VERTEX_SHADER));
+        auto vertexShaderOld = make_ref(new Shader("../assets/shaders/vs_old.glsl", GL_VERTEX_SHADER));
+        auto fragmentShader = make_ref(new Shader("../assets/shaders/fs.glsl", GL_FRAGMENT_SHADER));
+        auto fragmentShaderFirefly = make_ref(new Shader("../assets/shaders/fs_constant_firefly.glsl", GL_FRAGMENT_SHADER));
 
         AddShaderProgram("sp", make_ref(new ShaderProgram({vertexShader, fragmentShader})));
         AddShaderProgram("sp_old", make_ref(new ShaderProgram({vertexShaderOld, fragmentShader})));
@@ -122,8 +122,8 @@ public:
 private:
     float plainSize = 10.0f;
     int bushesDensity = 4;
-    int treeCount = 50;
-    int fireflyCount = 50;
+    int treeCount = 20;
+    int fireflyCount = 20;
 
     ref<Flashlight> flashlight = make_ref(new Flashlight(glm::vec3(1.0, 1.0, 1.0), {}));
 };
@@ -133,14 +133,14 @@ class Cv7Scene2 : public Scene {
 public:
     Cv7Scene2() {
 
-        auto shaderVertex = make_ref(new Shader("../assets/vs.glsl", GL_VERTEX_SHADER));
-        auto shaderFragment = make_ref(new Shader("../assets/fs.glsl", GL_FRAGMENT_SHADER));
+        auto shaderVertex = make_ref(new Shader("../assets/shaders/vs.glsl", GL_VERTEX_SHADER));
+        auto shaderFragment = make_ref(new Shader("../assets/shaders/fs.glsl", GL_FRAGMENT_SHADER));
         AddShaderProgram("sp", make_ref(new ShaderProgram({shaderVertex, shaderFragment})));
 
         SetAmbientLight(glm::vec3(0.025, 0.025, 0.025));
         AddLight(make_ref(new SpotLight(glm::vec3(1, 0, 0), glm::vec3(0, 2, 0), glm::vec3(0, -1, 0), {})));
 
-        auto ml = ModelLoader("../assets/models/");
+        auto ml = ModelLoader("../assets/3rdparty/models/");
 
         auto obj = make_ref(new DrawableObject(
             make_ref(new Model(ml.Load("IronMan.obj"))),
@@ -173,10 +173,10 @@ private:
 class Cv7Scene3 : public Scene {
 public:
     Cv7Scene3() {
-        auto vertexShader = make_ref(new Shader("../assets/vs.glsl", GL_VERTEX_SHADER));
-        auto vertexShaderOld = make_ref(new Shader("../assets/vs_old.glsl", GL_VERTEX_SHADER));
-        auto fragmentShader = make_ref(new Shader("../assets/fs.glsl", GL_FRAGMENT_SHADER));
-        auto fragmentShaderFirefly = make_ref(new Shader("../assets/fs_constant_firefly.glsl", GL_FRAGMENT_SHADER));
+        auto vertexShader = make_ref(new Shader("../assets/shaders/vs.glsl", GL_VERTEX_SHADER));
+        auto vertexShaderOld = make_ref(new Shader("../assets/shaders/vs_old.glsl", GL_VERTEX_SHADER));
+        auto fragmentShader = make_ref(new Shader("../assets/shaders/fs.glsl", GL_FRAGMENT_SHADER));
+        auto fragmentShaderFirefly = make_ref(new Shader("../assets/shaders/fs_constant_firefly.glsl", GL_FRAGMENT_SHADER));
 
         AddShaderProgram("sp", make_ref(new ShaderProgram({vertexShader, fragmentShader})));
         AddShaderProgram("sp_old", make_ref(new ShaderProgram({vertexShaderOld, fragmentShader})));
