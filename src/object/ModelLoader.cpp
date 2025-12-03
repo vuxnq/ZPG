@@ -90,13 +90,6 @@ Model ModelLoader::Load(const std::string& filename) {
         int material_id = -1;
         if (!shape.mesh.material_ids.empty()) {
             material_id = shape.mesh.material_ids[0];
-
-            for (int mat_id : shape.mesh.material_ids) {
-                if (mat_id != material_id) {
-                    fprintf(stderr, "Warning: material ids differ inside a shape\n");
-                    break;
-                }
-            }
         }
 
         ref<Material> material;

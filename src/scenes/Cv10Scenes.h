@@ -307,7 +307,6 @@ public:
         loginTransformation->Add(make_ref(new TranslateTransform(glm::vec3(-1, 0, 0))));
         loginTransformation->Add(make_ref(new DynamicRotateTransform(-360 * 12, glm::vec3(0, 1, 0), speed)));
 
-        // TODO: Update() is called for eathBaseTrans 3x
         loginTransformation->Add(make_ref(new Transformation(*earthBaseTransformation.get())));
 
         AddDrawableObject(make_ref(new DrawableObject(
